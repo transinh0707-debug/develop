@@ -89,6 +89,13 @@ void hal_entry(void)
 				APP_PRINT ("\r\nEnter the desired period in millisecond\r\n");
 				gpt_desired_period_ms = process_input_data();
 
+				/* Validate that input is not zero */
+				if (RESET_VALUE == gpt_desired_period_ms)
+				{
+					APP_ERR_PRINT ("\r\n** INVALID INPUT, PERIOD CANNOT BE ZERO **\r\n");
+					break;
+				}
+
 				/* Get the source clock frequency (in Hz) */
 				pclkd_freq_hz = R_FSP_SystemClockHzGet(FSP_PRIV_CLOCK_PCLKD);
 				pclkd_freq_hz >>= (uint32_t)(g_timer_periodic_cfg.source_div);
@@ -244,6 +251,9 @@ void hal_entry(void)
 			        deinit_gpt_timer(&g_timer_one_shot_mode_ctrl);
 			        APP_PRINT("One-Shot Timer Instance Closed, If Already Opened\r\n");
 			    }
+
+			    /* Reset timeout counter for each One-Shot operation */
+			    one_shot_timeout = INT32_MAX;
 
 			    /* Initialize One-Shot Timer */
 			    err = init_gpt_timer(&g_timer_one_shot_mode_ctrl, &g_timer_one_shot_mode_cfg, ONE_SHOT_MODE_TIMER);

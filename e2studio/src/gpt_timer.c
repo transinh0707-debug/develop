@@ -104,7 +104,7 @@ fsp_err_t set_timer_duty_cycle(uint8_t duty_cycle_percent)
         /* Calculate the desired duty cycle based on the current period. Note that if the period could be larger than
          * UINT32_MAX / 100, this calculation could overflow. A cast to uint64_t is used to prevent this. The cast is
          * not required for 16-bit timers */
-        duty_cycle_counts = (uint32_t) ((uint64_t) (current_period_counts * duty_cycle_percent) / GPT_MAX_PERCENT);
+        duty_cycle_counts = (uint32_t) (((uint64_t) current_period_counts * duty_cycle_percent) / GPT_MAX_PERCENT);
 #if defined(BOARD_RA4W1_EK) || defined (BOARD_RA6T1_RSSK) || defined (BOARD_RA6T3_MCK) || defined (BOARD_RA6T2_MCK) ||\
     defined (BOARD_RA4T1_MCK)
         duty_cycle_counts = (current_period_counts - duty_cycle_counts);
@@ -183,7 +183,11 @@ void print_timer_menu(void)
     APP_PRINT ("\r\nMenu Options");
     APP_PRINT ("\r\n1. Enter 1 for Periodic mode");
     APP_PRINT ("\r\n2. Enter 2 for PWM mode");
-    APP_PRINT ("\r\n3. Enter 3 for One-Shot mode\r\n");
+    APP_PRINT ("\r\n3. Enter 3 for One-Shot mode");
+    APP_PRINT ("\r\n4. Enter 4 for Complementary PWM Mode 1 (crest transfer)");
+    APP_PRINT ("\r\n5. Enter 5 for Complementary PWM Mode 2 (trough transfer)");
+    APP_PRINT ("\r\n6. Enter 6 for Complementary PWM Mode 3 (crest & trough)");
+    APP_PRINT ("\r\n7. Enter 7 for Complementary PWM Mode 4 (immediate)\r\n");
     APP_PRINT ("User Input:  ");
 }
 

@@ -40,11 +40,13 @@
 #define PWM_MODE	                (2U)            /* To check status of GPT Timer in PWM mode */
 #define ONE_SHOT_MODE               (3U)            /* To check status of GPT Timer in One-Shot mode */
 
-#define EP_INFO    "\r\nThe project initializes GPT module in Periodic, PWM or One-Shot mode based on the user input"\
-                   "\r\nfrom the displayed menu options. In Periodic mode, the user can enter the time period within"\
-                   "\r\nthe permitted ranges to change the frequency of the user LED. In PWM mode, the user can enter"\
-                   "\r\nthe duty cycle within the specified range to adjust the intensity of the user LED. In One-Shot"\
-                   "\r\nmode, output will be displayed on J-link RTT Viewer when timer expires.\r\n"
+#define EP_INFO    "\r\nThe project initializes GPT module in Periodic, PWM, One-Shot, or Complementary PWM mode"\
+                   "\r\nbased on the user input from the displayed menu options. In Periodic mode, the user can"\
+                   "\r\nenter the time period within the permitted ranges to change the frequency of the user LED."\
+                   "\r\nIn PWM mode, the user can enter the duty cycle within the specified range to adjust the"\
+                   "\r\nintensity of the user LED. In One-Shot mode, output will be displayed on J-link RTT Viewer"\
+                   "\r\nwhen timer expires. Complementary PWM modes (1-4) generate three-phase PWM waveforms"\
+                   "\r\nwith configurable dead time for motor control applications.\r\n"
 
 /* Function declarations */
 fsp_err_t init_gpt_timer(timer_ctrl_t * const p_timer_ctl, timer_cfg_t const * const p_timer_cfg, uint8_t timer_mode);
