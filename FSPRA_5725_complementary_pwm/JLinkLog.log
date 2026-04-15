@@ -1,0 +1,2563 @@
+T6D58 000:001.332   SEGGER J-Link V8.92 Log File
+T6D58 000:001.545   DLL Compiled: Dec  3 2025 16:42:11
+T6D58 000:001.560   Logging started @ 2026-04-14 10:22
+T6D58 000:001.574   Process: C:\Users\SinhT\.eclipse\com.renesas.platform_1435879475\DebugComp\RA\e2-server-gdb.exe
+T6D58 000:001.594 - 1.587ms 
+T6D58 000:001.621 JLINK_GetDLLVersion()
+T6D58 000:001.635 - 0.015ms returns 89200
+T6D58 000:008.010 JLINK_OpenEx(...)
+T6D58 000:018.402   Firmware: J-Link OB-RA4M2 compiled Dec 10 2025 15:52:53
+T6D58 000:018.911   Firmware: J-Link OB-RA4M2 compiled Dec 10 2025 15:52:53
+T6D58 000:030.766   Hardware: V1.00
+T6D58 000:030.820   S/N: 1088287562
+T6D58 000:030.839   OEM: SEGGER
+T6D58 000:030.858   Feature(s): None
+T6D58 000:031.389   Bootloader: 2021 May 14
+T6D58 000:031.785   USB speed mode: Full speed (12 MBit/s)
+T6D58 000:032.192   TELNET listener socket opened on port 19021
+T6D58 000:032.479   WEBSRV WEBSRV_Init(): Starting webserver thread(s)
+T6D58 000:032.779   WEBSRV Webserver running on local port 19080
+T6D58 000:033.018   Looking for J-Link GUI Server exe at: C:\Users\SinhT\.eclipse\com.renesas.platform_1435879475\DebugComp\RA\ARM\Segger_v8.92.0\JLinkGUIServer.exe
+T6D58 000:033.514   Looking for J-Link GUI Server exe at: \JLinkGUIServer.exe
+T6D58 000:335.674   Failed to connect to J-Link GUI Server.
+T6D58 000:347.600 - 339.584ms returns "O.K."
+T6D58 000:347.754 JLINK_ExecCommand("ProjectFile=C:\Users\admin.wins\e2_studio\workspace\FSPRA_5725_complementary_pwm/FSPRA_5725_complementary_pwm Debug_Flat.jlink", ...). 
+T6D58 000:366.286 - 18.534ms returns 0x00
+T8744 000:366.349 JLINK_ExecCommand("SetRTTAddr 20004CA0", ...). 
+T8744 000:366.567 - 0.178ms returns 0x00
+T6D58 000:367.223 JLINK_ExecCommand("device=R7FA2T107", ...). 
+T6D58 000:368.188   Flash bank @ 0x00000000: SFL: Parsing sectorization info from ELF file
+T6D58 000:368.230     FlashDevice.SectorInfo[0]: .SectorSize = 0x00000800, .SectorStartAddr = 0x00000000
+T6D58 000:368.251   FlashBank @0x00000000: Sectorization info from SFL ELF file ignored because sectorization override from DLL / XML file is active.
+T6D58 000:368.318   Flash bank @ 0x01010010: SFL: Parsing sectorization info from ELF file
+T6D58 000:368.340     FlashDevice.SectorInfo[0]: .SectorSize = 0x00000024, .SectorStartAddr = 0x00000000
+T6D58 000:368.361   FlashBank @0x01010010: Sectorization info from SFL ELF file ignored because sectorization override from DLL / XML file is active.
+T6D58 000:368.401   Flash bank @ 0x40100000: SFL: Parsing sectorization info from ELF file
+T6D58 000:368.422     FlashDevice.SectorInfo[0]: .SectorSize = 0x00000400, .SectorStartAddr = 0x00000000
+T6D58 000:368.443   FlashBank @0x40100000: Sectorization info from SFL ELF file ignored because sectorization override from DLL / XML file is active.
+T6D58 000:368.475   Device "R7FA2T107" selected.
+T6D58 000:369.212 - 1.963ms returns 0x00
+T6D58 000:369.249 JLINK_ExecCommand("SetCPUConnectIDCODE = FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", ...). 
+T6D58 000:369.264 - 0.004ms returns 0x00
+T6D58 000:369.288 JLINK_TIF_GetAvailable(...)
+T6D58 000:369.418 - 0.131ms 
+T6D58 000:369.435 JLINK_TIF_Select(JLINKARM_TIF_SWD)
+T6D58 000:369.777 - 0.343ms returns 0x00
+T6D58 000:369.793 JLINK_SetSpeed(4000)
+T6D58 000:369.853 - 0.061ms 
+T6D58 000:369.867 JLINK_SetEndian(ARM_ENDIAN_LITTLE)
+T6D58 000:369.875 - 0.008ms returns 0
+T6D58 000:369.884 JLINK_SetInitRegsOnReset(OFF)
+T6D58 000:369.891 - 0.007ms returns 1
+T6D58 000:369.901 JLINK_SetResetType(JLINKARM_RESET_TYPE_NO_RESET)
+T6D58 000:369.909 - 0.007ms returns JLINKARM_RESET_TYPE_NORMAL
+T6D58 000:369.918 JLINK_ExecCommand("EnableFlashBPs", ...). 
+T6D58 000:369.927 - 0.000ms returns 0x00
+T6D58 000:369.937 JLINK_ExecCommand("SetAllowFlashCache = 1", ...). 
+T6D58 000:369.946 - 0.000ms returns 0x01
+T6D58 000:369.955 JLINK_ExecCommand("SetRestartOnClose = 0", ...). 
+T6D58 000:369.966 - 0.001ms returns 0x01
+T6D58 000:369.975 JLINK_ExecCommand("SetAllowSimulation = 0", ...). 
+T6D58 000:369.984 - 0.000ms returns 0x01
+T6D58 000:369.993 JLINK_EnableSoftBPs(ON)
+T6D58 000:370.001 - 0.007ms 
+T6D58 000:370.049 JLINK_Connect()
+T6D58 000:370.652   InitTarget() start
+T6D58 000:370.673    J-Link Script File: Executing InitTarget()
+T6D58 000:370.684   Identifying target device...
+T6D58 000:370.696   SWD selected. Executing JTAG -> SWD switching sequence...
+T6D58 000:371.177   Initializing DAP...
+T6D58 000:372.023   DAP initialized successfully.
+T6D58 000:373.072   Low power mode detected. Waking device from low power mode.
+T6D58 000:375.200   InitTarget() end - Took 4.52ms
+T6D58 000:375.676   Found SW-DP with ID 0x5BA02477
+T6D58 000:377.025   DPIDR: 0x5BA02477
+T6D58 000:377.043   CoreSight SoC-400 or earlier
+T6D58 000:377.055   Scanning AP map to find all available APs
+T6D58 000:377.776   AP[2]: Stopped AP scan as end of AP map has been reached
+T6D58 000:377.822   AP[0]: AHB-AP (IDR: 0x74770001, ADDR: 0x00000000)
+T6D58 000:377.842   AP[1]: APB-AP (IDR: 0x44770002, ADDR: 0x01000000)
+T6D58 000:377.861   Iterating through AP map to find AHB-AP to use
+T6D58 000:378.548   AP[0]: Core found
+T6D58 000:378.571   AP[0]: AHB-AP ROM base: 0x4001A000
+T6D58 000:378.884   CPUID register: 0x411CD200. Implementer code: 0x41 (ARM)
+T6D58 000:378.905   Feature set: Baseline
+T6D58 000:379.207   Cache: No cache
+T6D58 000:379.226   Found Cortex-M23 r1p0, Little endian.
+T6D58 000:379.524   -- Max. mem block: 0x0001D908
+T6D58 000:379.937   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T6D58 000:380.342   CPU_ReadMem(4 bytes @ 0xE0002000)
+T6D58 000:380.626   FPUnit: 4 code (BP) slots and 0 literal slots
+T6D58 000:380.667   CPU_ReadMem(4 bytes @ 0xE000EDFC)
+T6D58 000:380.953   CPU_ReadMem(4 bytes @ 0xE0001000)
+T6D58 000:381.224   CPU_ReadMem(4 bytes @ 0xE0001000)
+T6D58 000:381.551   CPU_ReadMem(4 bytes @ 0xE0001028)
+T6D58 000:381.802   CPU_ReadMem(4 bytes @ 0xE0001038)
+T6D58 000:382.060   CPU_WriteMem(4 bytes @ 0xE0001000)
+T6D58 000:382.319   CPU_ReadMem(4 bytes @ 0xE000ED88)
+T6D58 000:382.559   CPU_WriteMem(4 bytes @ 0xE000ED88)
+T6D58 000:382.814   CPU_ReadMem(4 bytes @ 0xE000ED88)
+T6D58 000:383.082   CPU_WriteMem(4 bytes @ 0xE000ED88)
+T6D58 000:383.322   CPU_ReadMem(4 bytes @ 0xE000EFB8)
+T6D58 000:383.566   Security extension: not implemented
+T6D58 000:383.582   CoreSight components:
+T6D58 000:383.594   ROMTbl[0] @ 4001A000
+T6D58 000:383.605   CPU_ReadMem(64 bytes @ 0x4001A000)
+T6D58 000:384.206   CPU_ReadMem(32 bytes @ 0xE000EFE0)
+T6D58 000:384.633   CPU_ReadMem(4 bytes @ 0xE000EFBC)
+T6D58 000:384.888   CPU_ReadMem(4 bytes @ 0xE000EFCC)
+T6D58 000:385.135   [0][0]: E000E000 CID B105900D PID 000BBD20 DEVARCH 47702A04 DEVTYPE 00 Cortex-M23
+T6D58 000:385.161   CPU_ReadMem(32 bytes @ 0xE0001FE0)
+T6D58 000:385.588   CPU_ReadMem(4 bytes @ 0xE0001FBC)
+T6D58 000:385.843   CPU_ReadMem(4 bytes @ 0xE0001FCC)
+T6D58 000:386.097   [0][1]: E0001000 CID B105900D PID 000BBD20 DEVARCH 47701A02 DEVTYPE 00 DWT
+T6D58 000:386.111   CPU_ReadMem(32 bytes @ 0xE0002FE0)
+T6D58 000:386.542   CPU_ReadMem(4 bytes @ 0xE0002FBC)
+T6D58 000:386.795   CPU_ReadMem(4 bytes @ 0xE0002FCC)
+T6D58 000:387.060   [0][2]: E0002000 CID B105900D PID 000BBD20 DEVARCH 47701A03 DEVTYPE 00 FPB
+T6D58 000:387.086   CPU_ReadMem(32 bytes @ 0x40019FE0)
+T6D58 000:387.558   CPU_ReadMem(4 bytes @ 0x40019FBC)
+T6D58 000:387.838   CPU_ReadMem(4 bytes @ 0x40019FCC)
+T6D58 000:388.109   [0][3]: 40019000 CID B105900D PID 000BBD20 DEVARCH 47710A31 DEVTYPE 31 MTB
+T6D58 000:388.168 - 18.118ms returns 0x00
+T6D58 000:388.203 JLINK_Halt()
+T6D58 000:390.797 - 2.593ms returns 0x00
+T6D58 000:390.826 JLINK_IsHalted()
+T6D58 000:390.839 - 0.012ms returns TRUE
+T6D58 000:390.851 JLINK_ResetPullsRESET(ON)
+T6D58 000:390.859 - 0.007ms 
+T6D58 000:390.867 JLINK_Reset()
+T6D58 000:391.022   JLINK_GetResetTypeDesc
+T6D58 000:391.035   - 0.013ms 
+T6D58 000:391.044   Reset type: CONNECT UNDER RESET (https://kb.segger.com/J-Link_Reset_Strategies)
+T6D58 000:391.056   CPU_WriteMem(4 bytes @ 0xE000EDF0)
+T6D58 000:391.319   CPU_ReadMem(4 bytes @ 0xE000ED44)
+T6D58 000:391.571   CPU_WriteMem(4 bytes @ 0xE000EDFC)
+T6D58 000:391.821   Reset: Halt core after reset via DEMCR.VC_CORERESET.
+T6D58 000:392.096   Reset: Reset device via AIRCR.SYSRESETREQ.
+T6D58 000:392.113   CPU_WriteMem(4 bytes @ 0xE000ED0C)
+T6D58 000:445.009   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T6D58 000:445.350   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T6D58 000:445.600   CPU_WriteMem(4 bytes @ 0xE000EDFC)
+T6D58 000:451.582   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T6D58 000:454.655   CPU_WriteMem(4 bytes @ 0xE0002000)
+T6D58 000:455.001   CPU_ReadMem(4 bytes @ 0xE000EDFC)
+T6D58 000:455.325   CPU_ReadMem(4 bytes @ 0xE0001000)
+T6D58 000:455.635   CPU_WriteMem(4 bytes @ 0xE0001000)
+T6D58 000:455.954   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T6D58 000:456.240 - 65.371ms 
+T16D4 000:457.157   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 000:457.432   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 000:457.709   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 000:457.947   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 000:458.209   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 000:458.229   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 000:479.640   CPU_ReadMem(24 bytes @ 0x20004CA0)
+T16D4 000:480.110   Periodic RTT: RTT CB auto-detected @ 0x20004CA0
+T16D4 000:480.153   Periodic RTT: RTT CB verified. Started data handling
+T6D58 000:480.523 JLINK_IsHalted()
+T6D58 000:480.546 - 0.021ms returns TRUE
+T6D58 000:480.842 JLINK_IsHalted()
+T6D58 000:480.859 - 0.017ms returns TRUE
+T6D58 000:480.870 JLINK_MeasureCPUSpeed(RAMAddr = 0xFFFFFFFF)
+T6D58 000:480.884   CPU_ReadMem(16 bytes @ 0x20004000)
+T6D58 000:481.452   CPU_ReadMem(64 bytes @ 0x20004000)
+T6D58 000:482.535    -- Updating C cache (64 bytes @ 0x20004000)
+T6D58 000:482.565    -- Read from C cache (6 bytes @ 0x20004000)
+T6D58 000:482.580   CPU_ReadMem(4 bytes @ 0x40019004)
+T6D58 000:483.258   CPU_ReadMem(4 bytes @ 0xE000ED90)
+T6D58 000:483.986   CPU_ReadMem(4 bytes @ 0xE000ED94)
+T6D58 000:484.721   CPU_WriteMem(16 bytes @ 0x20004000)
+T6D58 000:485.578   CPU_WriteMem(6 bytes @ 0x20004000)
+T6D58 000:486.377   CPU_ReadMem(64 bytes @ 0x20004000)
+T6D58 000:487.404    -- Updating C cache (64 bytes @ 0x20004000)
+T6D58 000:487.426    -- Read from C cache (6 bytes @ 0x20004000)
+T6D58 000:487.446   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T6D58 000:488.145   CPU_WriteMem(4 bytes @ 0xE0002008)
+T6D58 000:488.164   CPU_WriteMem(4 bytes @ 0xE000200C)
+T6D58 000:488.174   CPU_WriteMem(4 bytes @ 0xE0002010)
+T6D58 000:488.185   CPU_WriteMem(4 bytes @ 0xE0002014)
+T6D58 000:496.469   CPU_WriteMem(4 bytes @ 0xE0002008)
+T6D58 000:497.227   CPU_WriteMem(4 bytes @ 0xE000200C)
+T6D58 000:498.110   CPU_WriteMem(4 bytes @ 0xE0002010)
+T6D58 000:498.728   CPU_WriteMem(4 bytes @ 0xE0002014)
+T6D58 000:499.464   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T6D58 000:500.188   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T6D58 000:500.909   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T6D58 000:528.565   CPU_WriteMem(6 bytes @ 0x20004000)
+T6D58 000:529.370   ClockFreq: 665400 Hz
+T6D58 000:529.408 - 48.538ms returns 665400
+T6D58 000:529.452 JLINK_ReadReg(XPSR)
+T6D58 000:529.475   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T6D58 000:530.090 - 0.638ms returns 0x41000000
+T16D4 000:532.412   CPU_ReadMem(32 bytes @ 0x000016F6)
+T3E34 002:812.017 JLINK_ResetPullsRESET(ON)
+T3E34 002:812.057 - 0.040ms 
+T3E34 002:812.070 JLINK_Halt()
+T3E34 002:812.712 - 0.641ms returns 0x00
+T3E34 002:812.745 JLINK_IsHalted()
+T3E34 002:812.763 - 0.017ms returns TRUE
+T3E34 002:812.777 JLINK_Reset()
+T3E34 002:813.500   CPU_WriteMem(4 bytes @ 0x20004CA0)
+T3E34 002:813.840   CPU_ReadMem(4 bytes @ 0x20004000)
+T3E34 002:814.126   CPU_WriteMem(4 bytes @ 0x20004000)
+T3E34 002:814.436   JLINK_GetResetTypeDesc
+T3E34 002:814.463   - 0.027ms 
+T3E34 002:814.479   Reset type: CONNECT UNDER RESET (https://kb.segger.com/J-Link_Reset_Strategies)
+T3E34 002:814.498   CPU_WriteMem(4 bytes @ 0xE000EDF0)
+T3E34 002:814.785   CPU_ReadMem(4 bytes @ 0xE000ED44)
+T3E34 002:815.053   CPU_WriteMem(4 bytes @ 0xE000EDFC)
+T3E34 002:815.345   Reset: Halt core after reset via DEMCR.VC_CORERESET.
+T3E34 002:815.728   Reset: Reset device via AIRCR.SYSRESETREQ.
+T3E34 002:815.765   CPU_WriteMem(4 bytes @ 0xE000ED0C)
+T3E34 002:869.434   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T3E34 002:869.777   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T3E34 002:870.058   CPU_WriteMem(4 bytes @ 0xE000EDFC)
+T3E34 002:875.699   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T3E34 002:878.826   CPU_WriteMem(4 bytes @ 0xE0002000)
+T3E34 002:879.176   CPU_ReadMem(4 bytes @ 0xE000EDFC)
+T3E34 002:879.444   CPU_ReadMem(4 bytes @ 0xE0001000)
+T3E34 002:879.730   CPU_WriteMem(4 bytes @ 0xE0001000)
+T3E34 002:880.045   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T3E34 002:880.356 - 67.578ms 
+T3E34 002:880.389 JLINK_SetEndian(ARM_ENDIAN_LITTLE)
+T3E34 002:880.398 - 0.009ms returns 0
+T16D4 002:881.583   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 002:881.892   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 002:882.562   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 002:883.213   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 002:883.618   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 002:883.644   CPU_ReadMem(4096 bytes @ 0x20005000)
+T3E34 002:905.051 JLINK_BeginDownload(Flags = 0x00000000)
+T3E34 002:905.100 - 0.049ms 
+T3E34 002:923.517 JLINK_WriteMem(0x00000000, 0x40 Bytes, ...)
+T3E34 002:923.575   Data:  60 44 00 20 7D 00 00 00 21 14 00 00 4D 15 00 00 ...
+T3E34 002:923.883   completely In flash
+T3E34 002:923.911 - 0.395ms returns 0x40
+T3E34 002:924.421 JLINK_WriteMem(0x00000040, 0x138 Bytes, ...)
+T3E34 002:924.445   Data:  01 00 00 00 70 00 00 00 02 00 00 00 50 00 00 00 ...
+T3E34 002:924.461   completely In flash
+T3E34 002:924.474 - 0.052ms returns 0x138
+T3E34 002:924.866 JLINK_WriteMem(0x00000400, 0x4 Bytes, ...)
+T3E34 002:924.885   Data:  FF FF FF FF
+T3E34 002:924.913   completely In flash
+T3E34 002:924.925 - 0.059ms returns 0x4
+T3E34 002:925.321 JLINK_WriteMem(0x00000404, 0x4 Bytes, ...)
+T3E34 002:925.344   Data:  DF DF FF FF
+T3E34 002:925.364   completely In flash
+T3E34 002:925.381 - 0.060ms returns 0x4
+T3E34 002:926.106 JLINK_WriteMem(0x00000440, 0x60 Bytes, ...)
+T3E34 002:926.129   Data:  00 00 00 01 00 20 00 00 00 00 00 00 00 00 00 00 ...
+T3E34 002:926.144   completely In flash
+T3E34 002:926.157 - 0.051ms returns 0x60
+T3E34 002:926.623 JLINK_WriteMem(0x000004A0, 0xBB0 Bytes, ...)
+T3E34 002:926.650   Data:  44 F2 60 00 44 F2 60 03 C2 F2 00 00 C2 F2 00 03 ...
+T3E34 002:926.666   completely In flash
+T3E34 002:926.678 - 0.055ms returns 0xBB0
+T3E34 002:927.123 JLINK_WriteMem(0x00001050, 0xBA0 Bytes, ...)
+T3E34 002:927.143   Data:  1C 43 02 2D 13 D1 29 B1 01 23 30 00 01 99 02 AA ...
+T3E34 002:927.159   completely In flash
+T3E34 002:927.171 - 0.048ms returns 0xBA0
+T3E34 002:927.436 JLINK_WriteMem(0x00001BF0, 0x564 Bytes, ...)
+T3E34 002:927.461   Data:  61 76 65 20 63 68 61 6E 6E 65 6C 32 20 28 63 68 ...
+T3E34 002:927.480   completely In flash
+T3E34 002:927.497 - 0.061ms returns 0x564
+T3E34 002:927.790 JLINK_WriteMem(0x00002154, 0x4 Bytes, ...)
+T3E34 002:927.830   Data:  F8 B5 C0 46
+T3E34 002:927.865   completely In flash
+T3E34 002:927.907 - 0.117ms returns 0x4
+T3E34 002:928.201 JLINK_WriteMem(0x00002158, 0x4 Bytes, ...)
+T3E34 002:928.226   Data:  F8 B5 C0 46
+T3E34 002:928.245   completely In flash
+T3E34 002:928.263 - 0.062ms returns 0x4
+T3E34 002:928.547 JLINK_WriteMem(0x0000215C, 0x4 Bytes, ...)
+T3E34 002:928.570   Data:  21 05 00 00
+T3E34 002:928.589   completely In flash
+T3E34 002:928.605 - 0.058ms returns 0x4
+T3E34 002:928.860 JLINK_WriteMem(0x00002160, 0x4 Bytes, ...)
+T3E34 002:928.881   Data:  F1 04 00 00
+T3E34 002:928.898   completely In flash
+T3E34 002:928.912 - 0.052ms returns 0x4
+T16D4 002:938.353   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 002:938.906   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 002:939.189   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 002:939.502   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 002:939.884   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 002:939.924   CPU_ReadMem(4096 bytes @ 0x20004000)
+T3E34 002:961.427 JLINK_EndDownload()
+T3E34 002:961.938   HandleBeforeFlashProg() start
+T3E34 002:961.964    J-Link Script File: Executing HandleBeforeFlashProg()
+T3E34 002:962.047   CPU_ReadMem(2 bytes @ 0x40000D04)
+T3E34 002:962.317   CPU_ReadMem(2 bytes @ 0x40000D14)
+T3E34 002:962.590   HandleBeforeFlashProg() end - Took 624us
+T3E34 002:962.608   CPU_ReadMem(4 bytes @ 0x40019004)
+T3E34 002:962.866   CPU_ReadMem(4 bytes @ 0xE000ED90)
+T3E34 002:963.154   CPU_ReadMem(4 bytes @ 0xE000ED94)
+T3E34 002:963.432    -- --------------------------------------
+T3E34 002:963.462    -- Start of determining flash info (Bank @ 0x00000000)
+T3E34 002:963.478    -- End of determining flash info
+T3E34 002:963.493    -- Start of determining dirty areas in flash cache
+T3E34 002:963.506    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x00000000 if necessary
+T3E34 002:963.519    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x00000800 if necessary
+T3E34 002:963.532    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x00001000 if necessary
+T3E34 002:963.545    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x00001800 if necessary
+T3E34 002:963.557    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x00002000 if necessary
+T3E34 002:963.578    -- End of determining dirty areas
+T3E34 002:963.590    -- Start of preparing flash programming
+T3E34 002:963.610    -- Preparing RAMCode
+T3E34 002:963.630    -- Calculating RAM usage
+T3E34 002:963.643    -- RAM usage = 6824 Bytes
+T3E34 002:963.655    -- Preserving CPU registers
+T3E34 002:963.927    -- Preparing memory
+T3E34 002:963.954    -- Preparing target
+T3E34 002:963.966    -- Preserving target RAM temporarily used for programming
+T3E34 002:998.869    -- Downloading RAMCode
+T3E34 003:021.535    -- Initializing RAMCode (InitType: 3 = Verify)
+T3E34 003:021.585   CPU_ReadMem(2 bytes @ 0x40000D04)
+T3E34 003:022.057   CPU_ReadMem(2 bytes @ 0x40000D14)
+T3E34 003:022.331    -- Executing SEGGER_FL_Prepare(3)
+T3E34 003:025.975    -- SEGGER_FL_Prepare() changed clock speed to 8000000Hz
+T3E34 003:026.036    -- End of preparing flash programming
+T3E34 003:026.060   
+  ***** Warning: 
+T3E34 003:026.080   CPU is running at low speed (8000 kHz).
+T3E34 003:026.099    -- CPU is running at 8000 kHz.
+T3E34 003:026.120    -- Start of comparing flash
+T3E34 003:026.141    -- CRC check was estimated as fastest method
+T3E34 003:026.165    -- Comparing range 0x0000 - 0x27FF (5 Sectors, 10 KB), using single-block CRC calculation
+T3E34 003:058.243    -- CRC matches
+T3E34 003:058.281    -- Comparing range 0x0000 - 0x27FF (5 Sectors, 10 KB), using alternative single-block CRC calculation
+T3E34 003:090.270    -- CRC matches
+T3E34 003:090.305    -- End of comparing flash
+T3E34 003:090.320    -- Start of erasing sectors
+T3E34 003:090.331    -- End of erasing sectors
+T3E34 003:090.343    -- Start of flash programming
+T3E34 003:090.354    -- End of flash programming
+T3E34 003:090.366    -- Start of verifying flash
+T3E34 003:090.377    -- End of verifying flash
+T3E34 003:090.388    -- Start of restoring
+T3E34 003:090.401    -- Executing SEGGER_FL_Restore()
+T3E34 003:093.889    -- Restoring target memory
+T3E34 003:124.744    -- Restoring CPU registers
+T3E34 003:125.112    -- End of restoring
+T3E34 003:125.140    -- Bank 0 @ 0x00000000: Skipped. Contents already match
+T3E34 003:125.152    -- Bank 0 @ 0x00000000: Skipped. Contents already match
+T3E34 003:125.167   HandleAfterFlashProg() start
+T3E34 003:125.179    J-Link Script File: Executing HandleAfterFlashProg()
+T3E34 003:125.189   HandleAfterFlashProg() end - Took 10us
+T3E34 003:125.307 - 163.879ms returns 0 (0x0)
+T16D4 003:126.429   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 003:126.705   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 003:126.960   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 003:127.199   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 003:127.450   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 003:127.475   CPU_ReadMem(4096 bytes @ 0x20005000)
+T3E34 003:148.927 JLINK_WriteReg(R15 (PC), 0x0000007C)
+T3E34 003:148.988 - 0.061ms returns 0
+T3E34 003:149.016 JLINK_WriteReg(XPSR, 0x01000000)
+T3E34 003:149.040 - 0.024ms returns 0
+T3E34 003:149.821 JLINK_ResetPullsRESET(ON)
+T3E34 003:149.866 - 0.045ms 
+T3E34 003:149.889 JLINK_Halt()
+T3E34 003:149.909 - 0.019ms returns 0x00
+T3E34 003:149.931 JLINK_IsHalted()
+T3E34 003:149.952 - 0.020ms returns TRUE
+T3E34 003:149.973 JLINK_Reset()
+T3E34 003:150.350   CPU_ReadMem(4 bytes @ 0x20004000)
+T3E34 003:150.656   CPU_WriteMem(4 bytes @ 0x20004000)
+T3E34 003:150.950   JLINK_GetResetTypeDesc
+T3E34 003:150.963   - 0.013ms 
+T3E34 003:150.971   Reset type: CONNECT UNDER RESET (https://kb.segger.com/J-Link_Reset_Strategies)
+T3E34 003:150.981   CPU_WriteMem(4 bytes @ 0xE000EDF0)
+T3E34 003:151.258   CPU_ReadMem(4 bytes @ 0xE000ED44)
+T3E34 003:151.512   CPU_WriteMem(4 bytes @ 0xE000EDFC)
+T3E34 003:151.798   Reset: Halt core after reset via DEMCR.VC_CORERESET.
+T3E34 003:152.046   Reset: Reset device via AIRCR.SYSRESETREQ.
+T3E34 003:152.063   CPU_WriteMem(4 bytes @ 0xE000ED0C)
+T3E34 003:204.744   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T3E34 003:205.070   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T3E34 003:205.362   CPU_WriteMem(4 bytes @ 0xE000EDFC)
+T3E34 003:211.609   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T3E34 003:214.689   CPU_WriteMem(4 bytes @ 0xE0002000)
+T3E34 003:215.025   CPU_ReadMem(4 bytes @ 0xE000EDFC)
+T3E34 003:215.330   CPU_ReadMem(4 bytes @ 0xE0001000)
+T3E34 003:215.619   CPU_WriteMem(4 bytes @ 0xE0001000)
+T3E34 003:215.915   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T3E34 003:216.203 - 66.229ms 
+T3E34 003:216.247 JLINK_SetEndian(ARM_ENDIAN_LITTLE)
+T3E34 003:216.262 - 0.015ms returns 0
+T16D4 003:217.913   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 003:218.251   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 003:218.622   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 003:218.908   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 003:219.176   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 003:219.202   CPU_ReadMem(4096 bytes @ 0x20004000)
+T3E34 003:240.682 JLINK_ReadMem(0x0000007C, 0x4 Bytes, ...)
+T3E34 003:240.718    -- Read from flash cache (4 bytes @ 0x0000007C)
+T3E34 003:240.731   Data:  10 B5 00 F0
+T3E34 003:240.744 - 0.062ms returns 0
+T3E34 003:247.037 JLINK_ReadMem(0x0000007C, 0x4 Bytes, ...)
+T3E34 003:247.072    -- Read from flash cache (4 bytes @ 0x0000007C)
+T3E34 003:247.084   Data:  10 B5 00 F0
+T3E34 003:247.096 - 0.059ms returns 0
+T16D4 003:282.235   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 003:282.615   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 003:282.916   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 003:283.200   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 003:283.516   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 003:283.548   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 003:346.719   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 003:347.045   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 003:347.320   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 003:347.622   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 003:347.936   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 003:347.973   CPU_ReadMem(4096 bytes @ 0x20004000)
+T3E34 003:403.787 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T3E34 003:403.828 - 0.041ms returns 0x04
+T3E34 003:403.842 JLINK_GetNumWPUnits()
+T3E34 003:403.854 - 0.011ms returns 2
+T3E34 003:403.872 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T3E34 003:403.884 - 0.012ms returns 0x04
+T3E34 003:403.898 JLINK_GetNumWPUnits()
+T3E34 003:403.909 - 0.011ms returns 2
+T3E34 003:403.924 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T3E34 003:403.936 - 0.012ms returns 0x04
+T3E34 003:403.949 JLINK_GetNumWPUnits()
+T3E34 003:403.960 - 0.011ms returns 2
+T3E34 003:404.008 JLINK_SetBPEx(Addr = 0x00000E80, Type = 0xFFFFFF00)
+T3E34 003:404.027 - 0.019ms returns 0x00000001
+T3E34 003:404.043 JLINK_ClrBPEx(BPHandle = 0x00000001)
+T3E34 003:404.056 - 0.012ms returns 0x00
+T3E34 003:405.418 JLINK_ReadMem(0x00000E80, 0x40 Bytes, ...)
+T3E34 003:405.452    -- Read from flash cache (64 bytes @ 0x00000E80)
+T3E34 003:405.466   Data:  10 B5 FF F7 E5 FF 00 20 10 BD 00 00 EF F3 10 80 ...
+T3E34 003:405.478 - 0.060ms returns 0
+T3E34 003:406.959 JLINK_ReadMem(0x00000E80, 0x2 Bytes, ...)
+T3E34 003:407.004    -- Read from flash cache (2 bytes @ 0x00000E80)
+T3E34 003:407.025   Data:  10 B5
+T3E34 003:407.046 - 0.087ms returns 0
+T3E34 003:407.443 JLINK_SetBPEx(Addr = 0x00000E80, Type = 0xFFFFFF00)
+T3E34 003:407.474 - 0.030ms returns 0x00000002
+T16D4 003:411.381   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 003:411.716   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 003:411.982   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 003:412.236   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 003:412.488   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 003:412.508   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 003:467.118   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 003:467.438   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 003:467.722   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 003:467.980   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 003:468.242   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 003:468.272   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 003:533.130   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 003:533.466   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 003:533.785   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 003:534.064   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 003:534.363   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 003:534.390   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 003:598.996   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 003:599.358   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 003:599.671   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 003:600.080   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 003:600.400   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 003:600.437   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 003:664.280   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 003:664.618   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 003:664.956   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 003:665.239   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 003:665.514   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 003:665.537   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 003:720.357   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 003:720.688   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 003:720.960   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 003:721.216   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 003:721.480   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 003:721.503   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 003:776.689   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 003:777.024   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 003:777.304   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 003:777.659   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 003:777.938   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 003:777.962   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 003:841.804   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 003:842.197   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 003:842.480   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 003:842.809   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 003:843.080   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 003:843.099   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 003:906.895   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 003:907.212   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 003:907.480   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 003:907.803   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 003:908.085   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 003:908.111   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 003:972.499   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 003:972.993   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 003:973.292   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 003:973.657   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 003:973.921   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 003:973.940   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 004:037.409   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 004:037.815   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 004:038.108   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 004:038.388   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 004:038.680   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 004:038.710   CPU_ReadMem(4096 bytes @ 0x20005000)
+T3E34 004:060.197 JLINK_ReadRegs(NumRegs = 22)
+T3E34 004:060.256   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T3E34 004:060.651   
+  R0 (0)        = 0x00                 R1 (1)        = 0x40044400           R2 (2)        = 0x00                 R3 (3)        = 0x20004115        
+  R4 (4)        = 0x20005A38           R5 (5)        = 0x200045CC           R6 (6)        = 0x00                 R7 (7)        = 0x20005A98        
+  R8 (8)        = 0x7D01D807           R9 (9)        = 0x40008668           R10 (10)      = 0xF70058B2           R11 (11)      = 0x22428801        
+  R12 (12)      = 0x40044400           R13 (SP) (13) = 0x20004460           R14 (14)      = 0x20004503           R15 (PC) (15) = 0x7C              
+  XPSR (16)     = 0x61000000           MSP (17)      = 0x20004460           PSP (18)      = 0x2110E008           MSPLIM (86)   = 0x00              
+  PSPLIM (87)   = 0x00                 CFBP (20)     = 0x00              
+T3E34 004:060.679 - 0.482ms returns 0x00
+T3E34 004:061.848 JLINK_ReadMem(0x0000007C, 0x4 Bytes, ...)
+T3E34 004:061.883    -- Read from flash cache (4 bytes @ 0x0000007C)
+T3E34 004:061.904   Data:  10 B5 00 F0
+T3E34 004:061.921 - 0.073ms returns 0
+T16D4 004:102.411   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 004:102.756   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 004:103.016   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 004:103.272   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 004:103.532   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 004:103.551   CPU_ReadMem(4096 bytes @ 0x20004000)
+T9554 004:124.955 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T9554 004:125.006 - 0.052ms returns 0x04
+T9554 004:125.024 JLINK_GetNumWPUnits()
+T9554 004:125.032 - 0.008ms returns 2
+T9554 004:125.834 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T9554 004:125.868 - 0.033ms returns 0x04
+T9554 004:125.882 JLINK_GetNumWPUnits()
+T9554 004:125.893 - 0.011ms returns 2
+T9554 004:126.326 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T9554 004:126.352 - 0.025ms returns 0x04
+T9554 004:126.365 JLINK_GetNumWPUnits()
+T9554 004:126.378 - 0.011ms returns 2
+T9554 004:126.584 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T9554 004:126.606 - 0.022ms returns 0x04
+T9554 004:126.615 JLINK_GetNumWPUnits()
+T9554 004:126.623 - 0.007ms returns 2
+T9554 004:126.994 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T9554 004:127.020 - 0.026ms returns 0x04
+T9554 004:127.034 JLINK_GetNumWPUnits()
+T9554 004:127.045 - 0.011ms returns 2
+T9554 004:127.240 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T9554 004:127.265 - 0.025ms returns 0x04
+T9554 004:127.278 JLINK_GetNumWPUnits()
+T9554 004:127.292 - 0.012ms returns 2
+T9554 004:127.468 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T9554 004:127.494 - 0.026ms returns 0x04
+T9554 004:127.509 JLINK_GetNumWPUnits()
+T9554 004:127.522 - 0.013ms returns 2
+T9554 004:127.673 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T9554 004:127.690 - 0.017ms returns 0x04
+T9554 004:127.699 JLINK_GetNumWPUnits()
+T9554 004:127.706 - 0.007ms returns 2
+T3E34 004:145.030 JLINK_ReadMem(0x0000007C, 0x4 Bytes, ...)
+T3E34 004:145.066    -- Read from flash cache (4 bytes @ 0x0000007C)
+T3E34 004:145.079   Data:  10 B5 00 F0
+T3E34 004:145.091 - 0.061ms returns 0
+T16D4 004:166.118   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 004:166.448   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 004:166.742   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 004:167.008   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 004:167.282   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 004:167.300   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 004:231.208   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 004:231.533   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 004:231.812   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 004:232.072   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 004:232.327   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 004:232.344   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 004:296.461   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 004:296.907   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 004:297.197   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 004:297.441   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 004:297.699   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 004:297.725   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 004:361.187   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 004:361.508   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 004:361.818   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 004:362.099   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 004:362.369   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 004:362.394   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 004:426.493   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 004:442.894   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 004:443.174   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 004:443.481   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 004:443.742   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 004:443.759   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 004:518.597   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 004:518.925   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 004:519.214   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 004:519.492   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 004:519.744   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 004:519.761   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 004:583.832   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 004:584.168   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 004:584.445   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 004:584.701   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 004:584.959   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 004:584.980   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 004:650.168   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 004:650.536   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 004:650.836   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 004:651.111   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 004:651.385   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 004:651.413   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 004:715.665   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 004:716.000   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 004:716.258   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 004:716.509   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 004:716.815   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 004:716.832   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 004:781.231   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 004:781.669   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 004:781.952   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 004:782.237   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 004:782.505   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 004:782.521   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 004:846.063   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 004:846.383   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 004:846.708   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 004:847.000   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 004:847.281   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 004:847.307   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 004:912.208   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 004:912.539   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 004:912.834   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 004:913.105   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 004:913.373   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 004:913.399   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 004:977.108   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 004:977.443   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 004:977.707   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 004:977.949   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 004:978.198   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 004:978.214   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 005:041.847   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 005:042.181   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 005:042.491   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 005:042.775   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 005:043.059   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 005:043.099   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 005:107.025   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 005:107.347   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 005:107.668   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 005:107.908   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 005:108.152   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 005:108.178   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 005:172.431   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 005:172.759   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 005:173.029   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 005:173.273   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 005:173.521   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 005:173.537   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 005:236.789   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 005:237.091   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 005:237.340   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 005:237.672   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 005:237.917   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 005:237.943   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 005:302.406   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 005:302.715   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 005:303.009   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 005:303.288   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 005:303.565   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 005:303.581   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 005:366.217   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 005:366.541   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 005:366.830   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 005:367.087   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 005:367.366   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 005:367.385   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 005:432.025   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 005:432.329   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 005:432.673   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 005:432.949   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 005:433.210   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 005:433.225   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 005:496.671   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 005:497.030   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 005:497.333   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 005:497.675   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 005:497.933   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 005:497.973   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 005:562.945   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 005:563.257   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 005:563.546   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 005:563.842   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 005:564.110   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 005:564.126   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 005:618.633   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 005:618.971   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 005:619.277   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 005:619.532   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 005:619.775   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 005:619.792   CPU_ReadMem(4096 bytes @ 0x20005000)
+T3E34 005:641.270 JLINK_STRACE_Read(..., NumItems = 0x10000)
+T3E34 005:641.323   Initializing trace type buffer with configured Coresight trace components (* indicates set/detected address):
+T3E34 005:641.332     TF:   0x00000000
+T3E34 005:641.339     TMC:  0x00000000
+T3E34 005:641.347     ETB:  0x00000000
+T3E34 005:641.356    *MTB:  0x40019000
+T3E34 005:641.363     TPIU: 0x00000000
+T3E34 005:641.371     ETM:  0x00000000
+T3E34 005:641.377     STM:  0x00000000
+T3E34 005:641.385     PTM:  0x00000000
+T3E34 005:641.548 - 0.278ms NumItemsRead = 0x00
+T3E34 005:641.577 JLINK_IsHalted()
+T3E34 005:641.843 - 0.265ms returns TRUE
+T3E34 005:641.859 JLINK_STRACE_Read(..., NumItems = 0x10000)
+T3E34 005:641.867 - 0.008ms NumItemsRead = 0x00
+T3E34 005:641.882 JLINK_GoEx(MaxEmulInsts = 0, Flags = 0x01)
+T3E34 005:641.899   CPU_WriteMem(4 bytes @ 0xE0002000)
+T3E34 005:642.181   CPU_ReadMem(4 bytes @ 0xE0001000)
+T3E34 005:642.472   CPU_WriteMem(4 bytes @ 0xE0001000)
+T3E34 005:642.789   CPU_WriteMem(4 bytes @ 0xE0002008)
+T3E34 005:642.813   CPU_WriteMem(4 bytes @ 0xE000200C)
+T3E34 005:642.825   CPU_WriteMem(4 bytes @ 0xE0002010)
+T3E34 005:642.837   CPU_WriteMem(4 bytes @ 0xE0002014)
+T3E34 005:643.703   CPU_WriteMem(4 bytes @ 0xE0001004)
+T3E34 005:644.453   Memory map 'after startup completion point' is active
+T3E34 005:644.475 - 2.592ms 
+T16D4 005:684.132   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 005:684.439   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 005:684.720   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 005:684.978   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 005:685.238   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 005:685.266   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 005:739.648   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 005:739.973   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 005:740.252   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 005:740.524   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 005:740.859   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 005:740.905   CPU_ReadMem(4096 bytes @ 0x20005000)
+T3E34 005:762.315 JLINK_IsHalted()
+T3E34 005:764.932 - 2.616ms returns TRUE
+T3E34 005:764.973 JLINK_ReadReg(XPSR)
+T3E34 005:764.993   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T3E34 005:765.284 - 0.310ms returns 0x61000000
+T3E34 005:765.313 JLINK_ReadReg(R15 (PC))
+T3E34 005:765.335 - 0.021ms returns 0x00000E80
+T3E34 005:765.355 JLINK_ReadReg(XPSR)
+T3E34 005:765.370 - 0.014ms returns 0x61000000
+T3E34 005:765.385 JLINK_ReadReg(XPSR)
+T3E34 005:765.400 - 0.014ms returns 0x61000000
+T3E34 005:765.415 JLINK_ReadReg(R15 (PC))
+T3E34 005:765.429 - 0.013ms returns 0x00000E80
+T3E34 005:765.444 JLINK_ReadReg(XPSR)
+T3E34 005:765.457 - 0.013ms returns 0x61000000
+T3E34 005:765.473 JLINK_ReadReg(XPSR)
+T3E34 005:765.486 - 0.013ms returns 0x61000000
+T3E34 005:765.502 JLINK_ReadMem(0x00000E80, 0x1 Bytes, ...)
+T3E34 005:765.518    -- Read from flash cache (1 bytes @ 0x00000E80)
+T3E34 005:765.538   Data:  10
+T3E34 005:765.557 - 0.055ms returns 0
+T3E34 005:765.573 JLINK_IsHalted()
+T3E34 005:765.585 - 0.013ms returns TRUE
+T3E34 005:765.600 JLINK_ReadReg(XPSR)
+T3E34 005:765.614 - 0.013ms returns 0x61000000
+T3E34 005:765.731 JLINK_ReadReg(XPSR)
+T3E34 005:765.757 - 0.025ms returns 0x61000000
+T3E34 005:765.777 JLINK_ReadReg(R15 (PC))
+T3E34 005:765.795 - 0.018ms returns 0x00000E80
+T3E34 005:765.811 JLINK_ReadReg(XPSR)
+T3E34 005:765.825 - 0.014ms returns 0x61000000
+T3E34 005:765.839 JLINK_ReadReg(XPSR)
+T3E34 005:765.853 - 0.013ms returns 0x61000000
+T3E34 005:765.869 JLINK_ReadMem(0x00000E80, 0x1 Bytes, ...)
+T3E34 005:765.883    -- Read from flash cache (1 bytes @ 0x00000E80)
+T3E34 005:765.903   Data:  10
+T3E34 005:765.922 - 0.053ms returns 0
+T3E34 005:766.007 JLINK_IsHalted()
+T3E34 005:766.024 - 0.016ms returns TRUE
+T3E34 005:766.040 JLINK_ReadReg(XPSR)
+T3E34 005:766.055 - 0.014ms returns 0x61000000
+T3E34 005:766.070 JLINK_ReadReg(R15 (PC))
+T3E34 005:766.084 - 0.014ms returns 0x00000E80
+T3E34 005:766.100 JLINK_ReadReg(XPSR)
+T3E34 005:766.113 - 0.013ms returns 0x61000000
+T3E34 005:766.129 JLINK_ReadReg(XPSR)
+T3E34 005:766.142 - 0.013ms returns 0x61000000
+T3E34 005:766.157 JLINK_ReadReg(R15 (PC))
+T3E34 005:766.171 - 0.013ms returns 0x00000E80
+T3E34 005:766.186 JLINK_ReadReg(XPSR)
+T3E34 005:766.200 - 0.013ms returns 0x61000000
+T3E34 005:766.215 JLINK_ReadReg(XPSR)
+T3E34 005:766.229 - 0.014ms returns 0x61000000
+T3E34 005:766.244 JLINK_ReadMem(0x00000E80, 0x1 Bytes, ...)
+T3E34 005:766.258    -- Read from flash cache (1 bytes @ 0x00000E80)
+T3E34 005:766.277   Data:  10
+T3E34 005:766.296 - 0.052ms returns 0
+T3E34 005:766.311 JLINK_IsHalted()
+T3E34 005:766.324 - 0.012ms returns TRUE
+T3E34 005:766.339 JLINK_ReadReg(XPSR)
+T3E34 005:766.352 - 0.013ms returns 0x61000000
+T3E34 005:766.367 JLINK_ReadReg(XPSR)
+T3E34 005:766.390 - 0.022ms returns 0x61000000
+T3E34 005:766.405 JLINK_ReadReg(R15 (PC))
+T3E34 005:766.419 - 0.014ms returns 0x00000E80
+T3E34 005:766.434 JLINK_ReadReg(XPSR)
+T3E34 005:766.448 - 0.014ms returns 0x61000000
+T3E34 005:766.463 JLINK_ReadReg(XPSR)
+T3E34 005:766.477 - 0.013ms returns 0x61000000
+T3E34 005:766.491 JLINK_ReadMem(0x00000E80, 0x1 Bytes, ...)
+T3E34 005:766.505    -- Read from flash cache (1 bytes @ 0x00000E80)
+T3E34 005:766.524   Data:  10
+T3E34 005:766.543 - 0.051ms returns 0
+T3E34 005:767.153 JLINK_ReadRegs(NumRegs = 22)
+T3E34 005:767.192   
+  R0 (0)        = 0x00                 R1 (1)        = 0x00                 R2 (2)        = 0x00                 R3 (3)        = 0x00              
+  R4 (4)        = 0x20005A38           R5 (5)        = 0x200045CC           R6 (6)        = 0x00                 R7 (7)        = 0x20005A98        
+  R8 (8)        = 0x7D01D807           R9 (9)        = 0x40008668           R10 (10)      = 0xF70058B2           R11 (11)      = 0x22428801        
+  R12 (12)      = 0x40044400           R13 (SP) (13) = 0x20004458           R14 (14)      = 0x87                 R15 (PC) (15) = 0xE80             
+  XPSR (16)     = 0x61000000           MSP (17)      = 0x20004458           PSP (18)      = 0x2110E008           MSPLIM (86)   = 0x00              
+  PSPLIM (87)   = 0x00                 CFBP (20)     = 0x00              
+T3E34 005:767.204 - 0.051ms returns 0x00
+T3E34 005:768.352 JLINK_ReadMem(0x00000E80, 0x4 Bytes, ...)
+T3E34 005:768.379    -- Read from flash cache (4 bytes @ 0x00000E80)
+T3E34 005:768.390   Data:  10 B5 FF F7
+T3E34 005:768.402 - 0.051ms returns 0
+T3E34 005:771.183 JLINK_ClrBPEx(BPHandle = 0x00000002)
+T3E34 005:771.225 - 0.041ms returns 0x00
+T16D4 005:804.475   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 005:804.795   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 005:805.075   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 005:805.334   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 005:805.583   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 005:805.600   CPU_ReadMem(4096 bytes @ 0x20004000)
+T3E34 005:827.004 JLINK_ReadMem(0x00000E80, 0x4 Bytes, ...)
+T3E34 005:827.043    -- Read from flash cache (4 bytes @ 0x00000E80)
+T3E34 005:827.055   Data:  10 B5 FF F7
+T3E34 005:827.067 - 0.063ms returns 0
+T16D4 005:860.383   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 005:860.718   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 005:860.995   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 005:861.263   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 005:861.527   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 005:861.551   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 005:923.855   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 005:924.191   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 005:924.477   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 005:924.739   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 005:924.980   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 005:924.996   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 005:988.827   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 005:989.162   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 005:989.421   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 005:989.701   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 005:989.958   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 005:989.981   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 006:052.789   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 006:053.126   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 006:053.396   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 006:053.704   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 006:053.991   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 006:054.018   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 006:107.140   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 006:107.463   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 006:107.729   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 006:107.987   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 006:108.247   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 006:108.276   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 006:172.496   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 006:172.826   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 006:173.122   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 006:173.381   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 006:173.700   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 006:173.717   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 006:226.615   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 006:226.937   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 006:227.203   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 006:227.444   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 006:227.703   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 006:227.720   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 006:292.061   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 006:292.373   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 006:292.697   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 006:292.965   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 006:293.228   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 006:293.261   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 006:356.357   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 006:356.705   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 006:357.001   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 006:357.275   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 006:357.535   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 006:357.555   CPU_ReadMem(4096 bytes @ 0x20005000)
+T16D4 006:421.737   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 006:422.064   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 006:422.342   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 006:422.592   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 006:422.855   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 006:422.871   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 006:488.260   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 006:488.584   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 006:488.912   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 006:489.189   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 006:489.442   Periodic RTT: Looking for RTT CB @ 0x20005000 (Range 1/1)
+T16D4 006:489.459   CPU_ReadMem(4096 bytes @ 0x20005000)
+T3E34 006:526.651 JLINK_STRACE_Read(..., NumItems = 0x10000)
+T3E34 006:526.693 - 0.042ms NumItemsRead = 0x00
+T3E34 006:526.713 JLINK_IsHalted()
+T3E34 006:527.009 - 0.295ms returns TRUE
+T3E34 006:527.035 JLINK_STRACE_Read(..., NumItems = 0x10000)
+T3E34 006:527.045 - 0.009ms NumItemsRead = 0x00
+T3E34 006:527.055 JLINK_GoEx(MaxEmulInsts = 0, Flags = 0x01)
+T3E34 006:527.077   CPU_ReadMem(4 bytes @ 0xE0001000)
+T3E34 006:527.357   CPU_WriteMem(4 bytes @ 0xE0002008)
+T3E34 006:528.162 - 1.106ms 
+T16D4 006:554.202   CPU_ReadMem(4 bytes @ 0xE000ED00)
+T16D4 006:554.527   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T16D4 006:554.812   CPU_ReadMem(4 bytes @ 0xE000ED08)
+T16D4 006:555.076   CPU_ReadMem(4 bytes @ 0x00000020)
+T16D4 006:555.375   Periodic RTT: Looking for RTT CB @ 0x20004000 (Range 1/1)
+T16D4 006:555.400   CPU_ReadMem(4096 bytes @ 0x20004000)
+T16D4 006:576.804   CPU_ReadMem(24 bytes @ 0x20004CA0)
+T16D4 006:577.225   Periodic RTT: RTT CB auto-detected @ 0x20004CA0
+T16D4 006:577.243   Periodic RTT: RTT CB verified. Started data handling
+T3E34 006:624.240 JLINK_IsHalted()
+T3E34 006:624.990 - 0.749ms returns FALSE
+T3E34 006:625.039 JLINK_IsHalted()
+T3E34 006:625.751 - 0.711ms returns FALSE
+T3E34 006:734.138 JLINK_IsHalted()
+T3E34 006:734.716 - 0.577ms returns FALSE
+T3E34 006:734.739 JLINK_IsHalted()
+T3E34 006:735.472 - 0.732ms returns FALSE
+T3E34 006:842.808 JLINK_IsHalted()
+T3E34 006:843.568 - 0.759ms returns FALSE
+T3E34 006:843.593 JLINK_IsHalted()
+T3E34 006:844.327 - 0.733ms returns FALSE
+T3E34 006:952.192 JLINK_IsHalted()
+T3E34 006:952.843 - 0.651ms returns FALSE
+T3E34 006:952.858 JLINK_IsHalted()
+T3E34 006:953.596 - 0.737ms returns FALSE
+T3E34 007:063.591 JLINK_IsHalted()
+T3E34 007:064.306 - 0.714ms returns FALSE
+T3E34 007:064.333 JLINK_IsHalted()
+T3E34 007:065.053 - 0.719ms returns FALSE
+T3E34 007:171.002 JLINK_IsHalted()
+T3E34 007:171.463 - 0.461ms returns FALSE
+T3E34 007:171.493 JLINK_IsHalted()
+T3E34 007:172.217 - 0.723ms returns FALSE
+T3E34 007:280.328 JLINK_IsHalted()
+T3E34 007:281.218 - 0.889ms returns FALSE
+T3E34 007:281.265 JLINK_IsHalted()
+T3E34 007:281.963 - 0.697ms returns FALSE
+T3E34 007:390.292 JLINK_IsHalted()
+T3E34 007:391.088 - 0.796ms returns FALSE
+T3E34 007:391.115 JLINK_IsHalted()
+T3E34 007:391.834 - 0.719ms returns FALSE
+T3E34 007:499.313 JLINK_IsHalted()
+T3E34 007:500.006 - 0.693ms returns FALSE
+T3E34 007:500.043 JLINK_IsHalted()
+T3E34 007:500.742 - 0.699ms returns FALSE
+T3E34 007:608.065 JLINK_IsHalted()
+T3E34 007:608.739 - 0.673ms returns FALSE
+T3E34 007:608.765 JLINK_IsHalted()
+T3E34 007:609.528 - 0.762ms returns FALSE
+T3E34 007:718.147 JLINK_IsHalted()
+T3E34 007:718.606 - 0.459ms returns FALSE
+T3E34 007:718.625 JLINK_IsHalted()
+T3E34 007:719.464 - 0.838ms returns FALSE
+T9554 007:774.135 JLINK_IsHalted()
+T9554 007:774.827 - 0.691ms returns FALSE
+T9554 007:774.852 JLINK_IsHalted()
+T9554 007:775.586 - 0.734ms returns FALSE
+T9554 007:775.769 JLINK_IsHalted()
+T9554 007:776.345 - 0.575ms returns FALSE
+T9554 007:776.385 JLINK_IsHalted()
+T9554 007:777.105 - 0.720ms returns FALSE
+T3E34 007:828.144 JLINK_IsHalted()
+T3E34 007:828.747 - 0.603ms returns FALSE
+T3E34 007:828.777 JLINK_IsHalted()
+T3E34 007:829.497 - 0.720ms returns FALSE
+T3E34 007:938.393 JLINK_IsHalted()
+T3E34 007:939.151 - 0.758ms returns FALSE
+T3E34 007:939.166 JLINK_IsHalted()
+T3E34 007:939.930 - 0.762ms returns FALSE
+T3E34 008:045.753 JLINK_IsHalted()
+T3E34 008:046.273 - 0.518ms returns FALSE
+T3E34 008:046.309 JLINK_IsHalted()
+T3E34 008:047.054 - 0.743ms returns FALSE
+T3E34 008:157.058 JLINK_IsHalted()
+T3E34 008:157.803 - 0.744ms returns FALSE
+T3E34 008:157.843 JLINK_IsHalted()
+T3E34 008:158.548 - 0.704ms returns FALSE
+T3E34 008:264.414 JLINK_IsHalted()
+T3E34 008:264.869 - 0.454ms returns FALSE
+T3E34 008:264.893 JLINK_IsHalted()
+T3E34 008:265.628 - 0.734ms returns FALSE
+T3E34 008:375.082 JLINK_IsHalted()
+T3E34 008:375.814 - 0.731ms returns FALSE
+T3E34 008:375.841 JLINK_IsHalted()
+T3E34 008:376.581 - 0.740ms returns FALSE
+T3E34 008:483.805 JLINK_IsHalted()
+T3E34 008:484.264 - 0.458ms returns FALSE
+T3E34 008:484.291 JLINK_IsHalted()
+T3E34 008:485.011 - 0.719ms returns FALSE
+T3E34 008:594.006 JLINK_IsHalted()
+T3E34 008:594.507 - 0.500ms returns FALSE
+T3E34 008:594.541 JLINK_IsHalted()
+T3E34 008:595.264 - 0.722ms returns FALSE
+T3E34 008:702.105 JLINK_IsHalted()
+T3E34 008:702.818 - 0.712ms returns FALSE
+T3E34 008:702.855 JLINK_IsHalted()
+T3E34 008:703.568 - 0.712ms returns FALSE
+T9554 008:778.680 JLINK_IsHalted()
+T9554 008:779.404 - 0.723ms returns FALSE
+T9554 008:779.422 JLINK_IsHalted()
+T9554 008:780.183 - 0.759ms returns FALSE
+T3E34 008:812.368 JLINK_IsHalted()
+T3E34 008:813.127 - 0.758ms returns FALSE
+T3E34 008:813.152 JLINK_IsHalted()
+T3E34 008:813.907 - 0.753ms returns FALSE
+T3E34 008:921.320 JLINK_IsHalted()
+T3E34 008:921.845 - 0.525ms returns FALSE
+T3E34 008:921.877 JLINK_IsHalted()
+T3E34 008:922.610 - 0.732ms returns FALSE
+T3E34 009:030.538 JLINK_IsHalted()
+T3E34 009:031.213 - 0.674ms returns FALSE
+T3E34 009:031.227 JLINK_IsHalted()
+T3E34 009:031.969 - 0.740ms returns FALSE
+T3E34 009:139.309 JLINK_IsHalted()
+T3E34 009:139.897 - 0.587ms returns FALSE
+T3E34 009:139.938 JLINK_IsHalted()
+T3E34 009:140.658 - 0.719ms returns FALSE
+T3E34 009:249.553 JLINK_IsHalted()
+T3E34 009:249.926 - 0.372ms returns FALSE
+T3E34 009:249.941 JLINK_IsHalted()
+T3E34 009:250.701 - 0.759ms returns FALSE
+T3E34 009:358.856 JLINK_IsHalted()
+T3E34 009:359.654 - 0.798ms returns FALSE
+T3E34 009:359.673 JLINK_IsHalted()
+T3E34 009:360.420 - 0.746ms returns FALSE
+T3E34 009:469.396 JLINK_IsHalted()
+T3E34 009:470.139 - 0.742ms returns FALSE
+T3E34 009:470.194 JLINK_IsHalted()
+T3E34 009:470.894 - 0.699ms returns FALSE
+T3E34 009:577.499 JLINK_IsHalted()
+T3E34 009:578.096 - 0.596ms returns FALSE
+T3E34 009:578.123 JLINK_IsHalted()
+T3E34 009:578.843 - 0.720ms returns FALSE
+T3E34 009:686.310 JLINK_IsHalted()
+T3E34 009:686.814 - 0.503ms returns FALSE
+T3E34 009:686.862 JLINK_IsHalted()
+T3E34 009:687.557 - 0.695ms returns FALSE
+T9554 009:780.261 JLINK_IsHalted()
+T9554 009:781.046 - 0.784ms returns FALSE
+T9554 009:781.071 JLINK_IsHalted()
+T9554 009:781.811 - 0.739ms returns FALSE
+T3E34 009:795.542 JLINK_IsHalted()
+T3E34 009:796.091 - 0.548ms returns FALSE
+T3E34 009:796.123 JLINK_IsHalted()
+T3E34 009:796.848 - 0.725ms returns FALSE
+T3E34 009:905.856 JLINK_IsHalted()
+T3E34 009:906.346 - 0.488ms returns FALSE
+T3E34 009:906.382 JLINK_IsHalted()
+T3E34 009:907.103 - 0.720ms returns FALSE
+T3E34 010:014.613 JLINK_IsHalted()
+T3E34 010:015.170 - 0.556ms returns FALSE
+T3E34 010:015.209 JLINK_IsHalted()
+T3E34 010:015.933 - 0.723ms returns FALSE
+T3E34 010:124.428 JLINK_IsHalted()
+T3E34 010:124.970 - 0.542ms returns FALSE
+T3E34 010:124.995 JLINK_IsHalted()
+T3E34 010:125.713 - 0.717ms returns FALSE
+T3E34 010:233.669 JLINK_IsHalted()
+T3E34 010:234.296 - 0.626ms returns FALSE
+T3E34 010:234.320 JLINK_IsHalted()
+T3E34 010:235.059 - 0.738ms returns FALSE
+T3E34 010:342.557 JLINK_IsHalted()
+T3E34 010:343.010 - 0.452ms returns FALSE
+T3E34 010:343.049 JLINK_IsHalted()
+T3E34 010:343.836 - 0.786ms returns FALSE
+T3E34 010:452.406 JLINK_IsHalted()
+T3E34 010:453.007 - 0.600ms returns FALSE
+T3E34 010:453.046 JLINK_IsHalted()
+T3E34 010:453.836 - 0.789ms returns FALSE
+T3E34 010:561.462 JLINK_IsHalted()
+T3E34 010:562.030 - 0.567ms returns FALSE
+T3E34 010:562.067 JLINK_IsHalted()
+T3E34 010:562.834 - 0.766ms returns FALSE
+T3E34 010:671.473 JLINK_IsHalted()
+T3E34 010:671.931 - 0.458ms returns FALSE
+T3E34 010:671.958 JLINK_IsHalted()
+T3E34 010:672.710 - 0.751ms returns FALSE
+T3E34 010:780.854 JLINK_IsHalted()
+T3E34 010:781.678 - 0.823ms returns FALSE
+T3E34 010:781.698 JLINK_IsHalted()
+T3E34 010:782.432 - 0.733ms returns FALSE
+T9554 010:782.478 JLINK_IsHalted()
+T9554 010:783.207 - 0.729ms returns FALSE
+T9554 010:783.229 JLINK_IsHalted()
+T9554 010:783.971 - 0.741ms returns FALSE
+T3E34 010:890.204 JLINK_IsHalted()
+T3E34 010:890.967 - 0.762ms returns FALSE
+T3E34 010:891.005 JLINK_IsHalted()
+T3E34 010:891.711 - 0.705ms returns FALSE
+T3E34 010:999.594 JLINK_IsHalted()
+T3E34 011:000.222 - 0.626ms returns FALSE
+T3E34 011:000.260 JLINK_IsHalted()
+T3E34 011:000.978 - 0.717ms returns FALSE
+T3E34 011:108.851 JLINK_IsHalted()
+T3E34 011:109.599 - 0.747ms returns FALSE
+T3E34 011:109.614 JLINK_IsHalted()
+T3E34 011:110.360 - 0.745ms returns FALSE
+T3E34 011:217.458 JLINK_IsHalted()
+T3E34 011:217.879 - 0.421ms returns FALSE
+T3E34 011:217.905 JLINK_IsHalted()
+T3E34 011:218.636 - 0.730ms returns FALSE
+T3E34 011:329.624 JLINK_IsHalted()
+T3E34 011:330.345 - 0.720ms returns FALSE
+T3E34 011:330.381 JLINK_IsHalted()
+T3E34 011:331.095 - 0.713ms returns FALSE
+T3E34 011:436.887 JLINK_IsHalted()
+T3E34 011:437.421 - 0.533ms returns FALSE
+T3E34 011:437.461 JLINK_IsHalted()
+T3E34 011:438.188 - 0.726ms returns FALSE
+T3E34 011:545.950 JLINK_IsHalted()
+T3E34 011:546.390 - 0.438ms returns FALSE
+T3E34 011:546.422 JLINK_IsHalted()
+T3E34 011:547.151 - 0.729ms returns FALSE
+T3E34 011:654.950 JLINK_IsHalted()
+T3E34 011:655.590 - 0.638ms returns FALSE
+T3E34 011:655.629 JLINK_IsHalted()
+T3E34 011:656.336 - 0.707ms returns FALSE
+T3E34 011:765.147 JLINK_IsHalted()
+T3E34 011:765.518 - 0.371ms returns FALSE
+T3E34 011:765.534 JLINK_IsHalted()
+T3E34 011:766.270 - 0.735ms returns FALSE
+T9554 011:785.677 JLINK_IsHalted()
+T9554 011:786.438 - 0.759ms returns FALSE
+T9554 011:786.476 JLINK_IsHalted()
+T9554 011:787.194 - 0.717ms returns FALSE
+T3E34 011:875.683 JLINK_IsHalted()
+T3E34 011:876.424 - 0.740ms returns FALSE
+T3E34 011:876.450 JLINK_IsHalted()
+T3E34 011:877.186 - 0.736ms returns FALSE
+T3E34 011:983.601 JLINK_IsHalted()
+T3E34 011:984.066 - 0.464ms returns FALSE
+T3E34 011:984.081 JLINK_IsHalted()
+T3E34 011:984.862 - 0.780ms returns FALSE
+T3E34 012:092.430 JLINK_IsHalted()
+T3E34 012:092.878 - 0.447ms returns FALSE
+T3E34 012:092.919 JLINK_IsHalted()
+T3E34 012:093.629 - 0.708ms returns FALSE
+T3E34 012:202.071 JLINK_IsHalted()
+T3E34 012:202.487 - 0.415ms returns FALSE
+T3E34 012:202.516 JLINK_IsHalted()
+T3E34 012:203.230 - 0.713ms returns FALSE
+T3E34 012:312.143 JLINK_IsHalted()
+T3E34 012:312.888 - 0.745ms returns FALSE
+T3E34 012:312.912 JLINK_IsHalted()
+T3E34 012:313.634 - 0.721ms returns FALSE
+T3E34 012:421.006 JLINK_IsHalted()
+T3E34 012:421.551 - 0.545ms returns FALSE
+T3E34 012:421.582 JLINK_IsHalted()
+T3E34 012:422.309 - 0.726ms returns FALSE
+T3E34 012:530.442 JLINK_IsHalted()
+T3E34 012:530.901 - 0.457ms returns FALSE
+T3E34 012:530.941 JLINK_IsHalted()
+T3E34 012:531.642 - 0.701ms returns FALSE
+T3E34 012:639.612 JLINK_IsHalted()
+T3E34 012:640.355 - 0.742ms returns FALSE
+T3E34 012:640.382 JLINK_IsHalted()
+T3E34 012:641.107 - 0.725ms returns FALSE
+T3E34 012:749.594 JLINK_IsHalted()
+T3E34 012:750.253 - 0.658ms returns FALSE
+T3E34 012:750.278 JLINK_IsHalted()
+T3E34 012:750.995 - 0.716ms returns FALSE
+T9554 012:787.062 JLINK_IsHalted()
+T9554 012:787.680 - 0.617ms returns FALSE
+T9554 012:787.704 JLINK_IsHalted()
+T9554 012:788.450 - 0.745ms returns FALSE
+T3E34 012:858.294 JLINK_IsHalted()
+T3E34 012:858.903 - 0.608ms returns FALSE
+T3E34 012:858.929 JLINK_IsHalted()
+T3E34 012:859.670 - 0.740ms returns FALSE
+T3E34 012:969.588 JLINK_IsHalted()
+T3E34 012:970.341 - 0.753ms returns FALSE
+T3E34 012:970.371 JLINK_IsHalted()
+T3E34 012:971.100 - 0.728ms returns FALSE
+T3E34 013:077.667 JLINK_IsHalted()
+T3E34 013:078.032 - 0.363ms returns FALSE
+T3E34 013:078.070 JLINK_IsHalted()
+T3E34 013:078.795 - 0.724ms returns FALSE
+T3E34 013:187.684 JLINK_IsHalted()
+T3E34 013:188.423 - 0.739ms returns FALSE
+T3E34 013:188.446 JLINK_IsHalted()
+T3E34 013:189.195 - 0.748ms returns FALSE
+T3E34 013:296.034 JLINK_IsHalted()
+T3E34 013:296.623 - 0.588ms returns FALSE
+T3E34 013:296.656 JLINK_IsHalted()
+T3E34 013:297.358 - 0.700ms returns FALSE
+T3E34 013:405.714 JLINK_IsHalted()
+T3E34 013:406.476 - 0.761ms returns FALSE
+T3E34 013:406.514 JLINK_IsHalted()
+T3E34 013:407.224 - 0.709ms returns FALSE
+T3E34 013:515.278 JLINK_IsHalted()
+T3E34 013:515.661 - 0.380ms returns FALSE
+T3E34 013:515.686 JLINK_IsHalted()
+T3E34 013:516.421 - 0.733ms returns FALSE
+T3E34 013:625.602 JLINK_IsHalted()
+T3E34 013:626.339 - 0.736ms returns FALSE
+T3E34 013:626.360 JLINK_IsHalted()
+T3E34 013:627.106 - 0.744ms returns FALSE
+T3E34 013:733.418 JLINK_IsHalted()
+T3E34 013:734.021 - 0.602ms returns FALSE
+T3E34 013:734.066 JLINK_IsHalted()
+T3E34 013:734.726 - 0.660ms returns FALSE
+T9554 013:788.930 JLINK_IsHalted()
+T9554 013:789.677 - 0.746ms returns FALSE
+T9554 013:789.694 JLINK_IsHalted()
+T9554 013:790.427 - 0.731ms returns FALSE
+T3E34 013:843.122 JLINK_IsHalted()
+T3E34 013:843.690 - 0.566ms returns FALSE
+T3E34 013:843.720 JLINK_IsHalted()
+T3E34 013:844.442 - 0.720ms returns FALSE
+T3E34 013:952.101 JLINK_IsHalted()
+T3E34 013:952.474 - 0.371ms returns FALSE
+T3E34 013:952.496 JLINK_IsHalted()
+T3E34 013:953.229 - 0.731ms returns FALSE
+T3E34 014:061.627 JLINK_IsHalted()
+T3E34 014:062.218 - 0.590ms returns FALSE
+T3E34 014:062.235 JLINK_IsHalted()
+T3E34 014:062.974 - 0.738ms returns FALSE
+T3E34 014:170.966 JLINK_IsHalted()
+T3E34 014:171.573 - 0.606ms returns FALSE
+T3E34 014:171.595 JLINK_IsHalted()
+T3E34 014:172.342 - 0.747ms returns FALSE
+T3E34 014:280.294 JLINK_IsHalted()
+T3E34 014:280.946 - 0.650ms returns FALSE
+T3E34 014:280.981 JLINK_IsHalted()
+T3E34 014:281.690 - 0.707ms returns FALSE
+T3E34 014:389.586 JLINK_IsHalted()
+T3E34 014:390.307 - 0.720ms returns FALSE
+T3E34 014:390.323 JLINK_IsHalted()
+T3E34 014:391.072 - 0.749ms returns FALSE
+T3E34 014:498.958 JLINK_IsHalted()
+T3E34 014:499.586 - 0.627ms returns FALSE
+T3E34 014:499.602 JLINK_IsHalted()
+T3E34 014:500.299 - 0.696ms returns FALSE
+T3E34 014:610.539 JLINK_IsHalted()
+T3E34 014:611.275 - 0.736ms returns FALSE
+T3E34 014:611.310 JLINK_IsHalted()
+T3E34 014:612.040 - 0.728ms returns FALSE
+T3E34 014:717.694 JLINK_IsHalted()
+T3E34 014:718.354 - 0.660ms returns FALSE
+T3E34 014:718.376 JLINK_IsHalted()
+T3E34 014:719.106 - 0.729ms returns FALSE
+T9554 014:790.790 JLINK_IsHalted()
+T9554 014:791.734 - 0.943ms returns FALSE
+T9554 014:791.779 JLINK_IsHalted()
+T9554 014:792.472 - 0.692ms returns FALSE
+T3E34 014:827.754 JLINK_IsHalted()
+T3E34 014:828.619 - 0.865ms returns FALSE
+T3E34 014:828.658 JLINK_IsHalted()
+T3E34 014:829.350 - 0.691ms returns FALSE
+T3E34 014:937.040 JLINK_IsHalted()
+T3E34 014:937.394 - 0.352ms returns FALSE
+T3E34 014:937.408 JLINK_IsHalted()
+T3E34 014:938.170 - 0.760ms returns FALSE
+T3E34 015:045.909 JLINK_IsHalted()
+T3E34 015:046.677 - 0.767ms returns FALSE
+T3E34 015:046.701 JLINK_IsHalted()
+T3E34 015:047.437 - 0.735ms returns FALSE
+T3E34 015:156.557 JLINK_IsHalted()
+T3E34 015:157.298 - 0.740ms returns FALSE
+T3E34 015:157.322 JLINK_IsHalted()
+T3E34 015:158.067 - 0.746ms returns FALSE
+T3E34 015:264.986 JLINK_IsHalted()
+T3E34 015:265.533 - 0.548ms returns FALSE
+T3E34 015:265.557 JLINK_IsHalted()
+T3E34 015:266.285 - 0.726ms returns FALSE
+T3E34 015:373.941 JLINK_IsHalted()
+T3E34 015:374.803 - 0.861ms returns FALSE
+T3E34 015:374.829 JLINK_IsHalted()
+T3E34 015:375.562 - 0.733ms returns FALSE
+T3E34 015:483.997 JLINK_IsHalted()
+T3E34 015:484.755 - 0.756ms returns FALSE
+T3E34 015:484.792 JLINK_IsHalted()
+T3E34 015:485.504 - 0.710ms returns FALSE
+T3E34 015:592.670 JLINK_IsHalted()
+T3E34 015:593.186 - 0.514ms returns FALSE
+T3E34 015:593.211 JLINK_IsHalted()
+T3E34 015:593.875 - 0.664ms returns FALSE
+T3E34 015:701.966 JLINK_IsHalted()
+T3E34 015:702.530 - 0.562ms returns FALSE
+T3E34 015:702.558 JLINK_IsHalted()
+T3E34 015:703.290 - 0.731ms returns FALSE
+T9554 015:792.662 JLINK_IsHalted()
+T9554 015:793.482 - 0.817ms returns FALSE
+T9554 015:793.526 JLINK_IsHalted()
+T9554 015:794.216 - 0.690ms returns FALSE
+T3E34 015:811.954 JLINK_IsHalted()
+T3E34 015:812.790 - 0.835ms returns FALSE
+T3E34 015:812.824 JLINK_IsHalted()
+T3E34 015:813.550 - 0.724ms returns FALSE
+T3E34 015:920.610 JLINK_IsHalted()
+T3E34 015:921.453 - 0.842ms returns FALSE
+T3E34 015:921.478 JLINK_IsHalted()
+T3E34 015:922.218 - 0.737ms returns FALSE
+T3E34 016:030.794 JLINK_IsHalted()
+T3E34 016:031.317 - 0.522ms returns FALSE
+T3E34 016:031.342 JLINK_IsHalted()
+T3E34 016:032.080 - 0.736ms returns FALSE
+T3E34 016:140.077 JLINK_IsHalted()
+T3E34 016:140.510 - 0.434ms returns FALSE
+T3E34 016:140.550 JLINK_IsHalted()
+T3E34 016:141.274 - 0.722ms returns FALSE
+T3E34 016:249.064 JLINK_IsHalted()
+T3E34 016:249.366 - 0.301ms returns FALSE
+T3E34 016:249.405 JLINK_IsHalted()
+T3E34 016:250.134 - 0.728ms returns FALSE
+T3E34 016:358.493 JLINK_IsHalted()
+T3E34 016:359.102 - 0.609ms returns FALSE
+T3E34 016:359.128 JLINK_IsHalted()
+T3E34 016:359.866 - 0.736ms returns FALSE
+T3E34 016:468.274 JLINK_IsHalted()
+T3E34 016:469.146 - 0.870ms returns FALSE
+T3E34 016:469.182 JLINK_IsHalted()
+T3E34 016:469.778 - 0.593ms returns FALSE
+T3E34 016:577.195 JLINK_IsHalted()
+T3E34 016:577.680 - 0.485ms returns FALSE
+T3E34 016:577.706 JLINK_IsHalted()
+T3E34 016:578.435 - 0.728ms returns FALSE
+T3E34 016:686.347 JLINK_IsHalted()
+T3E34 016:687.090 - 0.741ms returns FALSE
+T3E34 016:687.133 JLINK_IsHalted()
+T3E34 016:687.837 - 0.703ms returns FALSE
+T9554 016:793.744 JLINK_IsHalted()
+T9554 016:794.300 - 0.554ms returns FALSE
+T9554 016:794.322 JLINK_IsHalted()
+T9554 016:795.060 - 0.738ms returns FALSE
+T3E34 016:795.752 JLINK_IsHalted()
+T3E34 016:796.336 - 0.583ms returns FALSE
+T3E34 016:796.360 JLINK_IsHalted()
+T3E34 016:797.106 - 0.745ms returns FALSE
+T3E34 016:905.918 JLINK_IsHalted()
+T3E34 016:906.584 - 0.665ms returns FALSE
+T3E34 016:906.604 JLINK_IsHalted()
+T3E34 016:907.348 - 0.743ms returns FALSE
+T3E34 017:015.088 JLINK_IsHalted()
+T3E34 017:015.452 - 0.364ms returns FALSE
+T3E34 017:015.488 JLINK_IsHalted()
+T3E34 017:016.204 - 0.716ms returns FALSE
+T3E34 017:123.712 JLINK_IsHalted()
+T3E34 017:124.120 - 0.407ms returns FALSE
+T3E34 017:124.136 JLINK_IsHalted()
+T3E34 017:124.880 - 0.744ms returns FALSE
+T3E34 017:234.910 JLINK_IsHalted()
+T3E34 017:235.656 - 0.745ms returns FALSE
+T3E34 017:235.682 JLINK_IsHalted()
+T3E34 017:236.422 - 0.741ms returns FALSE
+T3E34 017:342.834 JLINK_IsHalted()
+T3E34 017:343.280 - 0.446ms returns FALSE
+T3E34 017:343.304 JLINK_IsHalted()
+T3E34 017:344.048 - 0.743ms returns FALSE
+T3E34 017:454.080 JLINK_IsHalted()
+T3E34 017:454.822 - 0.740ms returns FALSE
+T3E34 017:454.868 JLINK_IsHalted()
+T3E34 017:455.578 - 0.708ms returns FALSE
+T3E34 017:561.248 JLINK_IsHalted()
+T3E34 017:561.930 - 0.682ms returns FALSE
+T3E34 017:561.966 JLINK_IsHalted()
+T3E34 017:562.676 - 0.709ms returns FALSE
+T3E34 017:671.942 JLINK_IsHalted()
+T3E34 017:672.604 - 0.661ms returns FALSE
+T3E34 017:672.638 JLINK_IsHalted()
+T3E34 017:673.366 - 0.726ms returns FALSE
+T3E34 017:780.586 JLINK_IsHalted()
+T3E34 017:781.274 - 0.686ms returns FALSE
+T3E34 017:781.300 JLINK_IsHalted()
+T3E34 017:782.044 - 0.742ms returns FALSE
+T9554 017:795.040 JLINK_IsHalted()
+T9554 017:795.646 - 0.606ms returns FALSE
+T9554 017:795.670 JLINK_IsHalted()
+T9554 017:796.398 - 0.727ms returns FALSE
+T3E34 017:889.344 JLINK_IsHalted()
+T3E34 017:889.956 - 0.612ms returns FALSE
+T3E34 017:889.988 JLINK_IsHalted()
+T3E34 017:890.716 - 0.727ms returns FALSE
+T3E34 017:999.184 JLINK_IsHalted()
+T3E34 017:999.912 - 0.727ms returns FALSE
+T3E34 017:999.936 JLINK_IsHalted()
+T3E34 018:000.670 - 0.734ms returns FALSE
+T3E34 018:108.746 JLINK_IsHalted()
+T3E34 018:109.158 - 0.412ms returns FALSE
+T3E34 018:109.194 JLINK_IsHalted()
+T3E34 018:109.906 - 0.710ms returns FALSE
+T3E34 018:217.568 JLINK_IsHalted()
+T3E34 018:218.188 - 0.619ms returns FALSE
+T3E34 018:218.212 JLINK_IsHalted()
+T3E34 018:218.942 - 0.728ms returns FALSE
+T3E34 018:327.564 JLINK_IsHalted()
+T3E34 018:327.946 - 0.380ms returns FALSE
+T3E34 018:327.972 JLINK_IsHalted()
+T3E34 018:328.706 - 0.734ms returns FALSE
+T3E34 018:436.306 JLINK_IsHalted()
+T3E34 018:436.740 - 0.432ms returns FALSE
+T3E34 018:436.768 JLINK_IsHalted()
+T3E34 018:437.490 - 0.721ms returns FALSE
+T3E34 018:545.690 JLINK_IsHalted()
+T3E34 018:546.444 - 0.754ms returns FALSE
+T3E34 018:546.468 JLINK_IsHalted()
+T3E34 018:547.202 - 0.732ms returns FALSE
+T3E34 018:655.614 JLINK_IsHalted()
+T3E34 018:656.092 - 0.476ms returns FALSE
+T3E34 018:656.128 JLINK_IsHalted()
+T3E34 018:656.832 - 0.704ms returns FALSE
+T3E34 018:765.052 JLINK_IsHalted()
+T3E34 018:765.786 - 0.732ms returns FALSE
+T3E34 018:765.818 JLINK_IsHalted()
+T3E34 018:766.534 - 0.716ms returns FALSE
+T9554 018:796.164 JLINK_IsHalted()
+T9554 018:796.860 - 0.694ms returns FALSE
+T9554 018:796.908 JLINK_IsHalted()
+T9554 018:797.608 - 0.699ms returns FALSE
+T3E34 018:874.354 JLINK_IsHalted()
+T3E34 018:875.138 - 0.781ms returns FALSE
+T3E34 018:875.188 JLINK_IsHalted()
+T3E34 018:875.884 - 0.696ms returns FALSE
+T3E34 018:983.520 JLINK_IsHalted()
+T3E34 018:984.360 - 0.838ms returns FALSE
+T3E34 018:984.402 JLINK_IsHalted()
+T3E34 018:985.122 - 0.719ms returns FALSE
+T3E34 019:092.962 JLINK_IsHalted()
+T3E34 019:093.732 - 0.770ms returns FALSE
+T3E34 019:093.762 JLINK_IsHalted()
+T3E34 019:094.452 - 0.690ms returns FALSE
+T3E34 019:201.924 JLINK_IsHalted()
+T3E34 019:202.450 - 0.525ms returns FALSE
+T3E34 019:202.482 JLINK_IsHalted()
+T3E34 019:203.262 - 0.780ms returns FALSE
+T3E34 019:311.328 JLINK_IsHalted()
+T3E34 019:311.842 - 0.512ms returns FALSE
+T3E34 019:311.864 JLINK_IsHalted()
+T3E34 019:312.596 - 0.731ms returns FALSE
+T3E34 019:423.156 JLINK_IsHalted()
+T3E34 019:438.744 - 15.585ms returns FALSE
+T3E34 019:438.774 JLINK_IsHalted()
+T3E34 019:439.504 - 0.729ms returns FALSE
+T3E34 019:545.826 JLINK_IsHalted()
+T3E34 019:546.406 - 0.580ms returns FALSE
+T3E34 019:546.436 JLINK_IsHalted()
+T3E34 019:547.154 - 0.717ms returns FALSE
+T3E34 019:655.764 JLINK_IsHalted()
+T3E34 019:656.484 - 0.719ms returns FALSE
+T3E34 019:656.516 JLINK_IsHalted()
+T3E34 019:657.326 - 0.809ms returns FALSE
+T3E34 019:765.074 JLINK_IsHalted()
+T3E34 019:765.692 - 0.616ms returns FALSE
+T3E34 019:765.706 JLINK_IsHalted()
+T3E34 019:766.458 - 0.751ms returns FALSE
+T9554 019:797.672 JLINK_IsHalted()
+T9554 019:798.376 - 0.702ms returns FALSE
+T9554 019:798.416 JLINK_IsHalted()
+T9554 019:799.134 - 0.718ms returns FALSE
+T3E34 019:874.348 JLINK_IsHalted()
+T3E34 019:875.002 - 0.651ms returns FALSE
+T3E34 019:875.028 JLINK_IsHalted()
+T3E34 019:875.758 - 0.731ms returns FALSE
+T3E34 019:983.460 JLINK_IsHalted()
+T3E34 019:984.298 - 0.837ms returns FALSE
+T3E34 019:984.324 JLINK_IsHalted()
+T3E34 019:985.102 - 0.776ms returns FALSE
+T3E34 020:094.548 JLINK_IsHalted()
+T3E34 020:095.298 - 0.748ms returns FALSE
+T3E34 020:095.340 JLINK_IsHalted()
+T3E34 020:096.142 - 0.803ms returns FALSE
+T3E34 020:202.624 JLINK_IsHalted()
+T3E34 020:203.508 - 0.884ms returns FALSE
+T3E34 020:203.546 JLINK_IsHalted()
+T3E34 020:204.266 - 0.719ms returns FALSE
+T3E34 020:311.642 JLINK_IsHalted()
+T3E34 020:312.260 - 0.617ms returns FALSE
+T3E34 020:312.294 JLINK_IsHalted()
+T3E34 020:313.056 - 0.760ms returns FALSE
+T3E34 020:420.910 JLINK_IsHalted()
+T3E34 020:421.720 - 0.809ms returns FALSE
+T3E34 020:421.760 JLINK_IsHalted()
+T3E34 020:422.488 - 0.728ms returns FALSE
+T3E34 020:530.308 JLINK_IsHalted()
+T3E34 020:530.924 - 0.616ms returns FALSE
+T3E34 020:530.950 JLINK_IsHalted()
+T3E34 020:531.736 - 0.786ms returns FALSE
+T3E34 020:639.700 JLINK_IsHalted()
+T3E34 020:640.400 - 0.701ms returns FALSE
+T3E34 020:640.428 JLINK_IsHalted()
+T3E34 020:641.166 - 0.738ms returns FALSE
+T3E34 020:748.682 JLINK_IsHalted()
+T3E34 020:749.400 - 0.718ms returns FALSE
+T3E34 020:749.444 JLINK_IsHalted()
+T3E34 020:750.148 - 0.705ms returns FALSE
+T9554 020:798.840 JLINK_IsHalted()
+T9554 020:799.668 - 0.828ms returns FALSE
+T9554 020:799.708 JLINK_IsHalted()
+T9554 020:800.582 - 0.875ms returns FALSE
+T3E34 020:858.608 JLINK_IsHalted()
+T3E34 020:859.142 - 0.533ms returns FALSE
+T3E34 020:859.188 JLINK_IsHalted()
+T3E34 020:859.920 - 0.731ms returns FALSE
+T3E34 020:968.298 JLINK_IsHalted()
+T3E34 020:968.872 - 0.574ms returns FALSE
+T3E34 020:968.910 JLINK_IsHalted()
+T3E34 020:969.638 - 0.727ms returns FALSE
+T3E34 021:079.598 JLINK_IsHalted()
+T3E34 021:080.342 - 0.743ms returns FALSE
+T3E34 021:080.470 JLINK_IsHalted()
+T3E34 021:081.204 - 0.732ms returns FALSE
+T3E34 021:186.480 JLINK_IsHalted()
+T3E34 021:187.150 - 0.670ms returns FALSE
+T3E34 021:187.192 JLINK_IsHalted()
+T3E34 021:187.916 - 0.722ms returns FALSE
+T3E34 021:295.854 JLINK_IsHalted()
+T3E34 021:296.478 - 0.622ms returns FALSE
+T3E34 021:296.524 JLINK_IsHalted()
+T3E34 021:297.218 - 0.692ms returns FALSE
+T3E34 021:405.836 JLINK_IsHalted()
+T3E34 021:406.358 - 0.522ms returns FALSE
+T3E34 021:406.396 JLINK_IsHalted()
+T3E34 021:407.148 - 0.753ms returns FALSE
+T3E34 021:514.902 JLINK_IsHalted()
+T3E34 021:515.600 - 0.696ms returns FALSE
+T3E34 021:515.644 JLINK_IsHalted()
+T3E34 021:516.344 - 0.699ms returns FALSE
+T3E34 021:624.604 JLINK_IsHalted()
+T3E34 021:625.022 - 0.418ms returns FALSE
+T3E34 021:625.076 JLINK_IsHalted()
+T3E34 021:625.780 - 0.703ms returns FALSE
+T3E34 021:733.966 JLINK_IsHalted()
+T3E34 021:734.404 - 0.435ms returns FALSE
+T3E34 021:734.430 JLINK_IsHalted()
+T3E34 021:735.170 - 0.738ms returns FALSE
+T9554 021:800.954 JLINK_IsHalted()
+T9554 021:801.346 - 0.392ms returns FALSE
+T9554 021:801.374 JLINK_IsHalted()
+T9554 021:802.196 - 0.822ms returns FALSE
+T3E34 021:842.798 JLINK_IsHalted()
+T3E34 021:843.650 - 0.850ms returns FALSE
+T3E34 021:843.724 JLINK_IsHalted()
+T3E34 021:844.374 - 0.649ms returns FALSE
+T3E34 021:951.938 JLINK_IsHalted()
+T3E34 021:952.464 - 0.527ms returns FALSE
+T3E34 021:952.508 JLINK_IsHalted()
+T3E34 021:953.212 - 0.701ms returns FALSE
+T3E34 022:061.670 JLINK_IsHalted()
+T3E34 022:062.186 - 0.514ms returns FALSE
+T3E34 022:062.230 JLINK_IsHalted()
+T3E34 022:062.938 - 0.707ms returns FALSE
+T3E34 022:170.544 JLINK_IsHalted()
+T3E34 022:171.440 - 0.896ms returns FALSE
+T3E34 022:171.488 JLINK_IsHalted()
+T3E34 022:172.214 - 0.726ms returns FALSE
+T3E34 022:280.272 JLINK_IsHalted()
+T3E34 022:280.768 - 0.495ms returns FALSE
+T3E34 022:280.814 JLINK_IsHalted()
+T3E34 022:281.522 - 0.707ms returns FALSE
+T3E34 022:390.044 JLINK_IsHalted()
+T3E34 022:390.644 - 0.602ms returns FALSE
+T3E34 022:390.674 JLINK_IsHalted()
+T3E34 022:391.406 - 0.731ms returns FALSE
+T3E34 022:499.684 JLINK_IsHalted()
+T3E34 022:500.396 - 0.710ms returns FALSE
+T3E34 022:500.444 JLINK_IsHalted()
+T3E34 022:501.200 - 0.754ms returns FALSE
+T3E34 022:608.534 JLINK_IsHalted()
+T3E34 022:609.114 - 0.578ms returns FALSE
+T3E34 022:609.158 JLINK_IsHalted()
+T3E34 022:609.864 - 0.704ms returns FALSE
+T3E34 022:717.928 JLINK_IsHalted()
+T3E34 022:718.676 - 0.745ms returns FALSE
+T3E34 022:718.706 JLINK_IsHalted()
+T3E34 022:719.432 - 0.725ms returns FALSE
+T9554 022:802.556 JLINK_IsHalted()
+T9554 022:803.228 - 0.670ms returns FALSE
+T9554 022:803.254 JLINK_IsHalted()
+T9554 022:803.974 - 0.719ms returns FALSE
+T3E34 022:826.886 JLINK_IsHalted()
+T3E34 022:827.802 - 0.915ms returns FALSE
+T3E34 022:827.842 JLINK_IsHalted()
+T3E34 022:828.556 - 0.712ms returns FALSE
+T3E34 022:937.474 JLINK_IsHalted()
+T3E34 022:938.222 - 0.747ms returns FALSE
+T3E34 022:938.250 JLINK_IsHalted()
+T3E34 022:939.000 - 0.749ms returns FALSE
+T3E34 023:046.238 JLINK_IsHalted()
+T3E34 023:046.914 - 0.674ms returns FALSE
+T3E34 023:046.966 JLINK_IsHalted()
+T3E34 023:047.684 - 0.717ms returns FALSE
+T3E34 023:155.308 JLINK_IsHalted()
+T3E34 023:155.750 - 0.441ms returns FALSE
+T3E34 023:155.780 JLINK_IsHalted()
+T3E34 023:156.510 - 0.730ms returns FALSE
+T3E34 023:264.986 JLINK_IsHalted()
+T3E34 023:265.630 - 0.644ms returns FALSE
+T3E34 023:265.674 JLINK_IsHalted()
+T3E34 023:266.394 - 0.719ms returns FALSE
+T3E34 023:373.910 JLINK_IsHalted()
+T3E34 023:374.420 - 0.508ms returns FALSE
+T3E34 023:374.464 JLINK_IsHalted()
+T3E34 023:375.214 - 0.748ms returns FALSE
+T3E34 023:483.062 JLINK_IsHalted()
+T3E34 023:483.848 - 0.784ms returns FALSE
+T3E34 023:483.888 JLINK_IsHalted()
+T3E34 023:484.592 - 0.703ms returns FALSE
+T3E34 023:593.236 JLINK_IsHalted()
+T3E34 023:593.644 - 0.407ms returns FALSE
+T3E34 023:593.674 JLINK_IsHalted()
+T3E34 023:594.402 - 0.726ms returns FALSE
+T3E34 023:702.728 JLINK_IsHalted()
+T3E34 023:703.492 - 0.762ms returns FALSE
+T3E34 023:703.540 JLINK_IsHalted()
+T3E34 023:704.246 - 0.704ms returns FALSE
+T9554 023:804.460 JLINK_IsHalted()
+T9554 023:805.042 - 0.580ms returns FALSE
+T9554 023:805.088 JLINK_IsHalted()
+T9554 023:805.694 - 0.605ms returns FALSE
+T3E34 023:811.738 JLINK_IsHalted()
+T3E34 023:812.418 - 0.679ms returns FALSE
+T3E34 023:812.442 JLINK_IsHalted()
+T3E34 023:813.214 - 0.772ms returns FALSE
+T3E34 023:921.398 JLINK_IsHalted()
+T3E34 023:922.240 - 0.842ms returns FALSE
+T3E34 023:922.278 JLINK_IsHalted()
+T3E34 023:923.018 - 0.737ms returns FALSE
+T3E34 024:030.388 JLINK_IsHalted()
+T3E34 024:031.082 - 0.694ms returns FALSE
+T3E34 024:031.128 JLINK_IsHalted()
+T3E34 024:031.854 - 0.725ms returns FALSE
+T3E34 024:139.908 JLINK_IsHalted()
+T3E34 024:140.378 - 0.470ms returns FALSE
+T3E34 024:140.420 JLINK_IsHalted()
+T3E34 024:141.128 - 0.706ms returns FALSE
+T3E34 024:248.880 JLINK_IsHalted()
+T3E34 024:249.444 - 0.564ms returns FALSE
+T3E34 024:249.496 JLINK_IsHalted()
+T3E34 024:250.256 - 0.759ms returns FALSE
+T3E34 024:358.816 JLINK_IsHalted()
+T3E34 024:359.734 - 0.917ms returns FALSE
+T3E34 024:359.764 JLINK_IsHalted()
+T3E34 024:360.482 - 0.717ms returns FALSE
+T3E34 024:468.340 JLINK_IsHalted()
+T3E34 024:469.100 - 0.758ms returns FALSE
+T3E34 024:469.140 JLINK_IsHalted()
+T3E34 024:469.890 - 0.748ms returns FALSE
+T3E34 024:577.054 JLINK_IsHalted()
+T3E34 024:577.818 - 0.762ms returns FALSE
+T3E34 024:577.870 JLINK_IsHalted()
+T3E34 024:578.552 - 0.680ms returns FALSE
+T3E34 024:686.664 JLINK_IsHalted()
+T3E34 024:687.536 - 0.871ms returns FALSE
+T3E34 024:687.578 JLINK_IsHalted()
+T3E34 024:688.286 - 0.708ms returns FALSE
+T3E34 024:795.940 JLINK_IsHalted()
+T3E34 024:796.574 - 0.633ms returns FALSE
+T3E34 024:796.620 JLINK_IsHalted()
+T3E34 024:797.338 - 0.718ms returns FALSE
+T9554 024:806.500 JLINK_IsHalted()
+T9554 024:807.246 - 0.745ms returns FALSE
+T9554 024:807.286 JLINK_IsHalted()
+T9554 024:808.018 - 0.730ms returns FALSE
+T3E34 024:905.628 JLINK_IsHalted()
+T3E34 024:906.328 - 0.699ms returns FALSE
+T3E34 024:906.380 JLINK_IsHalted()
+T3E34 024:907.084 - 0.704ms returns FALSE
+T3E34 025:015.464 JLINK_IsHalted()
+T3E34 025:016.284 - 0.817ms returns FALSE
+T3E34 025:016.306 JLINK_IsHalted()
+T3E34 025:017.048 - 0.740ms returns FALSE
+T3E34 025:124.056 JLINK_IsHalted()
+T3E34 025:124.966 - 0.909ms returns FALSE
+T3E34 025:125.012 JLINK_IsHalted()
+T3E34 025:125.718 - 0.705ms returns FALSE
+T3E34 025:233.266 JLINK_IsHalted()
+T3E34 025:233.670 - 0.405ms returns FALSE
+T3E34 025:233.714 JLINK_IsHalted()
+T3E34 025:234.426 - 0.711ms returns FALSE
+T3E34 025:342.804 JLINK_IsHalted()
+T3E34 025:343.636 - 0.830ms returns FALSE
+T3E34 025:343.680 JLINK_IsHalted()
+T3E34 025:344.390 - 0.708ms returns FALSE
+T3E34 025:452.318 JLINK_IsHalted()
+T3E34 025:452.820 - 0.501ms returns FALSE
+T3E34 025:452.868 JLINK_IsHalted()
+T3E34 025:453.574 - 0.704ms returns FALSE
+T3E34 025:562.500 JLINK_IsHalted()
+T3E34 025:563.272 - 0.770ms returns FALSE
+T3E34 025:563.298 JLINK_IsHalted()
+T3E34 025:564.042 - 0.743ms returns FALSE
+T3E34 025:670.788 JLINK_IsHalted()
+T3E34 025:671.490 - 0.701ms returns FALSE
+T3E34 025:671.520 JLINK_IsHalted()
+T3E34 025:672.296 - 0.776ms returns FALSE
+T3E34 025:780.812 JLINK_IsHalted()
+T3E34 025:781.502 - 0.691ms returns FALSE
+T3E34 025:781.544 JLINK_IsHalted()
+T3E34 025:782.304 - 0.758ms returns FALSE
+T9554 025:808.972 JLINK_IsHalted()
+T9554 025:809.402 - 0.427ms returns FALSE
+T9554 025:809.444 JLINK_IsHalted()
+T9554 025:810.172 - 0.727ms returns FALSE
+T3E34 025:890.038 JLINK_IsHalted()
+T3E34 025:890.768 - 0.728ms returns FALSE
+T3E34 025:890.810 JLINK_IsHalted()
+T3E34 025:891.538 - 0.727ms returns FALSE
+T3E34 025:999.528 JLINK_IsHalted()
+T3E34 025:999.980 - 0.452ms returns FALSE
+T3E34 026:000.030 JLINK_IsHalted()
+T3E34 026:000.724 - 0.693ms returns FALSE
+T3E34 026:108.556 JLINK_IsHalted()
+T3E34 026:109.280 - 0.724ms returns FALSE
+T3E34 026:109.316 JLINK_IsHalted()
+T3E34 026:110.046 - 0.731ms returns FALSE
+T3E34 026:218.036 JLINK_IsHalted()
+T3E34 026:218.490 - 0.454ms returns FALSE
+T3E34 026:218.540 JLINK_IsHalted()
+T3E34 026:219.284 - 0.742ms returns FALSE
+T3E34 026:326.964 JLINK_IsHalted()
+T3E34 026:327.734 - 0.770ms returns FALSE
+T3E34 026:327.772 JLINK_IsHalted()
+T3E34 026:328.496 - 0.722ms returns FALSE
+T3E34 026:436.632 JLINK_IsHalted()
+T3E34 026:437.132 - 0.501ms returns FALSE
+T3E34 026:437.186 JLINK_IsHalted()
+T3E34 026:437.894 - 0.707ms returns FALSE
+T3E34 026:545.836 JLINK_IsHalted()
+T3E34 026:546.326 - 0.491ms returns FALSE
+T3E34 026:546.376 JLINK_IsHalted()
+T3E34 026:547.076 - 0.699ms returns FALSE
+T3E34 026:656.120 JLINK_IsHalted()
+T3E34 026:656.860 - 0.740ms returns FALSE
+T3E34 026:656.896 JLINK_IsHalted()
+T3E34 026:657.624 - 0.727ms returns FALSE
+T3E34 026:764.540 JLINK_IsHalted()
+T3E34 026:765.238 - 0.699ms returns FALSE
+T3E34 026:765.284 JLINK_IsHalted()
+T3E34 026:765.996 - 0.710ms returns FALSE
+T9554 026:810.996 JLINK_IsHalted()
+T9554 026:811.770 - 0.773ms returns FALSE
+T9554 026:811.794 JLINK_IsHalted()
+T9554 026:812.528 - 0.734ms returns FALSE
+T3E34 026:875.892 JLINK_IsHalted()
+T3E34 026:876.634 - 0.744ms returns FALSE
+T3E34 026:876.660 JLINK_IsHalted()
+T3E34 026:877.424 - 0.763ms returns FALSE
+T3E34 026:984.164 JLINK_IsHalted()
+T3E34 026:984.954 - 0.791ms returns FALSE
+T3E34 026:985.004 JLINK_IsHalted()
+T3E34 026:985.644 - 0.639ms returns FALSE
+T3E34 027:093.382 JLINK_IsHalted()
+T3E34 027:094.132 - 0.749ms returns FALSE
+T3E34 027:094.176 JLINK_IsHalted()
+T3E34 027:094.880 - 0.700ms returns FALSE
+T3E34 027:202.566 JLINK_IsHalted()
+T3E34 027:203.050 - 0.483ms returns FALSE
+T3E34 027:203.092 JLINK_IsHalted()
+T3E34 027:203.802 - 0.707ms returns FALSE
+T3E34 027:311.670 JLINK_IsHalted()
+T3E34 027:312.348 - 0.674ms returns FALSE
+T3E34 027:312.394 JLINK_IsHalted()
+T3E34 027:313.104 - 0.709ms returns FALSE
+T3E34 027:421.428 JLINK_IsHalted()
+T3E34 027:422.342 - 0.912ms returns FALSE
+T3E34 027:422.396 JLINK_IsHalted()
+T3E34 027:423.088 - 0.691ms returns FALSE
+T3E34 027:530.874 JLINK_IsHalted()
+T3E34 027:531.564 - 0.691ms returns FALSE
+T3E34 027:531.616 JLINK_IsHalted()
+T3E34 027:532.352 - 0.734ms returns FALSE
+T3E34 027:640.218 JLINK_IsHalted()
+T3E34 027:640.774 - 0.555ms returns FALSE
+T3E34 027:640.800 JLINK_IsHalted()
+T3E34 027:641.556 - 0.750ms returns FALSE
+T3E34 027:749.940 JLINK_IsHalted()
+T3E34 027:750.682 - 0.740ms returns FALSE
+T3E34 027:750.708 JLINK_IsHalted()
+T3E34 027:751.434 - 0.725ms returns FALSE
+T9554 027:812.480 JLINK_IsHalted()
+T9554 027:812.960 - 0.478ms returns FALSE
+T9554 027:813.014 JLINK_IsHalted()
+T9554 027:813.702 - 0.685ms returns FALSE
+T3E34 027:859.046 JLINK_IsHalted()
+T3E34 027:859.492 - 0.444ms returns FALSE
+T3E34 027:859.520 JLINK_IsHalted()
+T3E34 027:860.256 - 0.736ms returns FALSE
+T3E34 027:967.494 JLINK_IsHalted()
+T3E34 027:968.202 - 0.706ms returns FALSE
+T3E34 027:968.230 JLINK_IsHalted()
+T3E34 027:968.964 - 0.730ms returns FALSE
+T3E34 028:077.024 JLINK_IsHalted()
+T3E34 028:077.540 - 0.513ms returns FALSE
+T3E34 028:077.584 JLINK_IsHalted()
+T3E34 028:078.372 - 0.784ms returns FALSE
+T3E34 028:186.548 JLINK_IsHalted()
+T3E34 028:187.402 - 0.854ms returns FALSE
+T3E34 028:187.456 JLINK_IsHalted()
+T3E34 028:188.138 - 0.683ms returns FALSE
+T3E34 028:296.182 JLINK_IsHalted()
+T3E34 028:296.716 - 0.532ms returns FALSE
+T3E34 028:296.746 JLINK_IsHalted()
+T3E34 028:297.484 - 0.737ms returns FALSE
+T3E34 028:405.584 JLINK_IsHalted()
+T3E34 028:405.990 - 0.406ms returns FALSE
+T3E34 028:406.022 JLINK_IsHalted()
+T3E34 028:406.748 - 0.725ms returns FALSE
+T3E34 028:514.940 JLINK_IsHalted()
+T3E34 028:515.804 - 0.863ms returns FALSE
+T3E34 028:515.836 JLINK_IsHalted()
+T3E34 028:516.554 - 0.717ms returns FALSE
+T3E34 028:624.186 JLINK_IsHalted()
+T3E34 028:624.636 - 0.453ms returns FALSE
+T3E34 028:624.666 JLINK_IsHalted()
+T3E34 028:625.392 - 0.724ms returns FALSE
+T3E34 028:733.892 JLINK_IsHalted()
+T3E34 028:734.384 - 0.492ms returns FALSE
+T3E34 028:734.412 JLINK_IsHalted()
+T3E34 028:735.148 - 0.736ms returns FALSE
+T9554 028:814.540 JLINK_IsHalted()
+T9554 028:814.998 - 0.455ms returns FALSE
+T9554 028:815.044 JLINK_IsHalted()
+T9554 028:815.748 - 0.703ms returns FALSE
+T3E34 028:843.172 JLINK_IsHalted()
+T3E34 028:843.924 - 0.751ms returns FALSE
+T3E34 028:843.974 JLINK_IsHalted()
+T3E34 028:844.666 - 0.692ms returns FALSE
+T3E34 028:952.794 JLINK_IsHalted()
+T3E34 028:953.148 - 0.352ms returns FALSE
+T3E34 028:953.196 JLINK_IsHalted()
+T3E34 028:953.904 - 0.705ms returns FALSE
+T3E34 029:061.574 JLINK_IsHalted()
+T3E34 029:062.394 - 0.817ms returns FALSE
+T3E34 029:062.448 JLINK_IsHalted()
+T3E34 029:063.148 - 0.698ms returns FALSE
+T3E34 029:172.652 JLINK_IsHalted()
+T3E34 029:173.366 - 0.713ms returns FALSE
+T3E34 029:173.388 JLINK_IsHalted()
+T3E34 029:174.124 - 0.735ms returns FALSE
+T3E34 029:279.962 JLINK_IsHalted()
+T3E34 029:280.502 - 0.540ms returns FALSE
+T3E34 029:280.544 JLINK_IsHalted()
+T3E34 029:281.232 - 0.686ms returns FALSE
+T3E34 029:391.216 JLINK_IsHalted()
+T3E34 029:391.968 - 0.750ms returns FALSE
+T3E34 029:392.012 JLINK_IsHalted()
+T3E34 029:392.720 - 0.708ms returns FALSE
+T3E34 029:499.476 JLINK_IsHalted()
+T3E34 029:500.182 - 0.708ms returns FALSE
+T3E34 029:500.230 JLINK_IsHalted()
+T3E34 029:500.924 - 0.695ms returns FALSE
+T3E34 029:608.426 JLINK_IsHalted()
+T3E34 029:608.892 - 0.466ms returns FALSE
+T3E34 029:608.916 JLINK_IsHalted()
+T3E34 029:609.668 - 0.751ms returns FALSE
+T3E34 029:718.150 JLINK_IsHalted()
+T3E34 029:718.810 - 0.659ms returns FALSE
+T3E34 029:718.852 JLINK_IsHalted()
+T3E34 029:719.562 - 0.708ms returns FALSE
+T9554 029:815.792 JLINK_IsHalted()
+T9554 029:816.480 - 0.687ms returns FALSE
+T9554 029:816.570 JLINK_IsHalted()
+T9554 029:817.244 - 0.672ms returns FALSE
+T3E34 029:826.988 JLINK_IsHalted()
+T3E34 029:827.676 - 0.686ms returns FALSE
+T3E34 029:827.718 JLINK_IsHalted()
+T3E34 029:828.438 - 0.720ms returns FALSE
+T3E34 029:936.428 JLINK_IsHalted()
+T3E34 029:936.908 - 0.479ms returns FALSE
+T3E34 029:936.950 JLINK_IsHalted()
+T3E34 029:937.664 - 0.713ms returns FALSE
+T3E34 030:046.074 JLINK_IsHalted()
+T3E34 030:046.820 - 0.744ms returns FALSE
+T3E34 030:046.864 JLINK_IsHalted()
+T3E34 030:047.558 - 0.693ms returns FALSE
+T3E34 030:155.580 JLINK_IsHalted()
+T3E34 030:156.070 - 0.489ms returns FALSE
+T3E34 030:156.108 JLINK_IsHalted()
+T3E34 030:156.836 - 0.728ms returns FALSE
+T3E34 030:264.838 JLINK_IsHalted()
+T3E34 030:265.588 - 0.745ms returns FALSE
+T3E34 030:265.612 JLINK_IsHalted()
+T3E34 030:266.422 - 0.807ms returns FALSE
+T3E34 030:374.634 JLINK_IsHalted()
+T3E34 030:375.468 - 0.836ms returns FALSE
+T3E34 030:375.516 JLINK_IsHalted()
+T3E34 030:376.220 - 0.701ms returns FALSE
+T3E34 030:484.116 JLINK_IsHalted()
+T3E34 030:484.836 - 0.721ms returns FALSE
+T3E34 030:484.860 JLINK_IsHalted()
+T3E34 030:485.604 - 0.738ms returns FALSE
+T3E34 030:592.784 JLINK_IsHalted()
+T3E34 030:593.536 - 0.753ms returns FALSE
+T3E34 030:593.580 JLINK_IsHalted()
+T3E34 030:594.294 - 0.712ms returns FALSE
+T3E34 030:701.814 JLINK_IsHalted()
+T3E34 030:702.228 - 0.411ms returns FALSE
+T3E34 030:702.268 JLINK_IsHalted()
+T3E34 030:702.970 - 0.698ms returns FALSE
+T3E34 030:811.184 JLINK_IsHalted()
+T3E34 030:812.076 - 0.892ms returns FALSE
+T3E34 030:812.116 JLINK_IsHalted()
+T3E34 030:812.836 - 0.718ms returns FALSE
+T9554 030:818.570 JLINK_IsHalted()
+T9554 030:819.302 - 0.732ms returns FALSE
+T9554 030:819.328 JLINK_IsHalted()
+T9554 030:820.070 - 0.739ms returns FALSE
+T3E34 030:920.944 JLINK_IsHalted()
+T3E34 030:921.540 - 0.594ms returns FALSE
+T3E34 030:921.588 JLINK_IsHalted()
+T3E34 030:922.266 - 0.680ms returns FALSE
+T3E34 031:030.710 JLINK_IsHalted()
+T3E34 031:031.440 - 0.728ms returns FALSE
+T3E34 031:031.482 JLINK_IsHalted()
+T3E34 031:032.212 - 0.729ms returns FALSE
+T3E34 031:139.760 JLINK_IsHalted()
+T3E34 031:140.634 - 0.873ms returns FALSE
+T3E34 031:140.660 JLINK_IsHalted()
+T3E34 031:141.430 - 0.770ms returns FALSE
+T3E34 031:248.646 JLINK_IsHalted()
+T3E34 031:249.430 - 0.785ms returns FALSE
+T3E34 031:249.452 JLINK_IsHalted()
+T3E34 031:250.188 - 0.736ms returns FALSE
+T3E34 031:358.426 JLINK_IsHalted()
+T3E34 031:358.806 - 0.377ms returns FALSE
+T3E34 031:358.852 JLINK_IsHalted()
+T3E34 031:359.574 - 0.724ms returns FALSE
+T3E34 031:467.804 JLINK_IsHalted()
+T3E34 031:468.604 - 0.798ms returns FALSE
+T3E34 031:468.644 JLINK_IsHalted()
+T3E34 031:469.348 - 0.701ms returns FALSE
+T3E34 031:577.388 JLINK_IsHalted()
+T3E34 031:577.900 - 0.512ms returns FALSE
+T3E34 031:577.926 JLINK_IsHalted()
+T3E34 031:578.676 - 0.748ms returns FALSE
+T3E34 031:686.694 JLINK_IsHalted()
+T3E34 031:687.248 - 0.551ms returns FALSE
+T3E34 031:687.302 JLINK_IsHalted()
+T3E34 031:687.974 - 0.672ms returns FALSE
+T3E34 031:811.596 JLINK_IsHalted()
+T3E34 031:812.468 - 0.868ms returns FALSE
+T3E34 031:812.492 JLINK_IsHalted()
+T3E34 031:813.220 - 0.726ms returns FALSE
+T9554 031:821.866 JLINK_IsHalted()
+T9554 031:822.608 - 0.741ms returns FALSE
+T9554 031:822.656 JLINK_IsHalted()
+T9554 031:823.360 - 0.701ms returns FALSE
+T3E34 031:920.812 JLINK_IsHalted()
+T3E34 031:921.316 - 0.502ms returns FALSE
+T3E34 031:921.350 JLINK_IsHalted()
+T3E34 031:922.164 - 0.812ms returns FALSE
+T3E34 032:032.534 JLINK_IsHalted()
+T3E34 032:033.286 - 0.750ms returns FALSE
+T3E34 032:033.344 JLINK_IsHalted()
+T3E34 032:034.054 - 0.708ms returns FALSE
+T3E34 032:141.274 JLINK_IsHalted()
+T3E34 032:142.004 - 0.728ms returns FALSE
+T3E34 032:142.048 JLINK_IsHalted()
+T3E34 032:142.758 - 0.710ms returns FALSE
+T3E34 032:249.786 JLINK_IsHalted()
+T3E34 032:250.230 - 0.445ms returns FALSE
+T3E34 032:250.272 JLINK_IsHalted()
+T3E34 032:250.982 - 0.710ms returns FALSE
+T3E34 032:358.854 JLINK_IsHalted()
+T3E34 032:359.466 - 0.613ms returns FALSE
+T3E34 032:359.494 JLINK_IsHalted()
+T3E34 032:360.240 - 0.742ms returns FALSE
+T3E34 032:467.764 JLINK_IsHalted()
+T3E34 032:468.182 - 0.421ms returns FALSE
+T3E34 032:468.212 JLINK_IsHalted()
+T3E34 032:468.940 - 0.727ms returns FALSE
+T3E34 032:577.318 JLINK_IsHalted()
+T3E34 032:578.112 - 0.792ms returns FALSE
+T3E34 032:578.144 JLINK_IsHalted()
+T3E34 032:578.860 - 0.718ms returns FALSE
+T3E34 032:686.828 JLINK_IsHalted()
+T3E34 032:687.306 - 0.477ms returns FALSE
+T3E34 032:687.350 JLINK_IsHalted()
+T3E34 032:688.052 - 0.701ms returns FALSE
+T3E34 032:796.934 JLINK_IsHalted()
+T3E34 032:797.674 - 0.738ms returns FALSE
+T3E34 032:797.700 JLINK_IsHalted()
+T3E34 032:798.518 - 0.817ms returns FALSE
+T9554 032:824.330 JLINK_IsHalted()
+T9554 032:824.954 - 0.625ms returns FALSE
+T9554 032:824.982 JLINK_IsHalted()
+T9554 032:825.740 - 0.756ms returns FALSE
+T3E34 032:905.142 JLINK_IsHalted()
+T3E34 032:905.590 - 0.445ms returns FALSE
+T3E34 032:905.642 JLINK_IsHalted()
+T3E34 032:906.340 - 0.697ms returns FALSE
+T3E34 033:014.464 JLINK_IsHalted()
+T3E34 033:015.290 - 0.825ms returns FALSE
+T3E34 033:015.318 JLINK_IsHalted()
+T3E34 033:016.070 - 0.749ms returns FALSE
+T3E34 033:124.028 JLINK_IsHalted()
+T3E34 033:124.694 - 0.663ms returns FALSE
+T3E34 033:124.736 JLINK_IsHalted()
+T3E34 033:125.398 - 0.663ms returns FALSE
+T3E34 033:233.350 JLINK_IsHalted()
+T3E34 033:234.096 - 0.744ms returns FALSE
+T3E34 033:234.138 JLINK_IsHalted()
+T3E34 033:234.854 - 0.715ms returns FALSE
+T3E34 033:342.796 JLINK_IsHalted()
+T3E34 033:343.494 - 0.697ms returns FALSE
+T3E34 033:343.516 JLINK_IsHalted()
+T3E34 033:344.268 - 0.751ms returns FALSE
+T3E34 033:452.236 JLINK_IsHalted()
+T3E34 033:452.812 - 0.574ms returns FALSE
+T3E34 033:452.854 JLINK_IsHalted()
+T3E34 033:453.558 - 0.701ms returns FALSE
+T3E34 033:562.424 JLINK_IsHalted()
+T3E34 033:563.176 - 0.751ms returns FALSE
+T3E34 033:563.208 JLINK_IsHalted()
+T3E34 033:563.936 - 0.730ms returns FALSE
+T3E34 033:671.152 JLINK_IsHalted()
+T3E34 033:671.944 - 0.790ms returns FALSE
+T3E34 033:671.992 JLINK_IsHalted()
+T3E34 033:672.692 - 0.699ms returns FALSE
+T3E34 033:779.984 JLINK_IsHalted()
+T3E34 033:780.688 - 0.703ms returns FALSE
+T3E34 033:780.736 JLINK_IsHalted()
+T3E34 033:781.504 - 0.768ms returns FALSE
+T9554 033:825.452 JLINK_IsHalted()
+T9554 033:826.240 - 0.787ms returns FALSE
+T9554 033:826.268 JLINK_IsHalted()
+T9554 033:827.028 - 0.757ms returns FALSE
+T3E34 033:889.976 JLINK_IsHalted()
+T3E34 033:890.648 - 0.668ms returns FALSE
+T3E34 033:890.676 JLINK_IsHalted()
+T3E34 033:891.424 - 0.746ms returns FALSE
+T3E34 033:999.384 JLINK_IsHalted()
+T3E34 034:000.032 - 0.647ms returns FALSE
+T3E34 034:000.064 JLINK_IsHalted()
+T3E34 034:000.808 - 0.739ms returns FALSE
+T3E34 034:108.968 JLINK_IsHalted()
+T3E34 034:109.844 - 0.879ms returns FALSE
+T3E34 034:109.872 JLINK_IsHalted()
+T3E34 034:110.684 - 0.810ms returns FALSE
+T3E34 034:217.440 JLINK_IsHalted()
+T3E34 034:218.028 - 0.588ms returns FALSE
+T3E34 034:218.080 JLINK_IsHalted()
+T3E34 034:218.760 - 0.681ms returns FALSE
+T3E34 034:329.316 JLINK_IsHalted()
+T3E34 034:329.976 - 0.659ms returns FALSE
+T3E34 034:330.008 JLINK_IsHalted()
+T3E34 034:330.744 - 0.731ms returns FALSE
+T3E34 034:436.312 JLINK_IsHalted()
+T3E34 034:437.200 - 0.883ms returns FALSE
+T3E34 034:437.224 JLINK_IsHalted()
+T3E34 034:437.944 - 0.719ms returns FALSE
+T3E34 034:545.544 JLINK_IsHalted()
+T3E34 034:546.436 - 0.892ms returns FALSE
+T3E34 034:546.468 JLINK_IsHalted()
+T3E34 034:547.192 - 0.723ms returns FALSE
+T3E34 034:655.676 JLINK_IsHalted()
+T3E34 034:656.304 - 0.626ms returns FALSE
+T3E34 034:656.332 JLINK_IsHalted()
+T3E34 034:657.004 - 0.671ms returns FALSE
+T3E34 034:764.432 JLINK_IsHalted()
+T3E34 034:765.028 - 0.593ms returns FALSE
+T3E34 034:765.068 JLINK_IsHalted()
+T3E34 034:765.788 - 0.720ms returns FALSE
+T9554 034:827.000 JLINK_IsHalted()
+T9554 034:827.596 - 0.596ms returns FALSE
+T9554 034:827.620 JLINK_IsHalted()
+T9554 034:828.360 - 0.740ms returns FALSE
+T3E34 034:874.084 JLINK_IsHalted()
+T3E34 034:874.700 - 0.617ms returns FALSE
+T3E34 034:874.728 JLINK_IsHalted()
+T3E34 034:875.464 - 0.737ms returns FALSE
+T3E34 034:983.776 JLINK_IsHalted()
+T3E34 034:984.360 - 0.582ms returns FALSE
+T3E34 034:984.388 JLINK_IsHalted()
+T3E34 034:985.120 - 0.732ms returns FALSE
+T3E34 035:092.740 JLINK_IsHalted()
+T3E34 035:093.136 - 0.398ms returns FALSE
+T3E34 035:093.160 JLINK_IsHalted()
+T3E34 035:093.896 - 0.738ms returns FALSE
+T3E34 035:201.872 JLINK_IsHalted()
+T3E34 035:202.340 - 0.465ms returns FALSE
+T3E34 035:202.364 JLINK_IsHalted()
+T3E34 035:203.096 - 0.732ms returns FALSE
+T3E34 035:312.004 JLINK_IsHalted()
+T3E34 035:312.760 - 0.753ms returns FALSE
+T3E34 035:312.804 JLINK_IsHalted()
+T3E34 035:313.552 - 0.746ms returns FALSE
+T3E34 035:421.256 JLINK_IsHalted()
+T3E34 035:422.040 - 0.784ms returns FALSE
+T3E34 035:422.088 JLINK_IsHalted()
+T3E34 035:422.792 - 0.704ms returns FALSE
+T3E34 035:531.732 JLINK_IsHalted()
+T3E34 035:532.448 - 0.716ms returns FALSE
+T3E34 035:532.480 JLINK_IsHalted()
+T3E34 035:533.208 - 0.729ms returns FALSE
+T3E34 035:639.844 JLINK_IsHalted()
+T3E34 035:640.616 - 0.772ms returns FALSE
+T3E34 035:640.660 JLINK_IsHalted()
+T3E34 035:641.372 - 0.710ms returns FALSE
+T3E34 035:748.992 JLINK_IsHalted()
+T3E34 035:749.816 - 0.824ms returns FALSE
+T3E34 035:749.844 JLINK_IsHalted()
+T3E34 035:750.592 - 0.750ms returns FALSE
+T9554 035:828.664 JLINK_IsHalted()
+T9554 035:829.176 - 0.509ms returns FALSE
+T9554 035:829.220 JLINK_IsHalted()
+T9554 035:829.904 - 0.684ms returns FALSE
+T3E34 035:858.960 JLINK_IsHalted()
+T3E34 035:859.688 - 0.726ms returns FALSE
+T3E34 035:859.736 JLINK_IsHalted()
+T3E34 035:860.444 - 0.704ms returns FALSE
+T3E34 035:967.968 JLINK_IsHalted()
+T3E34 035:968.636 - 0.669ms returns FALSE
+T3E34 035:968.664 JLINK_IsHalted()
+T3E34 035:969.404 - 0.739ms returns FALSE
+T3E34 036:079.400 JLINK_IsHalted()
+T3E34 036:080.132 - 0.728ms returns FALSE
+T3E34 036:080.176 JLINK_IsHalted()
+T3E34 036:080.880 - 0.703ms returns FALSE
+T3E34 036:186.700 JLINK_IsHalted()
+T3E34 036:187.384 - 0.681ms returns FALSE
+T3E34 036:187.432 JLINK_IsHalted()
+T3E34 036:188.128 - 0.697ms returns FALSE
+T3E34 036:296.068 JLINK_IsHalted()
+T3E34 036:296.604 - 0.534ms returns FALSE
+T3E34 036:296.656 JLINK_IsHalted()
+T3E34 036:297.360 - 0.705ms returns FALSE
+T3E34 036:405.220 JLINK_IsHalted()
+T3E34 036:405.976 - 0.753ms returns FALSE
+T3E34 036:406.008 JLINK_IsHalted()
+T3E34 036:406.764 - 0.759ms returns FALSE
+T3E34 036:514.308 JLINK_IsHalted()
+T3E34 036:514.704 - 0.397ms returns FALSE
+T3E34 036:514.748 JLINK_IsHalted()
+T3E34 036:515.448 - 0.700ms returns FALSE
+T3E34 036:626.028 JLINK_IsHalted()
+T3E34 036:626.744 - 0.714ms returns FALSE
+T3E34 036:626.796 JLINK_IsHalted()
+T3E34 036:627.496 - 0.697ms returns FALSE
+T3E34 036:733.372 JLINK_IsHalted()
+T3E34 036:733.916 - 0.542ms returns FALSE
+T3E34 036:733.952 JLINK_IsHalted()
+T3E34 036:734.668 - 0.718ms returns FALSE
+T9554 036:830.384 JLINK_IsHalted()
+T9554 036:830.928 - 0.541ms returns FALSE
+T9554 036:830.980 JLINK_IsHalted()
+T9554 036:831.688 - 0.703ms returns FALSE
+T3E34 036:842.708 JLINK_IsHalted()
+T3E34 036:843.136 - 0.430ms returns FALSE
+T3E34 036:843.164 JLINK_IsHalted()
+T3E34 036:843.900 - 0.734ms returns FALSE
+T3E34 036:951.876 JLINK_IsHalted()
+T3E34 036:952.608 - 0.732ms returns FALSE
+T3E34 036:952.636 JLINK_IsHalted()
+T3E34 036:953.364 - 0.725ms returns FALSE
+T3E34 037:061.356 JLINK_IsHalted()
+T3E34 037:061.948 - 0.592ms returns FALSE
+T3E34 037:061.976 JLINK_IsHalted()
+T3E34 037:062.704 - 0.730ms returns FALSE
+T3E34 037:171.092 JLINK_IsHalted()
+T3E34 037:171.680 - 0.587ms returns FALSE
+T3E34 037:171.720 JLINK_IsHalted()
+T3E34 037:172.432 - 0.707ms returns FALSE
+T3E34 037:279.928 JLINK_IsHalted()
+T3E34 037:280.344 - 0.414ms returns FALSE
+T3E34 037:280.392 JLINK_IsHalted()
+T3E34 037:281.092 - 0.703ms returns FALSE
+T3E34 037:390.272 JLINK_IsHalted()
+T3E34 037:390.760 - 0.486ms returns FALSE
+T3E34 037:390.804 JLINK_IsHalted()
+T3E34 037:391.496 - 0.694ms returns FALSE
+T3E34 037:498.992 JLINK_IsHalted()
+T3E34 037:499.428 - 0.433ms returns FALSE
+T3E34 037:499.472 JLINK_IsHalted()
+T3E34 037:500.168 - 0.697ms returns FALSE
+T3E34 037:610.216 JLINK_IsHalted()
+T3E34 037:611.000 - 0.781ms returns FALSE
+T3E34 037:611.036 JLINK_IsHalted()
+T3E34 037:611.752 - 0.713ms returns FALSE
+T3E34 037:717.688 JLINK_IsHalted()
+T3E34 037:718.068 - 0.381ms returns FALSE
+T3E34 037:718.112 JLINK_IsHalted()
+T3E34 037:718.832 - 0.718ms returns FALSE
+T3E34 037:826.812 JLINK_IsHalted()
+T3E34 037:827.328 - 0.512ms returns FALSE
+T3E34 037:827.372 JLINK_IsHalted()
+T3E34 037:828.084 - 0.710ms returns FALSE
+T9554 037:831.992 JLINK_IsHalted()
+T9554 037:832.680 - 0.688ms returns FALSE
+T9554 037:832.704 JLINK_IsHalted()
+T9554 037:833.448 - 0.744ms returns FALSE
+T3E34 037:937.096 JLINK_IsHalted()
+T3E34 037:937.852 - 0.754ms returns FALSE
+T3E34 037:937.896 JLINK_IsHalted()
+T3E34 037:938.652 - 0.754ms returns FALSE
+T3E34 038:045.860 JLINK_IsHalted()
+T3E34 038:046.648 - 0.790ms returns FALSE
+T3E34 038:046.680 JLINK_IsHalted()
+T3E34 038:047.420 - 0.741ms returns FALSE
+T3E34 038:155.164 JLINK_IsHalted()
+T3E34 038:155.916 - 0.752ms returns FALSE
+T3E34 038:155.968 JLINK_IsHalted()
+T3E34 038:156.680 - 0.711ms returns FALSE
+T3E34 038:264.292 JLINK_IsHalted()
+T3E34 038:264.760 - 0.467ms returns FALSE
+T3E34 038:264.796 JLINK_IsHalted()
+T3E34 038:265.524 - 0.727ms returns FALSE
+T3E34 038:374.136 JLINK_IsHalted()
+T3E34 038:375.008 - 0.871ms returns FALSE
+T3E34 038:375.032 JLINK_IsHalted()
+T3E34 038:375.756 - 0.724ms returns FALSE
+T3E34 038:485.236 JLINK_IsHalted()
+T3E34 038:485.976 - 0.740ms returns FALSE
+T3E34 038:486.000 JLINK_IsHalted()
+T3E34 038:486.744 - 0.745ms returns FALSE
+T3E34 038:592.544 JLINK_IsHalted()
+T3E34 038:593.148 - 0.604ms returns FALSE
+T3E34 038:593.200 JLINK_IsHalted()
+T3E34 038:593.892 - 0.690ms returns FALSE
+T3E34 038:702.472 JLINK_IsHalted()
+T3E34 038:702.928 - 0.456ms returns FALSE
+T3E34 038:702.984 JLINK_IsHalted()
+T3E34 038:703.680 - 0.698ms returns FALSE
+T3E34 038:812.132 JLINK_IsHalted()
+T3E34 038:812.680 - 0.552ms returns FALSE
+T3E34 038:812.712 JLINK_IsHalted()
+T3E34 038:813.436 - 0.724ms returns FALSE
+T9554 038:833.308 JLINK_IsHalted()
+T9554 038:834.072 - 0.763ms returns FALSE
+T9554 038:834.096 JLINK_IsHalted()
+T9554 038:834.828 - 0.733ms returns FALSE
+T3E34 038:920.516 JLINK_IsHalted()
+T3E34 038:920.952 - 0.434ms returns FALSE
+T3E34 038:920.980 JLINK_IsHalted()
+T3E34 038:921.696 - 0.718ms returns FALSE
+T3E34 039:030.704 JLINK_IsHalted()
+T3E34 039:031.412 - 0.706ms returns FALSE
+T3E34 039:031.452 JLINK_IsHalted()
+T3E34 039:032.164 - 0.711ms returns FALSE
+T3E34 039:139.784 JLINK_IsHalted()
+T3E34 039:140.676 - 0.893ms returns FALSE
+T3E34 039:140.704 JLINK_IsHalted()
+T3E34 039:141.448 - 0.745ms returns FALSE
+T3E34 039:248.760 JLINK_IsHalted()
+T3E34 039:249.096 - 0.335ms returns FALSE
+T3E34 039:249.132 JLINK_IsHalted()
+T3E34 039:249.864 - 0.728ms returns FALSE
+T3E34 039:358.584 JLINK_IsHalted()
+T3E34 039:359.436 - 0.855ms returns FALSE
+T3E34 039:359.484 JLINK_IsHalted()
+T3E34 039:360.172 - 0.685ms returns FALSE
+T3E34 039:467.988 JLINK_IsHalted()
+T3E34 039:468.716 - 0.728ms returns FALSE
+T3E34 039:468.756 JLINK_IsHalted()
+T3E34 039:469.464 - 0.707ms returns FALSE
+T3E34 039:577.224 JLINK_IsHalted()
+T3E34 039:578.056 - 0.833ms returns FALSE
+T3E34 039:578.088 JLINK_IsHalted()
+T3E34 039:578.816 - 0.729ms returns FALSE
+T3E34 039:687.316 JLINK_IsHalted()
+T3E34 039:687.800 - 0.486ms returns FALSE
+T3E34 039:687.832 JLINK_IsHalted()
+T3E34 039:688.552 - 0.721ms returns FALSE
+T3E34 039:797.952 JLINK_IsHalted()
+T3E34 039:798.712 - 0.763ms returns FALSE
+T3E34 039:798.732 JLINK_IsHalted()
+T3E34 039:799.476 - 0.740ms returns FALSE
+T9554 039:834.548 JLINK_IsHalted()
+T9554 039:835.064 - 0.517ms returns FALSE
+T9554 039:835.096 JLINK_IsHalted()
+T9554 039:835.848 - 0.749ms returns FALSE
+T3E34 039:905.292 JLINK_IsHalted()
+T3E34 039:905.788 - 0.496ms returns FALSE
+T3E34 039:905.840 JLINK_IsHalted()
+T3E34 039:906.548 - 0.708ms returns FALSE
+T3E34 040:015.152 JLINK_IsHalted()
+T3E34 040:015.732 - 0.579ms returns FALSE
+T3E34 040:015.760 JLINK_IsHalted()
+T3E34 040:016.492 - 0.731ms returns FALSE
+T3E34 040:123.976 JLINK_IsHalted()
+T3E34 040:124.360 - 0.383ms returns FALSE
+T3E34 040:124.400 JLINK_IsHalted()
+T3E34 040:125.144 - 0.746ms returns FALSE
+T3E34 040:233.664 JLINK_IsHalted()
+T3E34 040:234.320 - 0.658ms returns FALSE
+T3E34 040:234.368 JLINK_IsHalted()
+T3E34 040:235.084 - 0.714ms returns FALSE
+T3E34 040:342.932 JLINK_IsHalted()
+T3E34 040:343.536 - 0.606ms returns FALSE
+T3E34 040:343.588 JLINK_IsHalted()
+T3E34 040:344.296 - 0.708ms returns FALSE
+T3E34 040:452.640 JLINK_IsHalted()
+T3E34 040:453.384 - 0.744ms returns FALSE
+T3E34 040:453.436 JLINK_IsHalted()
+T3E34 040:454.136 - 0.697ms returns FALSE
+T3E34 040:561.696 JLINK_IsHalted()
+T3E34 040:562.128 - 0.432ms returns FALSE
+T3E34 040:562.152 JLINK_IsHalted()
+T3E34 040:562.900 - 0.741ms returns FALSE
+T3E34 040:672.996 JLINK_IsHalted()
+T3E34 040:673.732 - 0.735ms returns FALSE
+T3E34 040:673.768 JLINK_IsHalted()
+T3E34 040:674.488 - 0.722ms returns FALSE
+T3E34 040:780.456 JLINK_IsHalted()
+T3E34 040:781.320 - 0.867ms returns FALSE
+T3E34 040:781.368 JLINK_IsHalted()
+T3E34 040:782.072 - 0.705ms returns FALSE
+T9554 040:836.220 JLINK_IsHalted()
+T9554 040:837.024 - 0.800ms returns FALSE
+T9554 040:837.068 JLINK_IsHalted()
+T9554 040:837.780 - 0.707ms returns FALSE
+T3E34 040:889.632 JLINK_IsHalted()
+T3E34 040:890.436 - 0.801ms returns FALSE
+T3E34 040:890.488 JLINK_IsHalted()
+T3E34 040:891.172 - 0.686ms returns FALSE
+T3E34 040:999.236 JLINK_IsHalted()
+T3E34 041:000.072 - 0.834ms returns FALSE
+T3E34 041:000.092 JLINK_IsHalted()
+T3E34 041:000.844 - 0.753ms returns FALSE
+T3E34 041:108.260 JLINK_IsHalted()
+T3E34 041:108.820 - 0.560ms returns FALSE
+T3E34 041:108.872 JLINK_IsHalted()
+T3E34 041:109.576 - 0.704ms returns FALSE
+T3E34 041:220.044 JLINK_IsHalted()
+T3E34 041:220.800 - 0.754ms returns FALSE
+T3E34 041:220.868 JLINK_IsHalted()
+T3E34 041:221.560 - 0.694ms returns FALSE
+T3E34 041:327.444 JLINK_IsHalted()
+T3E34 041:327.948 - 0.504ms returns FALSE
+T3E34 041:327.992 JLINK_IsHalted()
+T3E34 041:328.740 - 0.742ms returns FALSE
+T3E34 041:436.480 JLINK_IsHalted()
+T3E34 041:437.272 - 0.792ms returns FALSE
+T3E34 041:437.304 JLINK_IsHalted()
+T3E34 041:438.036 - 0.729ms returns FALSE
+T3E34 041:546.104 JLINK_IsHalted()
+T3E34 041:546.524 - 0.419ms returns FALSE
+T3E34 041:546.552 JLINK_IsHalted()
+T3E34 041:547.288 - 0.732ms returns FALSE
+T3E34 041:655.116 JLINK_IsHalted()
+T3E34 041:655.880 - 0.764ms returns FALSE
+T3E34 041:655.928 JLINK_IsHalted()
+T3E34 041:656.636 - 0.707ms returns FALSE
+T3E34 041:765.272 JLINK_IsHalted()
+T3E34 041:765.676 - 0.402ms returns FALSE
+T3E34 041:765.716 JLINK_IsHalted()
+T3E34 041:766.440 - 0.724ms returns FALSE
+T9554 041:837.740 JLINK_IsHalted()
+T9554 041:838.472 - 0.728ms returns FALSE
+T9554 041:838.504 JLINK_IsHalted()
+T9554 041:839.236 - 0.730ms returns FALSE
+T3E34 041:875.776 JLINK_IsHalted()
+T3E34 041:876.528 - 0.753ms returns FALSE
+T3E34 041:876.560 JLINK_IsHalted()
+T3E34 041:877.288 - 0.724ms returns FALSE
+T3E34 041:983.424 JLINK_IsHalted()
+T3E34 041:984.152 - 0.723ms returns FALSE
+T3E34 041:984.192 JLINK_IsHalted()
+T3E34 041:984.908 - 0.714ms returns FALSE
+T3E34 042:092.504 JLINK_IsHalted()
+T3E34 042:093.064 - 0.561ms returns FALSE
+T3E34 042:093.088 JLINK_IsHalted()
+T3E34 042:093.816 - 0.730ms returns FALSE
+T3E34 042:202.876 JLINK_IsHalted()
+T3E34 042:203.608 - 0.730ms returns FALSE
+T3E34 042:203.632 JLINK_IsHalted()
+T3E34 042:204.372 - 0.738ms returns FALSE
+T3E34 042:311.820 JLINK_IsHalted()
+T3E34 042:312.360 - 0.542ms returns FALSE
+T3E34 042:312.392 JLINK_IsHalted()
+T3E34 042:313.112 - 0.718ms returns FALSE
+T3E34 042:421.576 JLINK_IsHalted()
+T3E34 042:422.284 - 0.709ms returns FALSE
+T3E34 042:422.332 JLINK_IsHalted()
+T3E34 042:423.032 - 0.702ms returns FALSE
+T3E34 042:530.720 JLINK_IsHalted()
+T3E34 042:531.568 - 0.846ms returns FALSE
+T3E34 042:531.612 JLINK_IsHalted()
+T3E34 042:532.312 - 0.697ms returns FALSE
+T3E34 042:639.864 JLINK_IsHalted()
+T3E34 042:640.352 - 0.492ms returns FALSE
+T3E34 042:640.376 JLINK_IsHalted()
+T3E34 042:641.104 - 0.725ms returns FALSE
+T3E34 042:748.832 JLINK_IsHalted()
+T3E34 042:749.608 - 0.772ms returns FALSE
+T3E34 042:749.628 JLINK_IsHalted()
+T3E34 042:750.388 - 0.756ms returns FALSE
+T9554 042:839.168 JLINK_IsHalted()
+T9554 042:839.672 - 0.506ms returns FALSE
+T9554 042:839.720 JLINK_IsHalted()
+T9554 042:840.420 - 0.700ms returns FALSE
+T3E34 042:858.680 JLINK_IsHalted()
+T3E34 042:859.348 - 0.668ms returns FALSE
+T3E34 042:859.396 JLINK_IsHalted()
+T3E34 042:860.096 - 0.699ms returns FALSE
+T3E34 042:968.124 JLINK_IsHalted()
+T3E34 042:968.660 - 0.531ms returns FALSE
+T3E34 042:968.704 JLINK_IsHalted()
+T3E34 042:969.416 - 0.707ms returns FALSE
+T3E34 043:076.824 JLINK_IsHalted()
+T3E34 043:077.576 - 0.752ms returns FALSE
+T3E34 043:077.632 JLINK_IsHalted()
+T3E34 043:078.340 - 0.708ms returns FALSE
+T3E34 043:187.224 JLINK_IsHalted()
+T3E34 043:187.992 - 0.772ms returns FALSE
+T3E34 043:188.024 JLINK_IsHalted()
+T3E34 043:188.792 - 0.768ms returns FALSE
+T3E34 043:295.940 JLINK_IsHalted()
+T3E34 043:296.812 - 0.873ms returns FALSE
+T3E34 043:296.852 JLINK_IsHalted()
+T3E34 043:297.560 - 0.705ms returns FALSE
+T3E34 043:405.336 JLINK_IsHalted()
+T3E34 043:406.072 - 0.736ms returns FALSE
+T3E34 043:406.096 JLINK_IsHalted()
+T3E34 043:406.832 - 0.734ms returns FALSE
+T3E34 043:515.844 JLINK_IsHalted()
+T3E34 043:516.568 - 0.726ms returns FALSE
+T3E34 043:516.596 JLINK_IsHalted()
+T3E34 043:517.336 - 0.738ms returns FALSE
+T3E34 043:624.576 JLINK_IsHalted()
+T3E34 043:625.240 - 0.663ms returns FALSE
+T3E34 043:625.276 JLINK_IsHalted()
+T3E34 043:626.016 - 0.739ms returns FALSE
+T3E34 043:734.976 JLINK_IsHalted()
+T3E34 043:735.724 - 0.749ms returns FALSE
+T3E34 043:735.792 JLINK_IsHalted()
+T3E34 043:736.492 - 0.699ms returns FALSE
+T9554 043:840.652 JLINK_IsHalted()
+T9554 043:841.288 - 0.635ms returns FALSE
+T9554 043:841.332 JLINK_IsHalted()
+T9554 043:842.032 - 0.699ms returns FALSE
+T3E34 043:842.396 JLINK_IsHalted()
+T3E34 043:842.808 - 0.413ms returns FALSE
+T3E34 043:842.836 JLINK_IsHalted()
+T3E34 043:843.572 - 0.737ms returns FALSE
+T3E34 043:951.828 JLINK_IsHalted()
+T3E34 043:952.536 - 0.708ms returns FALSE
+T3E34 043:952.568 JLINK_IsHalted()
+T3E34 043:953.328 - 0.758ms returns FALSE
+T3E34 044:061.896 JLINK_IsHalted()
+T3E34 044:062.608 - 0.709ms returns FALSE
+T3E34 044:062.632 JLINK_IsHalted()
+T3E34 044:063.380 - 0.744ms returns FALSE
+T3E34 044:170.556 JLINK_IsHalted()
+T3E34 044:171.372 - 0.816ms returns FALSE
+T3E34 044:171.432 JLINK_IsHalted()
+T3E34 044:172.140 - 0.709ms returns FALSE
+T3E34 044:280.500 JLINK_IsHalted()
+T3E34 044:281.272 - 0.775ms returns FALSE
+T3E34 044:281.300 JLINK_IsHalted()
+T3E34 044:282.040 - 0.741ms returns FALSE
+T3E34 044:389.824 JLINK_IsHalted()
+T3E34 044:390.504 - 0.676ms returns FALSE
+T3E34 044:390.532 JLINK_IsHalted()
+T3E34 044:391.296 - 0.766ms returns FALSE
+T3E34 044:501.268 JLINK_IsHalted()
+T3E34 044:501.996 - 0.728ms returns FALSE
+T3E34 044:502.024 JLINK_IsHalted()
+T3E34 044:502.840 - 0.817ms returns FALSE
+T3E34 044:608.440 JLINK_IsHalted()
+T3E34 044:609.160 - 0.723ms returns FALSE
+T3E34 044:609.208 JLINK_IsHalted()
+T3E34 044:609.884 - 0.675ms returns FALSE
+T3E34 044:718.248 JLINK_IsHalted()
+T3E34 044:719.048 - 0.800ms returns FALSE
+T3E34 044:719.092 JLINK_IsHalted()
+T3E34 044:719.752 - 0.656ms returns FALSE
+T3E34 044:827.224 JLINK_IsHalted()
+T3E34 044:827.756 - 0.534ms returns FALSE
+T3E34 044:827.804 JLINK_IsHalted()
+T3E34 044:828.504 - 0.696ms returns FALSE
+T9554 044:842.356 JLINK_IsHalted()
+T9554 044:843.212 - 0.857ms returns FALSE
+T9554 044:843.240 JLINK_IsHalted()
+T9554 044:843.940 - 0.700ms returns FALSE
+T3E34 044:936.260 JLINK_IsHalted()
+T3E34 044:936.968 - 0.707ms returns FALSE
+T3E34 044:937.000 JLINK_IsHalted()
+T3E34 044:937.720 - 0.721ms returns FALSE
+T3E34 045:045.592 JLINK_IsHalted()
+T3E34 045:046.292 - 0.699ms returns FALSE
+T3E34 045:046.344 JLINK_IsHalted()
+T3E34 045:047.032 - 0.688ms returns FALSE
+T3E34 045:155.032 JLINK_IsHalted()
+T3E34 045:155.708 - 0.677ms returns FALSE
+T3E34 045:155.756 JLINK_IsHalted()
+T3E34 045:156.480 - 0.723ms returns FALSE
+T3E34 045:264.872 JLINK_IsHalted()
+T3E34 045:265.756 - 0.883ms returns FALSE
+T3E34 045:265.800 JLINK_IsHalted()
+T3E34 045:266.520 - 0.720ms returns FALSE
+T3E34 045:374.116 JLINK_IsHalted()
+T3E34 045:374.984 - 0.869ms returns FALSE
+T3E34 045:375.032 JLINK_IsHalted()
+T3E34 045:375.732 - 0.696ms returns FALSE
+T3E34 045:485.248 JLINK_IsHalted()
+T3E34 045:485.948 - 0.699ms returns FALSE
+T3E34 045:485.980 JLINK_IsHalted()
+T3E34 045:486.724 - 0.740ms returns FALSE
+T3E34 045:593.312 JLINK_IsHalted()
+T3E34 045:594.212 - 0.896ms returns FALSE
+T3E34 045:594.260 JLINK_IsHalted()
+T3E34 045:594.952 - 0.694ms returns FALSE
+T3E34 045:701.912 JLINK_IsHalted()
+T3E34 045:702.888 - 0.969ms returns FALSE
+T3E34 045:702.932 JLINK_IsHalted()
+T3E34 045:703.648 - 0.716ms returns FALSE
+T3E34 045:811.592 JLINK_IsHalted()
+T3E34 045:812.440 - 0.847ms returns FALSE
+T3E34 045:812.484 JLINK_IsHalted()
+T3E34 045:813.052 - 0.566ms returns FALSE
+T9554 045:845.264 JLINK_IsHalted()
+T9554 045:845.980 - 0.718ms returns FALSE
+T9554 045:846.008 JLINK_IsHalted()
+T9554 045:846.752 - 0.743ms returns FALSE
+T3E34 045:921.616 JLINK_IsHalted()
+T3E34 045:922.476 - 0.861ms returns FALSE
+T3E34 045:922.504 JLINK_IsHalted()
+T3E34 045:923.248 - 0.742ms returns FALSE
+T3E34 046:030.792 JLINK_IsHalted()
+T3E34 046:031.256 - 0.465ms returns FALSE
+T3E34 046:031.284 JLINK_IsHalted()
+T3E34 046:032.024 - 0.738ms returns FALSE
+T3E34 046:139.828 JLINK_IsHalted()
+T3E34 046:140.216 - 0.388ms returns FALSE
+T3E34 046:140.280 JLINK_IsHalted()
+T3E34 046:140.984 - 0.689ms returns FALSE
+T3E34 046:249.508 JLINK_IsHalted()
+T3E34 046:250.056 - 0.551ms returns FALSE
+T3E34 046:250.100 JLINK_IsHalted()
+T3E34 046:250.896 - 0.793ms returns FALSE
+T3E34 046:359.908 JLINK_IsHalted()
+T3E34 046:360.632 - 0.726ms returns FALSE
+T3E34 046:360.648 JLINK_IsHalted()
+T3E34 046:361.400 - 0.751ms returns FALSE
+T3E34 046:467.492 JLINK_IsHalted()
+T3E34 046:468.304 - 0.812ms returns FALSE
+T3E34 046:468.348 JLINK_IsHalted()
+T3E34 046:469.060 - 0.710ms returns FALSE
+T3E34 046:576.824 JLINK_IsHalted()
+T3E34 046:577.496 - 0.673ms returns FALSE
+T3E34 046:577.544 JLINK_IsHalted()
+T3E34 046:578.232 - 0.686ms returns FALSE
+T3E34 046:687.060 JLINK_IsHalted()
+T3E34 046:687.892 - 0.830ms returns FALSE
+T3E34 046:703.968 JLINK_IsHalted()
+T3E34 046:704.576 - 0.606ms returns FALSE
+T16D4 046:805.708   
+  ***** Error: Connection to emulator lost!
+T3E34 046:811.368 JLINK_IsHalted()
+T3E34 046:811.404 - 0.038ms returns ERROR
+T3E34 046:811.416 JLINK_IsHalted()
+T3E34 046:811.424 - 0.007ms returns ERROR
+T6D58 046:816.764 JLINK_Halt()
+T6D58 046:816.808 - 0.045ms returns 0x00
+T6D58 046:816.824 JLINK_ReadReg(XPSR)
+T6D58 046:816.840 - 0.012ms returns 0x00000000
+T6D58 046:837.348 JLINK_Close()
+T6D58 046:849.300 - 11.953ms
+T6D58 046:849.332   
+T6D58 046:849.336   Closed
