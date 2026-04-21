@@ -2,51 +2,31 @@
  * File Name    : complementary_pwm.c
  * Description  : Implementation of GPT Complementary PWM Modes 1, 2, 3, 4
  *
- *                Complementary PWM uses 3 consecutive GPT channels (ch0=master, ch1=slave1, ch2=slave2)
- *                to generate three-phase PWM with dead time for motor control applications.
- *
  *                Mode 1: Buffer transfer at crest   (GTCR.MD = 0xC)
  *                Mode 2: Buffer transfer at trough  (GTCR.MD = 0xD)
  *                Mode 3: Buffer transfer at crest and trough (GTCR.MD = 0xE)
  *                Mode 4: Immediate transfer         (GTCR.MD = 0xF)
  **********************************************************************************************************************/
-/***********************************************************************************************************************
-* Copyright (c) 2020 - 2025 Renesas Electronics Corporation and/or its affiliates
-*
-* SPDX-License-Identifier: BSD-3-Clause
-***********************************************************************************************************************/
 
 #include "common_utils.h"
 #include "gpt_timer.h"
 #include "complementary_pwm.h"
 
-/*******************************************************************************************************************//**
- * @addtogroup r_gpt_ep
- * @{
- **********************************************************************************************************************/
-
 /***********************************************************************************************************************
  * Private global variables
  **********************************************************************************************************************/
 
-/* Complementary PWM runtime configuration */
-static comp_pwm_cfg_t g_comp_pwm_cfg =
-{
-    .mode          = (timer_mode_t)RESET_VALUE,
-    .dead_time     = COMP_PWM_DEFAULT_DEAD_TIME,
-    .period        = COMP_PWM_DEFAULT_PERIOD,
-    .duty_u        = 0U,
-    .duty_v        = 0U,
-    .duty_w        = 0U,
-};
-
 /* Store open state (extern from gpt_timer.c) */
 static timer_mode_t g_timer_mode;
+
+timer_cfg_t g_timer_comp_master_cfg_test;
+timer_cfg_t g_timer_comp_slave1_cfg_test;
+timer_cfg_t g_timer_comp_slave2_cfg_test;
+gpt_extended_cfg_t * p_extend;
 
 /***********************************************************************************************************************
  * Private function prototypes
  **********************************************************************************************************************/
-static fsp_err_t comp_pwm_open_channels(uint8_t comp_mode);
 static fsp_err_t comp_pwm_set_compare_match(uint32_t duty_u, uint32_t duty_v, uint32_t duty_w);
 static uint32_t  comp_pwm_duty_to_counts(uint32_t duty_percent, uint32_t period);
 static void      comp_pwm_close_all_channels(void);
@@ -58,7 +38,7 @@ static void      comp_pwm_close_all_channels(void);
 /***********************************************************************************************************************
  * @brief  Initialize GPT channels for complementary PWM operation
  *
- * @param[in] comp_mode  Menu selection: COMP_PWM_MODE1_TIMER to COMP_PWM_MODE4_TIMER
+ * @param[in] comp_mode  Menu selection: TIMER_MODE_COMPLEMENTARY_PWM_MODE1_TIMER to TIMER_MODE_COMPLEMENTARY_PWM_MODE4
  * @retval FSP_SUCCESS          Initialization successful
  * @retval FSP_ERR_ALREADY_OPEN Timer already open
  * @retval other                Error from FSP API
@@ -67,33 +47,24 @@ fsp_err_t comp_pwm_init(uint8_t comp_mode)
 {
     fsp_err_t err = FSP_SUCCESS;
 
-    g_comp_pwm_cfg.mode = g_timer_comp_master_cfg.mode;
-    g_comp_pwm_cfg.period = g_timer_comp_master_cfg.period_counts;
-    g_comp_pwm_cfg.duty_u = g_timer_comp_master_cfg.duty_cycle_counts;
-    g_comp_pwm_cfg.duty_v = g_timer_comp_slave1_cfg.duty_cycle_counts;
-    g_comp_pwm_cfg.duty_w = g_timer_comp_slave2_cfg.duty_cycle_counts;
-
-
-    gpt_extended_cfg_t * p_extend = (gpt_extended_cfg_t *) g_timer_comp_master_cfg.p_extend;
-    g_comp_pwm_cfg.dead_time = p_extend->p_pwm_cfg->dead_time_count_up;
 
     /* Map menu selection to internal mode identifier */
     switch (comp_mode)
     {
         case COMP_PWM_MODE1_TIMER:
-            g_comp_pwm_cfg.mode = TIMER_MODE_COMPLEMENTARY_PWM_MODE1;
+            g_timer_mode = TIMER_MODE_COMPLEMENTARY_PWM_MODE1;
             APP_PRINT("\r\n--- Complementary PWM Mode 1 (Transfer at Crest) ---\r\n");
             break;
         case COMP_PWM_MODE2_TIMER:
-            g_comp_pwm_cfg.mode = TIMER_MODE_COMPLEMENTARY_PWM_MODE2;
+            g_timer_mode = TIMER_MODE_COMPLEMENTARY_PWM_MODE2;
             APP_PRINT("\r\n--- Complementary PWM Mode 2 (Transfer at Trough) ---\r\n");
             break;
         case COMP_PWM_MODE3_TIMER:
-            g_comp_pwm_cfg.mode = TIMER_MODE_COMPLEMENTARY_PWM_MODE3;
+            g_timer_mode = TIMER_MODE_COMPLEMENTARY_PWM_MODE3;
             APP_PRINT("\r\n--- Complementary PWM Mode 3 (Transfer at Crest & Trough) ---\r\n");
             break;
         case COMP_PWM_MODE4_TIMER:
-            g_comp_pwm_cfg.mode = TIMER_MODE_COMPLEMENTARY_PWM_MODE4;
+            g_timer_mode = TIMER_MODE_COMPLEMENTARY_PWM_MODE4;
             APP_PRINT("\r\n--- Complementary PWM Mode 4 (Immediate Transfer) ---\r\n");
             break;
         default:
@@ -102,20 +73,37 @@ fsp_err_t comp_pwm_init(uint8_t comp_mode)
     }
 
     /* Open and configure all 3 GPT channels*/
-    err = comp_pwm_open_channels(comp_mode);
-    if (FSP_SUCCESS != err)
-    {
-        APP_ERR_PRINT("\r\n** Complementary PWM channel open FAILED **\r\n");
-        comp_pwm_close_all_channels();
-        return err;
-    }
-    else
-    {
-        APP_ERR_PRINT("\r\n** Complementary PWM channel open SUCCESS **\r\n");   
-    }
+       g_timer_comp_master_cfg_test.mode        = g_timer_mode;
+
+       /* Open master channel (ch0) */
+       err = R_GPT_Open(&g_timer_comp_master_ctrl, &g_timer_comp_master_cfg_test);
+       if (FSP_SUCCESS != err)
+       {
+           APP_ERR_PRINT("\r\n** Master channel (ch0) R_GPT_Open FAILED **\r\n");
+           return err;
+       }
+       APP_PRINT("\nMaster channel 0 opened\r\n");
+
+       /* Open slave channel 1 (ch1) */
+       err = R_GPT_Open(&g_timer_comp_slave1_ctrl, &g_timer_comp_slave1_cfg);
+       if (FSP_SUCCESS != err)
+       {
+           APP_ERR_PRINT("\r\n** Slave1 channel (ch1) R_GPT_Open FAILED **\r\n");
+           return err;
+       }
+       APP_PRINT("\nSlave channel 1 opened\r\n");
+
+       /* Open slave channel 2 (ch2) */
+       err = R_GPT_Open(&g_timer_comp_slave2_ctrl, &g_timer_comp_slave2_cfg);
+       if (FSP_SUCCESS != err)
+       {
+           APP_ERR_PRINT("\r\n** Slave2 channel (ch2) R_GPT_Open FAILED **\r\n");
+           return err;
+       }
+       APP_PRINT("\n Complementary PWM channel open SUCCESS \r\n");
 
     /* Set initial compare match values (GTCCRA) and buffer values (GTCCRD) */
-    err = comp_pwm_set_compare_match(g_comp_pwm_cfg.duty_u, g_comp_pwm_cfg.duty_v, g_comp_pwm_cfg.duty_w);
+    err = comp_pwm_set_compare_match(g_timer_comp_master_cfg.duty_cycle_counts, g_timer_comp_slave1_cfg.duty_cycle_counts, g_timer_comp_slave2_cfg.duty_cycle_counts);
     if (FSP_SUCCESS != err)
     {
         APP_ERR_PRINT("\r\n** Compare match set FAILED **\r\n");
@@ -124,12 +112,12 @@ fsp_err_t comp_pwm_init(uint8_t comp_mode)
     }
     else
     {
-         APP_PRINT("Duty updated:\nvalue_u=%d\nvalue_v=%d\nvalue_w=%d\r\n", g_comp_pwm_cfg.duty_u , g_comp_pwm_cfg.duty_v, g_comp_pwm_cfg.duty_w);
+         APP_PRINT("Duty updated:\nvalue_u=%d\nvalue_v=%d\nvalue_w=%d\r\n", g_timer_comp_master_cfg.duty_cycle_counts, g_timer_comp_slave1_cfg.duty_cycle_counts, g_timer_comp_slave2_cfg.duty_cycle_counts);
     }
 
-    APP_PRINT("Complementary PWM Mode %d initialized successfully\r\n", g_comp_pwm_cfg.mode - 11);
-    APP_PRINT("  Period: 0x%04X counts\r\n", g_comp_pwm_cfg.period);
-    APP_PRINT("  Dead Time: 0x%04X counts\r\n", g_comp_pwm_cfg.dead_time);
+    APP_PRINT("Complementary PWM Mode %d initialized successfully\r\n", g_timer_comp_master_cfg_test.mode - 11);
+    APP_PRINT("  Period: 0x%04X counts\r\n", g_timer_comp_master_cfg.period_counts);
+    APP_PRINT("  Dead Time: 0x%04X counts\r\n", p_extend->p_pwm_cfg->dead_time_count_up);
 
     return FSP_SUCCESS;
 }
@@ -197,30 +185,21 @@ fsp_err_t comp_pwm_set_duty_3phase(uint8_t duty_u, uint8_t duty_v, uint8_t duty_
     }
 
     /* Convert percentages to compare match counts */
-    uint32_t counts_u = comp_pwm_duty_to_counts(duty_u, g_comp_pwm_cfg.period);
-    uint32_t counts_v = comp_pwm_duty_to_counts(duty_v, g_comp_pwm_cfg.period);
-    uint32_t counts_w = comp_pwm_duty_to_counts(duty_w, g_comp_pwm_cfg.period);
+    g_timer_comp_master_cfg_test.duty_cycle_counts = comp_pwm_duty_to_counts(duty_u, g_timer_comp_master_cfg.period_counts);
+    g_timer_comp_slave1_cfg_test.duty_cycle_counts = comp_pwm_duty_to_counts(duty_v, g_timer_comp_master_cfg.period_counts);
+    g_timer_comp_slave2_cfg_test.duty_cycle_counts = comp_pwm_duty_to_counts(duty_w, g_timer_comp_master_cfg.period_counts);
 
     /* Update compare match values.*/
-    err = comp_pwm_set_compare_match(counts_u, counts_v, counts_w);
+    err = comp_pwm_set_compare_match(g_timer_comp_master_cfg_test.duty_cycle_counts, g_timer_comp_slave1_cfg_test.duty_cycle_counts, g_timer_comp_slave2_cfg_test.duty_cycle_counts);
     if (FSP_SUCCESS != err)
     {
         APP_ERR_PRINT("\r\n** Duty cycle update FAILED **\r\n");
         return err;
     }
 
-    APP_PRINT("Duty updated:\nU=%d%%\tvalue_u=%d \nV=%d%%\tvalue_v=%d \nW=%d%%\tvalue_w=%d\r\n", duty_u, counts_u, duty_v, counts_v, duty_w, counts_w);
+    APP_PRINT("Duty updated:\nU=%d%%\tvalue_u=%d \nV=%d%%\tvalue_v=%d \nW=%d%%\tvalue_w=%d\r\n", duty_u, g_timer_comp_master_cfg_test.duty_cycle_counts, duty_v, g_timer_comp_slave1_cfg_test.duty_cycle_counts, duty_w, g_timer_comp_slave2_cfg_test.duty_cycle_counts);
 
     return FSP_SUCCESS;
-}
-
-/***********************************************************************************************************************
- * @brief  Get current complementary PWM configuration
- * @return Pointer to the configuration structure (read-only)
- **********************************************************************************************************************/
-const comp_pwm_cfg_t * comp_pwm_get_config(void)
-{
-    return &g_comp_pwm_cfg;
 }
 
 /***********************************************************************************************************************
@@ -318,18 +297,10 @@ void comp_pwm_process_input(void)
 
                 case 6U:  /* Show status */
                 {
-                    const comp_pwm_cfg_t *cfg = comp_pwm_get_config();
                     APP_PRINT("\r\n--- Complementary PWM Status ---\r\n");
-                    APP_PRINT("  Mode: %d \r\n", cfg->mode - 11);
-                    APP_PRINT("  Period: 0x%04X  Dead Time: 0x%04X\r\n", cfg->period, cfg->dead_time);
-                    APP_PRINT("  Duty: U=%d%%  V=%d%%  W=%d%%\r\n", cfg->duty_u, cfg->duty_v, cfg->duty_w);
-                    break;
-                }
-
-                case 0U:  /* Return to main menu */
-                {
-                    APP_PRINT("\r\nReturning to main menu...\r\n");
-                    comp_pwm_close_all_channels();
+                    APP_PRINT("  Mode: %d \r\n", g_timer_comp_master_cfg_test.mode - 11);
+                    APP_PRINT("  Period: 0x%04X  Dead Time: 0x%04X\r\n", g_timer_comp_master_cfg_test.period_counts, p_extend->p_pwm_cfg->dead_time_count_up);
+                    APP_PRINT("  Duty Counts: U=%d  V=%d  W=%d\r\n", g_timer_comp_master_cfg_test.duty_cycle_counts, g_timer_comp_slave1_cfg_test.duty_cycle_counts, g_timer_comp_slave2_cfg_test.duty_cycle_counts);
                     break;
                 }
 
@@ -350,67 +321,7 @@ void comp_pwm_process_input(void)
  **********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * @brief  Open all 3 GPT channels for complementary PWM
- *
- * @param[in] comp_mode  Complementary PWM mode selection
- * @retval FSP_SUCCESS on success
- **********************************************************************************************************************/
-static fsp_err_t comp_pwm_open_channels(uint8_t comp_mode)
-{
-    fsp_err_t err = FSP_SUCCESS;
 
-    /* Update global state */
-    switch (comp_mode)
-    {
-        case COMP_PWM_MODE1_TIMER:
-            g_timer_mode = TIMER_MODE_COMPLEMENTARY_PWM_MODE1;
-            break;
-        case COMP_PWM_MODE2_TIMER:
-            g_timer_mode = TIMER_MODE_COMPLEMENTARY_PWM_MODE2;
-            break;
-        case COMP_PWM_MODE3_TIMER:
-            g_timer_mode = TIMER_MODE_COMPLEMENTARY_PWM_MODE3;
-            break;
-        case COMP_PWM_MODE4_TIMER:
-            g_timer_mode = TIMER_MODE_COMPLEMENTARY_PWM_MODE4;
-            break;
-        default:
-            break;
-    }
-    timer_cfg_t g_timer_comp_master_cfg_test = g_timer_comp_master_cfg;
-
-    g_timer_comp_master_cfg_test.mode        = g_timer_mode;
-
-
-    /* Open master channel (ch0) */
-    err = R_GPT_Open(&g_timer_comp_master_ctrl, &g_timer_comp_master_cfg_test);
-    if (FSP_SUCCESS != err)
-    {
-        APP_ERR_PRINT("\r\n** Master channel (ch0) R_GPT_Open FAILED **\r\n");
-        return err;
-    }
-    APP_PRINT("\nMaster channel 0 opened\r\n");
-
-    /* Open slave channel 1 (ch1) */
-    err = R_GPT_Open(&g_timer_comp_slave1_ctrl, &g_timer_comp_slave1_cfg);
-    if (FSP_SUCCESS != err)
-    {
-        APP_ERR_PRINT("\r\n** Slave1 channel (ch1) R_GPT_Open FAILED **\r\n");
-        return err;
-    }
-    APP_PRINT("\nSlave channel 1 opened\r\n");
-
-    /* Open slave channel 2 (ch2) */
-    err = R_GPT_Open(&g_timer_comp_slave2_ctrl, &g_timer_comp_slave2_cfg);
-    if (FSP_SUCCESS != err)
-    {
-        APP_ERR_PRINT("\r\n** Slave2 channel (ch2) R_GPT_Open FAILED **\r\n");
-        return err;
-    }
-    APP_PRINT("\nSlave channel 2 opened\r\n");
-
-    return FSP_SUCCESS;
-}
 
 
 /***********************************************************************************************************************
@@ -488,6 +399,3 @@ static void comp_pwm_close_all_channels(void)
     R_GPT_Close(&g_timer_comp_slave2_ctrl);
 }
 
-/*******************************************************************************************************************//**
- * @} (end addtogroup r_gpt_ep)
- **********************************************************************************************************************/

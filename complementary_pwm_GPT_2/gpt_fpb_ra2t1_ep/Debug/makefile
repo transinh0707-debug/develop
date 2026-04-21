@@ -94,7 +94,7 @@ all: gpt_fpb_ra2t1_ep.elf secondary-outputs
 
 # Tool invocations
 gpt_fpb_ra2t1_ep.elf: $(OBJS) $(USER_OBJS) $(LINKER_SCRIPT)
-	$(file > gpt_fpb_ra2t1_ep.elf.in,-mcpu=cortex-m23 -mthumb -Oz -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-strict-aliasing -Wunused -Wuninitialized -Wall -Wextra -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Waggregate-return -Wfloat-equal -g -T "fsp.ld" -Xlinker --gc-sections -L "C:\\Users\\Admin\\Desktop\\gpt_fpb_ra2t1_ep\\complementary_pwm_GPT_2\\gpt_fpb_ra2t1_ep/script" -Wl,-Map,"gpt_fpb_ra2t1_ep.map" --specs=nano.specs -o "gpt_fpb_ra2t1_ep.elf" -Wl,--start-group $(OBJS) $(USER_OBJS) $(LIBS) -Wl,--end-group)
+	$(file > gpt_fpb_ra2t1_ep.elf.in,-mcpu=cortex-m23 -mthumb -Oz -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-strict-aliasing -Wunused -Wuninitialized -Wall -Wextra -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Waggregate-return -Wfloat-equal -g -T "fsp.ld" -Xlinker --gc-sections -L "C:\\Users\\Admin\\Desktop\\gpt_fpb_ra2t1_ep\\develop\\complementary_pwm_GPT_2\\gpt_fpb_ra2t1_ep/script" -Wl,-Map,"gpt_fpb_ra2t1_ep.map" --specs=nano.specs -o "gpt_fpb_ra2t1_ep.elf" -Wl,--start-group $(OBJS) $(USER_OBJS) $(LIBS) -Wl,--end-group)
 	@echo Building target: $@ && arm-none-eabi-gcc @"gpt_fpb_ra2t1_ep.elf.in"
 gpt_fpb_ra2t1_ep.hex: gpt_fpb_ra2t1_ep.elf
 	arm-none-eabi-objcopy -O ihex "gpt_fpb_ra2t1_ep.elf"  "gpt_fpb_ra2t1_ep.hex"
