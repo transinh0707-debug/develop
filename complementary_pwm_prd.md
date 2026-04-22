@@ -158,9 +158,6 @@ This feature will extend the existing `r_gpt.c` driver.
 ## 4. Module XMLs
 This feature will be integrated into the existing GPT driver module using XML definitions consistent with current FSP GPT configurations.
 
-The Complementary PWM functionality will be added as an extension of the existing GPT interface, without introducing a new standalone driver module.
-
-No changes to the existing `<provides>` interface are required, as the feature will be included within the current GPT driver:
 `<provides interface="interface.driver.gpt" />`
 
 ## 5. Constraint
@@ -170,6 +167,8 @@ No changes to the existing `<provides>` interface are required, as the feature w
 |**GTPBR ≥ GTPR − GTDVU**|Modes 1, 3, 4 — at crest transfer|Modes 1, 3, 4 — at crest transfer|N/A|
 |**GTPDBR ≥ GTPR − GTDVU**|Modes 1, 3, 4 — at crest transfer|Modes 1, 3, 4 — at crest transfer|N/A|
 
+**Rationale:** This constraint ensures that period buffer transfers (GTPBR/GTPDBR → GTPR) complete before the counter reaches the peak value. When GTPBR or GTPDBR is set too close to GTPR, the buffer transfer may not complete in time, causing timing violations or missed updates. The margin of GTDVU (dead time) provides a safe window for the hardware to complete the transfer operation during modes with crest-aligned transfers (Modes 1, 3, 4).
+
 ### Setting Timer Counter Width in Complementary PWM Mode
 | Property | RA2T1 (16-bit) | RA6T2 (32-bit) | RA8T2 (32-bit) |
 |---|---|---|---|
@@ -177,6 +176,19 @@ No changes to the existing `<provides>` interface are required, as the feature w
 | **Duty cycle resolution** | Up to 65,535 steps | Up to ~4.29 billion steps | Up to ~4.29 billion steps |
 | **Register size** | 16-bit registers | 32-bit registers | 32-bit registers |
 | **GTDVU + GTPR constraint** | GTDVU + GTPR ≤ 0xFFFF | GTDVU + GTPR ≤ 0xFFFFFFFF | GTDVU + GTPR ≤ 0xFFFFFFFF |
+
+### Channel Continuity Requirement
+**GPT channels used for Complementary PWM must be consecutive.** According to the RA MCU User's Manual section 21.3.3.7, "among consecutive three channels, the lowest channel is referred to as master channel, and the adjacent upper two channels are referred to as slave channel 1 (lower) and slave channel 2 (upper)."
+
+Valid configurations:
+- ✅ Channels 1-2-3 (master=1, slave1=2, slave2=3)
+- ✅ Channels 4-5-6 (master=4, slave1=5, slave2=6)
+
+Invalid configurations:
+- ❌ Channels 1-4-6 (non-consecutive)
+- ❌ Channels 2-3-5 (gap between 3 and 5)
+
+This hardware requirement ensures proper synchronization and buffer transfer across the three-phase PWM output.
 
 ### Add **property**
 T.B.U
@@ -197,51 +209,17 @@ The following build-time configurations will be provided:
 - An oscilloscope or logic analyzer is required to observe PWM waveform, dead time, and phase alignment.
 
 ### Channel Assignment for Complementary PWM Mode
-|No|MCU|Group|Module Name|Master|Slave 1|Slave 2|
-|:-:|:-:|:----:|:-:|:-:|:----:|:-:|
-|1| RA2T1|Group 1| GPT16|CH0 (GPT160)|CH1 (GPT161)|CH2 (GPT162)|
-|2| RA6T2|Group 1| GPT32|CH4 (GPT324)|CH5 (GPT325)|CH7 (GPT327)|
-|| RA6T2|Group 2| GPT32|CH7 (GPT327)|CH8 (GPT328)|CH9 (GPT329)|
-|3| RA8T2|Group 1| GPT32|CH4 (GPT324)|CH5 (GPT325)|CH7 (GPT327)|
-|| RA8T2|Group 2| GPT32|CH7 (GPT327)|CH8 (GPT328)|CH9 (GPT329)|
+The following channel configurations are used for testing Complementary PWM functionality. Multiple configurations per MCU are tested to validate that the implementation works correctly across different consecutive channel sets and to ensure portability.
 
-### Register Address Map
-#### Base Address
-|Device|Formula| 
-|---|---|
-|**RA2T1**|GPT16n = `0x4008_9000 + 0x0100 × n` (n=0–2)|
-|**RA6T2**|GPT32n = `0x4016_9000 + 0x0100 × n` (n=0–9)|
-|**RA8T2**|GPT32n = `0x4032_2000 + 0x0100 × n` (n=0–13)|
+|No|MCU|Module Name|Master|Slave 1|Slave 2|Test Purpose|
+|:-:|:-:|:-:|:-:|:----:|:-:|---|
+|1| RA2T1| GPT16|CH0 (GPT160)|CH1 (GPT161)|CH2 (GPT162)|Primary test configuration|
+|2| RA6T2| GPT32|CH4 (GPT324)|CH5 (GPT325)|CH6 (GPT326)|Test alternate channel set|
+|3| RA6T2| GPT32|CH7 (GPT327)|CH8 (GPT328)|CH9 (GPT329)|Validate multiple configurations|
+|4| RA8T2| GPT32|CH4 (GPT324)|CH5 (GPT325)|CH6 (GPT326)|Test alternate channel set|
+|5| RA8T2| GPT32|CH7 (GPT327)|CH8 (GPT328)|CH9 (GPT329)|Validate multiple configurations|
 
-#### Register Offset Map (Complementary PWM-related)
-|Offset|Register|Operation | Data Width |
-|---|---|---|---|
-|0x00|**GTWP**|Write Protection|32-bit (all)|
-|0x04|**GTSTR**|Software Start (master only valid)|32-bit (all)|
-|0x08|**GTSTP**|Software Stop (master only valid)|32-bit (all)|
-|0x0C|**GTCLR**|Software Clear (master only valid)|32-bit (all)|
-|0x30|**GTCR**|Control: MD[3:0]=0xC/D/E/F, TPCS, SSCGRP, CPSCD*|32-bit (all)|
-|0x34|**GTUDDTYC**|Count direction and duty setting|32-bit (all)|
-|0x38|**GTIOR**|I/O control: pin output settings, CPSCIR|32-bit (all)|
-|0x3C|**GTINTAD**|Interrupt/AD: GRPDTE, GRPABH, GRPABL|32-bit (all)|
-|0x40|**GTST**|Status: DTEF, OABHF, OABLF flags|32-bit (all)|
-|0x44|**GTBER**|Buffer enable: CCRA, PR buffer control|32-bit (all)|
-|0x48|**GTITC**|Interrupt skipping|32-bit (all)|
-|0x4C|**GTCNT**|Counter value|**16-bit (RA2T1)** / 32-bit|
-|0x4C+offset|**GTCCRA**|Compare match A (duty cycle)|**16-bit (RA2T1)** / 32-bit|
-| |**GTCCRB**|Compare match B (auto dead-time target)|**16-bit (RA2T1)** / 32-bit|
-| |**GTCCRC**|Buffer for GTCCRA (single buffer)|**16-bit (RA2T1)** / 32-bit|
-| |**GTCCRD**|Buffer for GTCCRC (write trigger)|**16-bit (RA2T1)** / 32-bit|
-| |**GTCCRE**|Buffer for GTCCRA (double buffer)|**16-bit (RA2T1)** / 32-bit|
-| |**GTCCRF**|Buffer for GTCCRE (write source)|**16-bit (RA2T1)** / 32-bit|
-|0x64|**GTPR**|Cycle setting (period)|**16-bit (RA2T1)** / 32-bit|
-|0x68|**GTPBR**|Cycle setting buffer|**16-bit (RA2T1)** / 32-bit|
-|0x6C|**GTPDBR**|Cycle setting double buffer|**16-bit (RA2T1)** / 32-bit|
-|0x8C|**GTDVU**|Dead time value, up-counting|**16-bit (RA2T1)** / 32-bit|
-|0x8C+4 |**GTDVD**|Dead time value, down-counting|**16-bit (RA2T1)** / 32-bit|
-|0x94|**GTDBU**|Dead time buffer, up|**16-bit (RA2T1)** / 32-bit|
-|0x94+4|**GTDBD**|Dead time buffer, down|**16-bit (RA2T1)** / 32-bit|
-|0x88|**GTDTCR**|Dead time control: TDE, TDFER|32-bit (all)|
+**Note:** Testing multiple consecutive channel sets ensures the driver implementation is not hardcoded to specific channel numbers and validates proper operation across different hardware configurations.
 
 ## Unit tests
 A new set of unit tests will be added at `peaks/ra/fsp/src/r_gpt/!test`. Additional tests will be written to cover the new features.
