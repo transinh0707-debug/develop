@@ -139,65 +139,47 @@ fsp_err_t R_GPT_THREE_PHASE_Open (three_phase_ctrl_t * const p_ctrl, three_phase
         }
 
 #if (1 == GPT_CFG_OUTPUT_SUPPORT_ENABLE)
-        typedef struct st_gpt_prv_duty_registers
+
+        /* Configure complementary PWM buffer chain for this channel.
+         * R_GPT_Open() already configured single buffer (GTBER2: CMTCA=1, CP3DB=0, CPBTD=0).
+         * Here we override for double buffer when applicable, and set initial duty values.
+         *
+         * Bug fixes applied (FSPRA-5725):
+         *  - Removed misplaced gpt_prv_duty_registers_t struct (belongs in r_gpt.c only)
+         *  - Removed wrong cast of p_cfg->p_extend to gpt_extended_cfg_t*
+         *  - Removed call to static gpt_gtior_calculate() (GTIOR is r_gpt.c's responsibility)
+         *  - Fixed use of p_instance_ctrl->buffer_mode before assignment (now uses p_cfg->buffer_mode)
+         *  - Fixed buffer_mode comparison against GTBER register value (0x50000) instead of enum
+         */
+        timer_mode_t mode = p_cfg->p_timer_instance[0]->p_cfg->mode;
+
+        if (mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE1 ||
+            mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE2 ||
+            mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE3 ||
+            mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE4)
         {
-            uint32_t gtccr_buffer;
-            uint32_t omdty;
-        } gpt_prv_duty_registers_t;
+            uint32_t duty_initial = p_cfg->p_timer_instance[ch]->p_cfg->duty_cycle_counts;
 
-        gpt_extended_cfg_t * p_extend = (gpt_extended_cfg_t *) p_cfg->p_extend;
-        uint32_t gtuddtyc = 0U;
-        uint32_t gtior    = p_extend->gtior_setting.gtior;
-
-        /* Save pointer to extended configuration structure. */
-
-        gpt_prv_duty_registers_t duty_regs = {UINT32_MAX, 0};
-        duty_regs.gtccr_buffer = p_instance_ctrl->p_cfg->p_timer_instance[ch]->p_cfg->period_counts - (p_instance_ctrl->p_cfg->p_timer_instance[ch]->p_cfg->period_counts - p_instance_ctrl->p_cfg->p_timer_instance[ch]->p_cfg->duty_cycle_counts);
-
-        if ((GPT_THREE_PHASE_PRV_GTBER_SINGLE_BUFFER == p_instance_ctrl->buffer_mode) && (p_instance_ctrl->p_cfg->p_timer_instance[0]->p_cfg->mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE1 ||
-                p_instance_ctrl->p_cfg->p_timer_instance[0]->p_cfg->mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE2 ||
-                p_instance_ctrl->p_cfg->p_timer_instance[0]->p_cfg->mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE3 ||
-                p_instance_ctrl->p_cfg->p_timer_instance[0]->p_cfg->mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE4))
-        {
-            /* Enable buffer transfer GTCCRD→GTCCRA at compare match */
-            p_instance_ctrl->p_reg[ch]->GTBER2_b.CMTCA  = 0x1U;
-            p_instance_ctrl->p_reg[ch]->GTBER2_b.CP3DB  = 0U;   /* double buffer OFF */
-            p_instance_ctrl->p_reg[ch]->GTBER2_b.CPBTD  = 0U;   /* buffer transfer ENABLED */
-
-            /* Set single buffer registers */
-            p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRA] = duty_regs.gtccr_buffer;
-            p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRD] = duty_regs.gtccr_buffer;
-        }
-        else if ((THREE_PHASE_BUFFER_MODE_DOUBLE == p_instance_ctrl->buffer_mode) && (p_instance_ctrl->p_cfg->p_timer_instance[0]->p_cfg->mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE3 ||
-                p_instance_ctrl->p_cfg->p_timer_instance[0]->p_cfg->mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE4))
-        {
-            p_instance_ctrl->p_reg[ch]->GTBER2_b.CP3DB  = 1U;   /* double buffer ON */
-            p_instance_ctrl->p_reg[ch]->GTBER2_b.CPBTD  = 0U;   /* buffer transfer ENABLED */
-
-            /* Set double buffer registers */
-            p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRA] = duty_regs.gtccr_buffer;
-            p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRD] = duty_regs.gtccr_buffer;
-            p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRF] = duty_regs.gtccr_buffer;
-
-            /* If the requested duty cycle is 0% or 100%, set this in the registers. */
-            gtuddtyc |= duty_regs.omdty << R_GPT0_GTUDDTYC_OADTY_Pos;
-            gtuddtyc |= duty_regs.omdty << R_GPT0_GTUDDTYC_OBDTY_Pos;
-
-            /* Check if custom GTIOR settings are provided. */
-            if (0 == p_extend->gtior_setting.gtior)
+            if ((THREE_PHASE_BUFFER_MODE_DOUBLE == p_cfg->buffer_mode) &&
+                (mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE3 ||
+                 mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE4))
             {
-                /* If custom GTIOR settings are not provided, calculate GTIOR. */
-                if (p_extend->gtioca.output_enabled)
-                {
-                    uint32_t gtioca_gtior = gpt_gtior_calculate(p_cfg, p_extend->gtioca.stop_level);
-                    gtior |= gtioca_gtior << R_GPT0_GTIOR_GTIOA_Pos;
-                }
+                /* Double buffer: GTCCRF -> Temp B -> GTCCRE -> GTCCRA */
+                p_instance_ctrl->p_reg[ch]->GTBER2_b.CMTCA = 0x1U;
+                p_instance_ctrl->p_reg[ch]->GTBER2_b.CP3DB = 1U;   /* double buffer ON */
+                p_instance_ctrl->p_reg[ch]->GTBER2_b.CPBTD = 0U;   /* buffer transfer ENABLED */
 
-                if (p_extend->gtiocb.output_enabled)
-                {
-                    uint32_t gtiocb_gtior = gpt_gtior_calculate(p_cfg, p_extend->gtiocb.stop_level);
-                    gtior |= gtiocb_gtior << R_GPT0_GTIOR_GTIOB_Pos;
-                }
+                /* Initialize active register + both buffer stages */
+                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRA] = duty_initial;
+                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRD] = duty_initial;
+                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRF] = duty_initial;
+            }
+            else
+            {
+                /* Single buffer (Modes 1-4): GTCCRD -> Temp A -> GTCCRA
+                 * GTBER2 already configured by R_GPT_Open; set initial duty values */
+                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRA] = duty_initial;
+                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRD] = duty_initial;
             }
         }
 #endif
@@ -336,18 +318,51 @@ fsp_err_t R_GPT_THREE_PHASE_DutyCycleSet (three_phase_ctrl_t * const       p_ctr
 
     r_gpt_write_protect_disable_all(p_instance_ctrl);
 
-    /* Set all duty cycle registers */
-    for (three_phase_channel_t ch = THREE_PHASE_CHANNEL_U; ch <= THREE_PHASE_CHANNEL_W; ch++)
-    {
-        p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRC] = p_duty_cycle->duty[ch];
-        p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRE] = p_duty_cycle->duty[ch];
+    /* Determine operating mode from the master (U) channel */
+    timer_mode_t mode = p_instance_ctrl->p_cfg->p_timer_instance[0]->p_cfg->mode;
 
-        /* Set double-buffer registers (if applicable) */
-        if ((THREE_PHASE_BUFFER_MODE_DOUBLE == p_instance_ctrl->buffer_mode) ||
-            (TIMER_MODE_TRIANGLE_WAVE_ASYMMETRIC_PWM_MODE3 == p_instance_ctrl->p_cfg->p_timer_instance[0]->p_cfg->mode))
+    if (mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE1 ||
+        mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE2 ||
+        mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE3 ||
+        mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE4)
+    {
+        /* Complementary PWM: write duty to GTCCRD buffer register.
+         * REQ-BUF-16: Write W channel (slave 2, index 2) LAST to trigger
+         * simultaneous temporary-register transfer across all three channels. */
+        static const three_phase_channel_t write_order[3] =
         {
-            p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRD] = p_duty_cycle->duty_buffer[ch];
-            p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRF] = p_duty_cycle->duty_buffer[ch];
+            THREE_PHASE_CHANNEL_U, THREE_PHASE_CHANNEL_V, THREE_PHASE_CHANNEL_W
+        };
+
+        for (uint32_t i = 0U; i < 3U; i++)
+        {
+            three_phase_channel_t ch = write_order[i];
+
+            /* Single buffer: GTCCRD -> Temp A -> GTCCRA */
+            p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRD] = p_duty_cycle->duty[ch];
+
+            /* Double buffer: additionally write GTCCRF -> Temp B -> GTCCRE -> GTCCRA */
+            if (THREE_PHASE_BUFFER_MODE_DOUBLE == p_instance_ctrl->buffer_mode)
+            {
+                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRF] = p_duty_cycle->duty_buffer[ch];
+            }
+        }
+    }
+    else
+    {
+        /* Standard triangle-wave PWM: write to GTCCRC/GTCCRE (original behavior) */
+        for (three_phase_channel_t ch = THREE_PHASE_CHANNEL_U; ch <= THREE_PHASE_CHANNEL_W; ch++)
+        {
+            p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRC] = p_duty_cycle->duty[ch];
+            p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRE] = p_duty_cycle->duty[ch];
+
+            /* Set double-buffer registers (if applicable) */
+            if ((THREE_PHASE_BUFFER_MODE_DOUBLE == p_instance_ctrl->buffer_mode) ||
+                (TIMER_MODE_TRIANGLE_WAVE_ASYMMETRIC_PWM_MODE3 == mode))
+            {
+                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRD] = p_duty_cycle->duty_buffer[ch];
+                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRF] = p_duty_cycle->duty_buffer[ch];
+            }
         }
     }
 
