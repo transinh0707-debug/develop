@@ -60,64 +60,94 @@ The GPT peripheral on RA MCUs provides exactly four Complementary PWM modes. In 
 
 # User interaction and design
 ## 1. Design Idea
-Complementary PWM support through GPT will be implemented as middleware, reusing the existing driver (`r_gpt.c`).
+
+![alt text](image-2.png)
+
+Complementary PWM support through GPT will be implemented as driver, reusing the existing driver (`r_gpt_three_phase.c`).
 
 ### 1.1 e2studio layer
-![alt text](image-2.png)
-- `g_timer_master`, `g_timer_slave1`, and `g_timer_slave2` are the GPT module dependencies required by the Complementary PWM middleware.
-- `g_timer_master` is used to configure runtime parameters and to synchronize the two upper channels.
-- `g_timer_slave1` is used to generate the PWM waveform with counter = master counter + GTDVU.
-- `g_timer_slave2` is used to take the compare match at the crest section or the trough section.
 
-In the e2studio layer, `g_timer_master`, `g_timer_slave1`, and `g_timer_slave2` share the following property configuration:
 ![alt text](image-3.png)
 
-### 1.2 Middleware layer
-New APIs will be created to handle GPT Complementary PWM Modes 1, 2, 3, and 4. Refer to section "3. APIs" for the full list of APIs.
+- `g_timer_comp_pwm_master`, `g_timer_comp_pwm_slave1`, and `g_timer_comp_pwm_slave2` are the GPT module dependencies required by the Complementary PWM driver.
+- `g_timer_comp_pwm_master` is used to configure runtime parameters and to synchronize the two upper channels.
+- `g_timer_comp_pwm_slave1` is used to generate the PWM waveform with counter = master counter + GTDVU.
+- `g_timer_comp_pwm_slave2` is used to take the compare match at the crest section or the trough section.
 
-The middleware is responsible only for the following tasks:
-- Open/Close the middleware and the GPT module (the Open/Close APIs open/close all three GPT channels used for Complementary PWM).
-- Start/Stop the middleware and the GPT module (the Start/Stop APIs act on the master channel; the slave channels follow automatically).
-- Configure the dead time register (GTDVU) on the master channel.
-- Set the three-phase duty cycles.
+In the e2studio layer, `g_timer_comp_pwm_master`, `g_timer_comp_pwm_slave1`, and `g_timer_comp_pwm_slave2` share the following property configuration:
 
-
-### 1.3 Driver layer
-At the driver layer, `r_gpt.c` will be modified to support Complementary PWM Mode 3 with double buffer operation. Refer to section "3. APIs" for the full list of APIs.
 ![alt text](image-4.png)
 
-#### 1.3.1 Single Buffer Transfer Mechanism for Complementary PWM (Modes 1, 2, 3)
-All three devices (RA2T1, RA6T2, and RA8T2) use the same single buffer transfer chain: `GTCCRD → Temp_A → GTCCRC → GTCCRA`.
+### 1.2 Driver layer
+At the driver layer, `r_gpt_three_phase.c` will be modified to support Complementary PWM Mode 1, 2, 3, 4 with single or double buffer operation.
 
-#### 1.3.2 Double Buffer Transfer Mechanism for Complementary PWM (Mode 3 only)
+#### 1.2.1 Single Buffer Transfer Mechanism for Complementary PWM (Modes 1, 2, 3, 4)
+All three devices (RA2T1, RA6T2, and RA8T2) use the same single buffer transfer chain: `GTCCRD → Temp_A → GTCCRC → GTCCRA`.
+- Complementary PWM mode 1 (transfer GTCCRC → GTCCRA at crests).
+- Complementary PWM mode 2 (transfer GTCCRC → GTCCRA at troughs).
+- Complementary PWM mode 3 (transfer GTCCRC → GTCCRA at crests and troughs).
+- Complementary PWM mode 4 (immediate GTCCRC → GTCCRA transfer).
+
+#### 1.2.2 Double Buffer Transfer Mechanism for Complementary PWM (Mode 3, 4)
 
 All three devices (RA2T1, RA6T2, and RA8T2) use the same double buffer transfer chain. When `GTBER2.CP3DB = 1`, a second transfer path must be added:
 ```
-GTCCRF → Temp_B → GTCCRE → GTCCRA (at trough)
-GTCCRD → Temp_A → GTCCRC → GTCCRA (at crest)
+GTCCRF → Temp_B → GTCCRE → GTCCRA (In Mode 3, transfer at troughs, but in Mode 4, transfer immediate)
+GTCCRD → Temp_A → GTCCRC → GTCCRA (In Mode 3, transfer at crests, but in Mode 4, transfer immediate)
 ```
-> **Note:** In Mode 3 with double buffer enabled, the GTCCRF → GTCCRD → GTCCRA transfer chain introduces a two-cycle delay before a newly written duty value takes effect on the output.
-
-#### 1.3.3 Buffer Transfer Mechanism for Complementary PWM (Mode 4)
-Mode 4 adds a second transfer path with immediate timing from GTCCRD/GTCCRF directly to GTCCRA.
+> **Note:** In Mode 3, 4 with double buffer enabled, the GTCCRF → GTCCRD → GTCCRA transfer chain introduces a two-cycle delay before a newly written duty value takes effect on the output.
 
 ## 2. Instance
-Add a new instance for the new APIs `comp_pwm_set_duty_3phase` and `comp_pwm_configure_dead_time`:
+
+Add a new instance to define enable extra feature of r_gpt_three_phase
 ```c
-static comp_pwm_cfg_t g_comp_pwm_cfg =
-{
-    .mode          = RESET_VALUE,
-    .dead_time     = COMP_PWM_DEFAULT_DEAD_TIME,
-    .period        = COMP_PWM_DEFAULT_PERIOD,
-    .duty_u        = 0U,
-    .duty_v        = 0U,
-    .duty_w        = 0U,
-    .double_buffer = false,
-    .is_running    = false,
-};
+/* GPT_CFG_OUTPUT_SUPPORT_ENABLE is set to 2 to enable extra features. */
+#define GPT_THREE_PHASE_PRV_EXTRA_FEATURES_ENABLED                   (2U)
 ```
 
-Add four new GPT driver timer operational modes:
+Add Configuration of complementary PWM buffer chain of r_gpt_three_phase
+```c
+#if (GPT_THREE_PHASE_PRV_EXTRA_FEATURES_ENABLED == GPT_CFG_OUTPUT_SUPPORT_ENABLE)
+
+        /* Configure complementary PWM buffer chain for this channel.
+         * R_GPT_Open() already configured single buffer (GTBER2: CMTCA=1, CP3DB=0, CPBTD=0).
+         * Here we override for double buffer when applicable, and set initial duty values.
+         */
+        timer_mode_t mode = p_cfg->p_timer_instance[0]->p_cfg->mode;
+
+        if (mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE1 ||
+            mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE2 ||
+            mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE3 ||
+            mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE4)
+        {
+            uint32_t duty_initial = p_cfg->p_timer_instance[ch]->p_cfg->duty_cycle_counts;
+
+            if ((THREE_PHASE_BUFFER_MODE_DOUBLE == p_cfg->buffer_mode) &&
+                (mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE3 ||
+                 mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE4))
+            {
+                /* Double buffer: GTCCRF -> Temp B -> GTCCRE -> GTCCRA */
+                p_instance_ctrl->p_reg[ch]->GTBER2_b.CMTCA = 0x1U;
+                p_instance_ctrl->p_reg[ch]->GTBER2_b.CP3DB = 1U;   /* double buffer ON */
+                p_instance_ctrl->p_reg[ch]->GTBER2_b.CPBTD = 0U;   /* buffer transfer ENABLED */
+
+                /* Initialize active register + both buffer stages */
+                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRA] = duty_initial;
+                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRD] = duty_initial;
+                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRF] = duty_initial;
+            }
+            else
+            {
+                /* Single buffer (Modes 1-4): GTCCRD -> Temp A -> GTCCRA
+                 * GTBER2 already configured by R_GPT_Open; set initial duty values */
+                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRA] = duty_initial;
+                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRD] = duty_initial;
+            }
+        }
+#endif
+```
+
+Add new four GPT driver timer operational modes  :
 ```c
 /** Timer operational modes */
 typedef enum e_timer_mode
@@ -131,34 +161,72 @@ typedef enum e_timer_mode
 
     /**
      * Timer generates Asymmetric Triangle-wave PWM output. In PWM mode 3, the duty cycle does
-     * not need to be updated at each trough/crest interrupt. Instead, the trough and crest duty
-     * cycle values can be set once and only need to be updated when the application needs to
-     * change the duty cycle.
+     * not need to be updated at each tough/crest interrupt. Instead, the trough and crest duty cycle values can be
+     * set once and only need to be updated when the application needs to change the duty cycle.
      */
     TIMER_MODE_TRIANGLE_WAVE_ASYMMETRIC_PWM_MODE3 = 6U,
 
-    TIMER_MODE_COMPLEMENTARY_PWM_MODE1 = 12U, ///< Transfer at crest
-    TIMER_MODE_COMPLEMENTARY_PWM_MODE2 = 13U, ///< Transfer at trough
-    TIMER_MODE_COMPLEMENTARY_PWM_MODE3 = 14U, ///< Transfer at crest and trough
-    TIMER_MODE_COMPLEMENTARY_PWM_MODE4 = 15U  ///< Immediate transfer
-
+    TIMER_MODE_COMPLEMENTARY_PWM_MODE1 = 12U, ///< Timer generates Symmetric Triangle-wave PWM output. In Complementary PWM Mode 1, buffer transfer at crest (GTCR.MD = 0xC).
+    TIMER_MODE_COMPLEMENTARY_PWM_MODE2 = 13U, ///< Timer generates Symmetric Triangle-wave PWM output. In Complementary PWM Mode 2, buffer transfer at trough (GTCR.MD = 0xD).
+    TIMER_MODE_COMPLEMENTARY_PWM_MODE3 = 14U, ///< Timer generates Symmetric Triangle-wave PWM output. In Complementary PWM Mode 3, buffer transfer at crest and trough (GTCR.MD = 0xE).
+    TIMER_MODE_COMPLEMENTARY_PWM_MODE4 = 15U  ///< Timer generates Symmetric Triangle-wave PWM output. In Complementary PWM Mode 4, immediate transfer (GTCR.MD = 0xF).
 } timer_mode_t;
 ```
 ## 3. APIs
-This feature will extend the existing `r_gpt.c` driver.
-### 3.1 APIs and internal functions supporting Complementary PWM
-|No| Name | Requirement ID | Reason | Classification | Note |
-| ----------|---------- | ----------- | ----- |----------- | ----- |
-|1| comp_pwm_init | REQ-OM-01 … REQ-OM-04 | Initialize GPT channels for Complementary PWM operation | New | Opens all 3 channels, applies mode selection |
-|2| comp_pwm_start | N/A | Start Complementary PWM output on all 3 channels | Modify | Starts master only; slaves follow |
-|3| comp_pwm_set_dead_time | REQ-DT-05, REQ-DT-06 | Set dead time value for Complementary PWM | New | Writes GTDVU on master channel |
-|4| comp_pwm_set_duty_3phase | REQ-DC-09 … REQ-DC-12 | Set three-phase duty cycles for U, V, W phases | New | Slave channel 2 written last (REQ-BUF-16) |
-|5| comp_pwm_stop | N/A | Stop Complementary PWM output on all 3 channels | Modify | Stops master; closes all channels |
+This feature will reuse the existing `r_gpt_three_phase.c` driver.
 
 ## 4. Module XMLs
 This feature will be integrated into the existing GPT driver module using XML definitions consistent with current FSP GPT configurations.
 
+the GPT mdoule XML will be created called
+```c
+Renesas##HAL Drivers##all##r_gpt####6.2.0.xml
+Renesas##HAL Drivers##all##r_gpt_three_phase####6.2.0.xml
+```
+it will expose the extended GPT implementation of the interface with following
+
 `<provides interface="interface.driver.gpt" />`
+
+Add four new options for complementary pwm mode of r_gpt
+```c
+        </property>
+        <property default="module.driver.timer.mode.mode_periodic" display="General|Mode" id="module.driver.timer.mode" description="Mode selection.\nPeriodic: Generates periodic interrupts or square waves.\nOne-shot: Generate a single interrupt or a pulse wave. Note: One-shot mode is implemented in software. ISRs must be enabled for one-shot even if callback is unused.\nOne-Shot Pulse: Counter performs saw-wave operation with fixed buffer operation.\nSaw-wave PWM: Generates basic saw-wave PWM waveforms.\nTriangle-wave PWM (symmetric, Mode 1): Generates symmetric PWM waveforms with duty cycle determined by compare match set with 32-bit transfer during a crest event and updated at the next trough with single or double buffer operation.\nTriangle-wave PWM (asymmetric, Mode 2): Generates asymmetric PWM waveforms with duty cycle determined by compare match set with 32-bit transfer during a crest/trough event and updated at the next trough/crest.\nTriangle-wave PWM (asymmetric, Mode 3): Generates PWM waveforms with duty cycle determined by compare match set with 64-bit transfer during a crest interrupt and updated at the next trough with fixed buffer operation.">
+            <option display="Periodic" id="module.driver.timer.mode.mode_periodic" value="TIMER_MODE_PERIODIC"/>
+            <option display="One-Shot" id="module.driver.timer.mode.mode_one_shot" value="TIMER_MODE_ONE_SHOT"/>
+            <option display="One-Shot Pulse" id="module.driver.timer.mode_one_shot_pulse" value="TIMER_MODE_ONE_SHOT_PULSE" />
+            <option display="Saw-wave PWM" id="module.driver.timer.mode.mode_pwm" value="TIMER_MODE_PWM"/>
+            <option display="Triangle-wave PWM (symmetric, Mode 1)" id="module.driver.timer.mode.mode_symmetric_pwm" value="TIMER_MODE_TRIANGLE_WAVE_SYMMETRIC_PWM"/>
+            <option display="Triangle-wave PWM (asymmetric, Mode 2)" id="module.driver.timer.mode.mode_asymmetric_pwm" value="TIMER_MODE_TRIANGLE_WAVE_ASYMMETRIC_PWM"/>
+            <option display="Triangle-wave PWM (asymmetric, Mode 3)" id="module.driver.timer.mode.mode_asymmetric_pwm_mode3" value="TIMER_MODE_TRIANGLE_WAVE_ASYMMETRIC_PWM_MODE3"/>
+            <option display="Triangle-wave Complementary PWM (symmetric, Mode 1)" id="module.driver.timer.mode.mode_complementary_pwm_mode1" value="TIMER_MODE_COMPLEMENTARY_PWM_MODE1"/>
+            <option display="Triangle-wave Complementary PWM (symmetric, Mode 2)" id="module.driver.timer.mode.mode_complementary_pwm_mode2" value="TIMER_MODE_COMPLEMENTARY_PWM_MODE2"/>
+            <option display="Triangle-wave Complementary PWM (symmetric, Mode 3)" id="module.driver.timer.mode.mode_complementary_pwm_mode3" value="TIMER_MODE_COMPLEMENTARY_PWM_MODE3"/>
+            <option display="Triangle-wave Complementary PWM (symmetric, Mode 4)" id="module.driver.timer.mode.mode_complementary_pwm_mode4" value="TIMER_MODE_COMPLEMENTARY_PWM_MODE4"/>
+        </property>
+```
+
+Add a new instance support Pin Output of r_gpt_three_phase
+```c
+        </property>
+            <property default="config.driver.gpt_three_phase.output_support_enable.disabled" display="Pin Output Support" id="config.driver.gpt_three_phase.output_support_enable" description="Enables or disables support for outputting PWM waveforms on GTIOCx pins. The &quot;Enabled with Extra Features&quot; option enables support for Triangle wave modes and also enables the features located in the &quot;Extra Features&quot; section of each module instance.">
+            <option display="Enabled" id="config.driver.gpt_three_phase.output_support_enable.enabled" value="(1)"/>
+            <option display="Disabled" id="config.driver.gpt_three_phase.output_support_enable.disabled" value="(0)"/>
+            <option display="Enabled with Extra Features" id="config.driver.gpt_three_phase.output_support_enable.enabled_extra" value="(2)"/>
+        </property>
+```
+
+Add four new options for complementary pwm mode of r_gpt_three_phase
+```c
+        <property default="module.driver.three_phase.mode.mode_symmetric_pwm" display="General|Mode" id="module.driver.three_phase.mode" description="Mode selection.\nTriangle-Wave Symmetric PWM: Generates symmetric PWM waveforms with duty cycle determined by compare match set during a crest interrupt and updated at the next trough.\nTriangle-Wave Asymmetric PWM: Generates asymmetric PWM waveforms with duty cycle determined by compare match set during a crest/trough interrupt and updated at the next trough/crest.">
+            <option display="Triangle-Wave Symmetric PWM" id="module.driver.three_phase.mode.mode_symmetric_pwm" value="mode_symmetric_pwm"/>
+            <option display="Triangle-Wave Asymmetric PWM" id="module.driver.three_phase.mode.mode_asymmetric_pwm" value="mode_asymmetric_pwm"/>
+            <option display="Triangle-Wave Asymmetric PWM (Mode 3)" id="module.driver.three_phase.mode.mode_asymmetric_pwm_mode3" value="mode_asymmetric_pwm_mode3"/>
+            <option display="Triangle-Wave Symmetric Complementary PWM (Mode 1)" id="module.driver.three_phase.mode.mode_complementary_pwm_mode1" value="mode_complementary_pwm_mode1"/>
+            <option display="Triangle-Wave Symmetric Complementary PWM (Mode 2)" id="module.driver.three_phase.mode.mode_complementary_pwm_mode2" value="mode_complementary_pwm_mode2"/>
+            <option display="Triangle-Wave Symmetric Complementary PWM (Mode 3)" id="module.driver.three_phase.mode.mode_complementary_pwm_mode3" value="mode_complementary_pwm_mode3"/>
+            <option display="Triangle-Wave Symmetric Complementary PWM (Mode 1)" id="module.driver.three_phase.mode.mode_complementary_pwm_mode4" value="mode_complementary_pwm_mode4"/>
+        </property>
+```
 
 ## 5. Constraint
 ### Setting Range of GTPBR and GTPDBR in Complementary PWM Mode
@@ -194,11 +262,46 @@ This hardware requirement ensures proper synchronization and buffer transfer acr
 T.B.U
 
 # Configuration for Stack
-The following build-time configurations will be provided:
+The following options shall be configurable for r_gpt_three_phase driver.
+
+## Build Options - Common
+g_three_phase
 | Property | Options | Description |
 | :----: | -------------------- | --- |
-|General\|Mode|- Complementary PWM (asymmetric, Mode 1)<br>- Complementary PWM (symmetric, Mode 2)<br>- Complementary PWM (symmetric, Mode 3)<br>- Complementary PWM (symmetric, Mode 4)| Property needs to be updated|
-|T.B.U|||
+|Common > Parameter Checking| Enabled/Disabled/Default (BSP)|Select whether to include parameter checking in the build|
+|Common > Pin Output Support| Enabled/Disabled/Enabled with Extra Features| Select whether to enable pin output support|
+
+g_timer
+| Property | Options | Description |
+| :----: | -------------------- | --- |
+|Common > Parameter Checking| Enabled/Disabled/Default (BSP)|Select whether to include parameter checking in the build|
+|Common > Pin Output Support| Enabled/Disabled/Enabled with Extra Features| Select whether to enable pin output support|
+|Common > Write Protect Enable| Enabled/Disabled| Select whether to enable Write Protect|
+
+## Build Options - General
+| Property | Options | Description |
+| :----: | -------------------- | --- |
+|General > Name| g_three_phase, or any valid C variable name|Module name|
+|General > Mode|- Triangle-Wave Symmetric Complementary PWM (Mode 1)<br>- Triangle-Wave Symmetric Complementary PWM (Mode 2)<br>- Triangle-Wave Symmetric Complementary PWM (Mode 3)<br>- Triangle-Wave Symmetric Complementary PWM (Mode 4)| Select Complementary PWM mode 1, 2, 3, or 4|
+|General > Period| 0 < Integer <= MCU GPT Max Timer | Slect timer Period value. both RA6T2 and RA8T2 are support 32-bit timer, but 16-bit timer only for RA2T1|
+|General > GPT U-Channel| 0 < Integer <= MCU GPT Max duty cycle | Select duty cycle value for master channel|
+|General > GPT V-Channel| 0 < Integer <= MCU GPT Max duty cycle | Select duty cycle value for slave1 channel|
+|General > GPT W-Channel| 0 < Integer <= MCU GPT Max duty cycle | Select duty cycle value for slave2 channel|
+|General > Buffer Mode| Single Buffer/ Double Buffer| Select enable single or double buffer|
+
+g_timer
+| Property | Options | Description |
+| :----: | -------------------- | --- |
+|General > Name| g_timer0, or any valid C variable name|Module name of master, slave1, or slave 2|
+|General > Mode|- Triangle-Wave Complementary PWM (Symmetric, Mode 1)<br>- Triangle-Wave Complementary PWM (Symmetric, Mode 2)<br>- Triangle-Wave Complementary PWM (Symmetric, Mode 3)<br>- Triangle-Wave Complementary PWM (Symmetric, Mode 4)| Select Complementary PWM mode 1, 2, 3, or 4|
+|General > Duty Cycle Pecent| 0 < Integer <= 100 | Select duty cycle value for master, slave1, or slave2 channel|
+
+## Build Options - Pins
+g_timer
+| Property | Options | Description |
+| :----: | -------------------- | --- |
+|Pins > GTIOC0A|-|select up to Enable pin with operation Mode GTIOCA and GTIOCB for master, slave1, or slave2 channel|
+|Pins > GTIOC0B|-|select up to Enable pin with operation Mode GTIOCA and GTIOCB for master, slave1, or slave2 channel|
 
 # Testing
 
@@ -267,11 +370,13 @@ Pack files will be created/updated for GPT modules.
 
 # Effort estimate
 
-|                           Task                            | Story Point Estimate |
-| --------------------------------------------------------- | :------------------: |
-| Investigate Complementary PWM Mode for GPT                |         T.B.U        |
-| Update MDF                                                |         T.B.U        |
-| Add feature for GPT driver (r_gpt)                        |         T.B.U        |
-| Test Case                                                 |         T.B.U        |
-| MDF Test                                                  |         T.B.U        |
-| Finish tests                                              |         T.B.U        |
+|                           Task                                   | Story Point Estimate | Note |
+| ---------------------------------------------------------------- | :------------------: | :-------------: |
+| Investigate Complementary PWM (Modes 1-4) for GPT                |         1            |         -       |
+| Update xml for Complementary PWM (Modes 1-4)                     |         0.5          |         -       |
+| Create API for Complementary PWM (Modes 1-4)                     |         0.5          |         -       |
+| Update HAL driver of GPT to support Complementary PWM (Modes 1-4)|         2            |         -       |
+| Testing for updated source code                                  |         3            |         -       |
+| Testing for xml                                                  |         0.5          |         -       |
+| Add example for Complementary PWM (Modes 1-4)                    |         1            |         -       |
+| Create usage note                                                |         0.5          |         -       |
