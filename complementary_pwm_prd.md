@@ -224,7 +224,7 @@ Add four new options for complementary pwm mode of r_gpt_three_phase
             <option display="Triangle-Wave Symmetric Complementary PWM (Mode 1)" id="module.driver.three_phase.mode.mode_complementary_pwm_mode1" value="mode_complementary_pwm_mode1"/>
             <option display="Triangle-Wave Symmetric Complementary PWM (Mode 2)" id="module.driver.three_phase.mode.mode_complementary_pwm_mode2" value="mode_complementary_pwm_mode2"/>
             <option display="Triangle-Wave Symmetric Complementary PWM (Mode 3)" id="module.driver.three_phase.mode.mode_complementary_pwm_mode3" value="mode_complementary_pwm_mode3"/>
-            <option display="Triangle-Wave Symmetric Complementary PWM (Mode 1)" id="module.driver.three_phase.mode.mode_complementary_pwm_mode4" value="mode_complementary_pwm_mode4"/>
+            <option display="Triangle-Wave Symmetric Complementary PWM (Mode 4)" id="module.driver.three_phase.mode.mode_complementary_pwm_mode4" value="mode_complementary_pwm_mode4"/>
         </property>
 ```
 
@@ -246,7 +246,7 @@ Add four new options for complementary pwm mode of r_gpt_three_phase
 | **GTDVU + GTPR constraint** | GTDVU + GTPR ≤ 0xFFFF | GTDVU + GTPR ≤ 0xFFFFFFFF | GTDVU + GTPR ≤ 0xFFFFFFFF |
 
 ### Channel Continuity Requirement
-**GPT channels used for Complementary PWM must be consecutive.** According to the RA MCU User's Manual section 21.3.3.7, "among consecutive three channels, the lowest channel is referred to as master channel, and the adjacent upper two channels are referred to as slave channel 1 (lower) and slave channel 2 (upper)."
+**GPT channels used for Complementary PWM must be consecutive.** According to the RA MCU User's Manual, "among consecutive three channels, the lowest channel is referred to as master channel, and the adjacent upper two channels are referred to as slave channel 1 (lower) and slave channel 2 (upper)."
 
 Valid configurations:
 - ✅ Channels 1-2-3 (master=1, slave1=2, slave2=3)
@@ -257,9 +257,6 @@ Invalid configurations:
 - ❌ Channels 2-3-5 (gap between 3 and 5)
 
 This hardware requirement ensures proper synchronization and buffer transfer across the three-phase PWM output.
-
-### Add **property**
-T.B.U
 
 # Configuration for Stack
 The following options shall be configurable for r_gpt_three_phase driver.
@@ -336,11 +333,24 @@ A new set of unit tests will be added at `peaks/ra/fsp/src/r_gpt/!test`. Additio
 
 |Test Group| Test Name | Description | Notes |
 | ----------|---------- | ----------- | ----- |
-|R_GPT_TG2| TC_ComplementaryPWMMode1 | Verify buffer transfer at crest (GTCR.MD = 0xC) and phase-aligned three-phase output | |
-|R_GPT_TG2| TC_ComplementaryPWMMode2 | Verify buffer transfer at trough (GTCR.MD = 0xD) and phase-aligned three-phase output | |
-|R_GPT_TG2| TC_ComplementaryPWMMode3 | Verify buffer transfer at both crest and trough (GTCR.MD = 0xE); validate single- and double-buffer paths | |
-|R_GPT_TG2| TC_ComplementaryPWMMode4 | Verify immediate transfer (GTCR.MD = 0xF) from GTCCRD/GTCCRF to GTCCRA | |
-T.B.U
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_OM_01 | Verify GTCCRD transfers to GTCCRA at end of crest section |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_OM_02 |  Verify GTCCRD transfers to GTCCRA at end of trough section. |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_OM_03 | Verify transfer at both boundaries, single and double buffer. |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_OM_04 | Verify immediate transfer (GTCR.MD = 0xF) from GTCCRD/GTCCRF to GTCCRA |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_OM_04 | Verify immediate transfer, bypass buffer chain. |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DT_05 | Verify Configurable dead time via GTDVU register. |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DT_06 | Verify Valid range - 0 < GTDVU < GTPR. |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DT_07 | Verify No buffer operation for dead time register. |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DT_08 | Verify Non-overlapping guard - dead time prevents shoot-through. |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DC_09 | Verify Independent duty cycle control across three channels (U, V, W). |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DC_10 | Verify GTCCRA >= GTPR means 0% duty (positive OFF, negative ON). |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DC_11 | Verify GTCCRA = 0 means 100% duty (positive ON, negative OFF). |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DC_12 | Verify Prevent 16-bit overflow on compare match value (RA2T1 only). |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_BUF_13 | Verify Single buffer chain for Modes 1-3 (GTCCRD -> Temp A -> GTCCRA). |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_BUF_14 | Verify Double buffer chain for Mode 3 (GTCCRF -> Temp B -> GTCCRE -> GTCCRA). |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_BUF_15 | Verify Mode 4 immediate bypass - GTCCRD transfers directly to GTCCRA. |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_BUF_16 | Verify Slave channel 2 (W phase) write ordering - W must be written LAST. |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_SEC_17 | Verify Support for five counting operation sections. |-|
 
 ## XML Tests
 Add cases in the `yml.j2` file to test XML using existing boards that are equivalent (RA2T1, RA6T2).
