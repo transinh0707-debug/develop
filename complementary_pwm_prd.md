@@ -35,7 +35,7 @@ The GPT peripheral on RA MCUs provides exactly four Complementary PWM modes. In 
 |:-:|:-:|:----:|:-:|:----:|
 |1|RA2T1|CM23|Yes|-|
 |2|RA6T2|CM33|Yes|-|
-|3|RA8T2|CM85 & CM33|No|Current released pack has not supported yet|
+|3|RA8T2|CM85 & CM33|Yes|-|
 
 # Requirements 
 |Requirement ID|Title|Use case|Importance|Notes|
