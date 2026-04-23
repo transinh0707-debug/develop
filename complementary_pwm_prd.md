@@ -97,6 +97,39 @@ GTCCRD → Temp_A → GTCCRC → GTCCRA (In Mode 3, transfer at crests, but in M
 ```
 > **Note:** In Mode 3, 4 with double buffer enabled, the GTCCRF → GTCCRD → GTCCRA transfer chain introduces a two-cycle delay before a newly written duty value takes effect on the output.
 
+### 1.3 Application layer
+
+The application interacts with Complementary PWM exclusively through the `r_gpt_three_phase` public API. A typical lifecycle, as exercised by the reference test application in `compl_pwm/src/r_gpt_test_tg3_comp_pwm.c`, is:
+
+```c
+/* 1. Open the three-phase driver (configures GTCR.MD, GTBER2, GTDVU, and initial GTCCRA/D/F) */
+R_GPT_THREE_PHASE_Open(&g_three_phase_comp_pwm_ctrl, &g_three_phase_comp_pwm_cfg);
+
+/* 2. Start all three channels synchronously */
+R_GPT_THREE_PHASE_Start(&g_three_phase_comp_pwm_ctrl);
+
+/* 3. Update duty cycle at runtime. Driver writes U → V → W to GTCCRD.
+ *    Writing slave channel 2 (W) LAST triggers simultaneous temp-register
+ *    transfer across all three channels (REQ-BUF-16). */
+three_phase_duty_cycle_t duty = {{u_count, v_count, w_count}, {0}};
+R_GPT_THREE_PHASE_DutyCycleSet(&g_three_phase_comp_pwm_ctrl, &duty);
+
+/* 4. Optional: change dead time at runtime by writing GTDVU on master.
+ *    GTDVU is NOT buffered (REQ-DT-07) — the new value takes effect immediately. */
+
+/* 5. Stop and close when PWM output is no longer required */
+R_GPT_THREE_PHASE_Stop(&g_three_phase_comp_pwm_ctrl);
+R_GPT_THREE_PHASE_Close(&g_three_phase_comp_pwm_ctrl);
+```
+
+#### 1.3.1 Duty cycle write ordering (REQ-BUF-16)
+Per Section 20.3.3.7 of the RA2T1 User's Manual, data transfers from GTCCRD to Temporary Register A (and from GTCCRF to Temporary Register B) are performed **at the same time across all three channels by writing a value to the GPT16n+2 (slave channel 2) GTCCRD register**. The driver therefore writes in the order **U (master) → V (slave1) → W (slave2)**. Applications that bypass the driver and access `GTCCRD` directly must preserve this ordering.
+
+#### 1.3.2 Initial register seeding
+During `R_GPT_THREE_PHASE_Open()`, the driver pre-loads the active and buffer compare-match registers so the first PWM cycle uses valid values:
+- Single buffer (Modes 1-4): `GTCCRA` and `GTCCRD` are initialized to `duty_cycle_counts`.
+- Double buffer (Modes 3, 4 only): `GTCCRA`, `GTCCRD`, and `GTCCRF` are initialized to `duty_cycle_counts`, and `GTBER2.CP3DB` is overridden from 0 to 1.
+
 ## 2. Instance
 
 Add a new instance to define enable extra feature of r_gpt_three_phase
@@ -259,61 +292,99 @@ Invalid configurations:
 This hardware requirement ensures proper synchronization and buffer transfer across the three-phase PWM output.
 
 # Configuration for Stack
-The following options shall be configurable for r_gpt_three_phase driver.
+The following options shall be configurable for the `r_gpt_three_phase` three-phase wrapper and the three underlying `r_gpt` timer instances (master, slave1, slave2). All options listed below map to properties exposed by the FSP configurator, consistent with the reference configuration used in `compl_pwm/ra_cfg.txt`.
 
 ## Build Options - Common
-g_three_phase
+**g_three_phase_comp_pwm (r_gpt_three_phase)**
 | Property | Options | Description |
 | :----: | -------------------- | --- |
-|Common > Parameter Checking| Enabled/Disabled/Default (BSP)|Select whether to include parameter checking in the build|
-|Common > Pin Output Support| Enabled/Disabled/Enabled with Extra Features| Select whether to enable pin output support|
+|Common > Parameter Checking| Enabled / Disabled / Default (BSP)|Select whether to include parameter checking in the build|
+|Common > Pin Output Support| Enabled / Disabled / **Enabled with Extra Features**| Must be set to "Enabled with Extra Features" for Complementary PWM because the mode relies on dead time and buffer-chain options that are only compiled in under `GPT_CFG_OUTPUT_SUPPORT_ENABLE == 2` |
 
-g_timer
+**g_timer_comp_pwm_master / slave1 / slave2 (r_gpt)**
 | Property | Options | Description |
 | :----: | -------------------- | --- |
-|Common > Parameter Checking| Enabled/Disabled/Default (BSP)|Select whether to include parameter checking in the build|
-|Common > Pin Output Support| Enabled/Disabled/Enabled with Extra Features| Select whether to enable pin output support|
-|Common > Write Protect Enable| Enabled/Disabled| Select whether to enable Write Protect|
+|Common > Parameter Checking| Enabled / Disabled / Default (BSP)|Select whether to include parameter checking in the build|
+|Common > Pin Output Support| Enabled / Disabled / **Enabled with Extra Features**| Must be set to "Enabled with Extra Features" so that dead time (GTDVU) and the extended `gpt_extended_pwm_cfg_t` structure are enabled |
+|Common > Write Protect Enable| Enabled / Disabled| Select whether to enable GPT write protection (GTWP) |
 
 ## Build Options - General
+**g_three_phase_comp_pwm (r_gpt_three_phase)**
 | Property | Options | Description |
 | :----: | -------------------- | --- |
-|General > Name| g_three_phase, or any valid C variable name|Module name|
-|General > Mode|- Triangle-Wave Symmetric Complementary PWM (Mode 1)<br>- Triangle-Wave Symmetric Complementary PWM (Mode 2)<br>- Triangle-Wave Symmetric Complementary PWM (Mode 3)<br>- Triangle-Wave Symmetric Complementary PWM (Mode 4)| Select Complementary PWM mode 1, 2, 3, or 4|
-|General > Period| 0 < Integer <= MCU GPT Max Timer | Slect timer Period value. both RA6T2 and RA8T2 are support 32-bit timer, but 16-bit timer only for RA2T1|
-|General > GPT U-Channel| 0 < Integer <= MCU GPT Max duty cycle | Select duty cycle value for master channel|
-|General > GPT V-Channel| 0 < Integer <= MCU GPT Max duty cycle | Select duty cycle value for slave1 channel|
-|General > GPT W-Channel| 0 < Integer <= MCU GPT Max duty cycle | Select duty cycle value for slave2 channel|
-|General > Buffer Mode| Single Buffer/ Double Buffer| Select enable single or double buffer|
+|General > Name| `g_three_phase_comp_pwm`, or any valid C variable name | Instance name used by the application |
+|General > Mode| - Triangle-Wave Symmetric Complementary PWM (Mode 1)<br>- Triangle-Wave Symmetric Complementary PWM (Mode 2)<br>- Triangle-Wave Symmetric Complementary PWM (Mode 3)<br>- Triangle-Wave Symmetric Complementary PWM (Mode 4) | Select Complementary PWM mode 1, 2, 3, or 4 |
+|General > Period| `0 < Integer <= MCU GPT Max Timer` | Timer period value (GTPR). RA6T2 and RA8T2 support 32-bit GPT; RA2T1 is 16-bit only (max 0xFFFF) |
+|General > Period Unit| Raw Counts / Nanoseconds / Microseconds / Milliseconds / Seconds / Hertz / Kilohertz | Unit for the Period field. The reference project uses **Raw Counts** with a period of `0xA000` |
+|General > GPT U-Channel| `0 <= Integer < GPT channel count` | Master channel number |
+|General > GPT V-Channel| `U-Channel + 1` | Slave 1 channel number (must be consecutive — see "Channel Continuity Requirement") |
+|General > GPT W-Channel| `U-Channel + 2` | Slave 2 channel number (must be consecutive) |
+|General > Callback Channel| U-Channel / V-Channel / W-Channel | Selects which GPT channel's callback is used by the three-phase instance |
+|General > Buffer Mode| Single Buffer / Double Buffer | Single: `GTCCRD → Temp A → GTCCRC → GTCCRA`.<br>Double (Mode 3, 4 only): also `GTCCRF → Temp B → GTCCRE → GTCCRA`. Sets `GTBER2.CP3DB` at open time |
+|General > GTIOCA Stop Level| Pin Level Low / Pin Level High / Pin Level Retain | Level driven on GTIOCnA when the counter is stopped |
+|General > GTIOCB Stop Level| Pin Level Low / Pin Level High / Pin Level Retain | Level driven on GTIOCnB when the counter is stopped |
 
-g_timer
+**g_three_phase_comp_pwm — Extra Features**
 | Property | Options | Description |
 | :----: | -------------------- | --- |
-|General > Name| g_timer0, or any valid C variable name|Module name of master, slave1, or slave 2|
-|General > Mode|- Triangle-Wave Complementary PWM (Symmetric, Mode 1)<br>- Triangle-Wave Complementary PWM (Symmetric, Mode 2)<br>- Triangle-Wave Complementary PWM (Symmetric, Mode 3)<br>- Triangle-Wave Complementary PWM (Symmetric, Mode 4)| Select Complementary PWM mode 1, 2, 3, or 4|
-|General > Duty Cycle Pecent| 0 < Integer <= 100 | Select duty cycle value for master, slave1, or slave2 channel|
+|Extra Features > Dead Time > Dead Time Count Up (Raw Counts)| `0 < Integer < GTPR` | Dead time in counter cycles, programmed into master channel `GTDVU`. Must satisfy REQ-DT-06 (`0 < GTDVU < GTPR`). `GTDVU` is **not** buffered (REQ-DT-07) — runtime writes take effect immediately |
+|Extra Features > Dead Time > Dead Time Count Down (Raw Counts) (GPTE/GPTEH only)| `0 < Integer < GTPR` | Down-count dead time. Available only on GPTE/GPTEH channels (RA6T2/RA8T2); ignored on RA2T1 |
+
+**g_timer_comp_pwm_master / slave1 / slave2 (r_gpt)**
+| Property | Options | Description |
+| :----: | -------------------- | --- |
+|General > Name| `g_timer_comp_pwm_master` / `..._slave1` / `..._slave2`, or any valid C variable name | Module name |
+|General > Channel| `0 <= Integer < GPT channel count` | Master uses the lowest channel; slave1 and slave2 must be master+1 and master+2 |
+|General > Mode| - Triangle-wave Complementary PWM (symmetric, Mode 1)<br>- Triangle-wave Complementary PWM (symmetric, Mode 2)<br>- Triangle-wave Complementary PWM (symmetric, Mode 3)<br>- Triangle-wave Complementary PWM (symmetric, Mode 4) | Must match the mode selected on the parent three-phase instance on all three timer instances |
+|General > Period| `0 < Integer <= MCU GPT Max Timer` | Must match the three-phase Period on all three timer instances |
+|General > Period Unit| Raw Counts / Nanoseconds / Microseconds / Milliseconds / Seconds / Hertz / Kilohertz | Must match the three-phase Period Unit |
+|Output > Duty Cycle Percent (only applicable in PWM mode)| `0 <= Integer <= 100` | Initial duty cycle percent per channel (converted to counts during Open) |
+|Output > GTIOCA Output Enabled| True / False | Enable GTIOCnA positive-phase PWM output |
+|Output > GTIOCB Output Enabled| True / False | Enable GTIOCnB negative-phase PWM output (automatically complementary to GTIOCnA with dead time) |
+|Output > GTIOCA Stop Level| Pin Level Low / High / Retain | GTIOCnA level when timer stopped |
+|Output > GTIOCB Stop Level| Pin Level Low / High / Retain | GTIOCnB level when timer stopped |
+|Extra Features > Extra Features| Enabled / Disabled | Must be **Enabled** on the master channel to expose the `gpt_extended_pwm_cfg_t` (dead time) configuration. Required for any Complementary PWM mode |
+|Extra Features > Output Disable > POEG Link| POEG Channel 0 / 1 / 2 / 3 / None | Optional hardware safe-shutdown link (POEG) for fault-triggered output disable |
 
 ## Build Options - Pins
-g_timer
+**g_timer_comp_pwm_master / slave1 / slave2 (r_gpt)**
 | Property | Options | Description |
 | :----: | -------------------- | --- |
-|Pins > GTIOC0A|-|select up to Enable pin with operation Mode GTIOCA and GTIOCB for master, slave1, or slave2 channel|
-|Pins > GTIOC0B|-|select up to Enable pin with operation Mode GTIOCA and GTIOCB for master, slave1, or slave2 channel|
+|Pins > GTIOCnA| Enabled pin (board-specific) | Positive-phase PWM output pin for this channel. On FPB-RA2T1, master uses P213 (GTIOC0A) |
+|Pins > GTIOCnB| Enabled pin (board-specific) | Negative-phase PWM output pin for this channel. On FPB-RA2T1, master uses P212 (GTIOC0B) |
+
+> **Note:** The three `g_timer_comp_pwm_*` instances are *dependencies* of `g_three_phase_comp_pwm` — the Mode, Period, and Period Unit fields are propagated from the three-phase parent and must be kept consistent on all four instances.
 
 # Testing
 
 ## HW Configuration
-- Three GPT channels must be available and routed to output pins for three-phase PWM generation.
-- Complementary PWM output pins (GTIOCA/GTIOCB) must be connected to external headers.
-- A gate driver or inverter circuit is recommended for validating Complementary PWM signals.
+- Three consecutive GPT channels (master + slave1 + slave2) must be available and routed to output pins for three-phase PWM generation.
+- Complementary PWM output pins (GTIOCnA/GTIOCnB) must be connected to external headers for waveform probing.
+- A gate driver or inverter circuit is recommended for validating PWM drive to a real power stage; for waveform validation only, an oscilloscope probing the GTIOC pins directly is sufficient.
 - An oscilloscope or logic analyzer is required to observe PWM waveform, dead time, and phase alignment.
+- A SEGGER J-Link (or equivalent) is required for flashing and for SEGGER RTT log capture; the reference test harness prints results via the `APP_PRINT` macro routed to RTT channel 0.
+
+### Reference Test Configuration (FPB-RA2T1)
+The reference test project `compl_pwm/` targets the FPB-RA2T1 evaluation board and uses the following configuration, which is also the basis for RA6T2/RA8T2 porting:
+
+| Property | Value | Source |
+|---|---|---|
+| Board | FPB-RA2T1 (R7FA2T1074CFL) | `ra_cfg.txt` |
+| Three-phase instance | `g_three_phase_comp_pwm` | `ra_cfg.txt` |
+| Timer instances | `g_timer_comp_pwm_master`, `g_timer_comp_pwm_slave1`, `g_timer_comp_pwm_slave2` | `ra_cfg.txt` |
+| Default mode | Triangle-Wave Symmetric Complementary PWM (Mode 1) | `ra_cfg.txt` (overridden per test case) |
+| Period (GTPR) | `0xA000` (40960 counts, ≈ 640 µs at PCLKD = 64 MHz) | `ra_cfg.txt` |
+| Default buffer mode | Single Buffer | `ra_cfg.txt` (overridden to Double Buffer in REQ-OM-03/REQ-BUF-14) |
+| Dead time (test value) | `DEAD_TIME_TEST_COUNTS = 64` counts | `r_gpt_test_tg3_comp_pwm.c` |
+| GTIOC stop level (A/B) | Pin Level Low | `ra_cfg.txt` |
+| Output pins (master) | P213 (GTIOC0A), P212 (GTIOC0B) | `ra_cfg.txt` |
 
 ### Channel Assignment for Complementary PWM Mode
 The following channel configurations are used for testing Complementary PWM functionality. Multiple configurations per MCU are tested to validate that the implementation works correctly across different consecutive channel sets and to ensure portability.
 
 |No|MCU|Module Name|Master|Slave 1|Slave 2|Test Purpose|
 |:-:|:-:|:-:|:-:|:----:|:-:|---|
-|1| RA2T1| GPT16|CH0 (GPT160)|CH1 (GPT161)|CH2 (GPT162)|Primary test configuration|
+|1| RA2T1| GPT16|CH0 (GPT160)|CH1 (GPT161)|CH2 (GPT162)|Primary test configuration (matches `compl_pwm/` reference project)|
 |2| RA6T2| GPT32|CH4 (GPT324)|CH5 (GPT325)|CH6 (GPT326)|Test alternate channel set|
 |3| RA6T2| GPT32|CH7 (GPT327)|CH8 (GPT328)|CH9 (GPT329)|Validate multiple configurations|
 |4| RA8T2| GPT32|CH4 (GPT324)|CH5 (GPT325)|CH6 (GPT326)|Test alternate channel set|
@@ -322,35 +393,60 @@ The following channel configurations are used for testing Complementary PWM func
 **Note:** Testing multiple consecutive channel sets ensures the driver implementation is not hardcoded to specific channel numbers and validates proper operation across different hardware configurations.
 
 ## Unit tests
-A new set of unit tests will be added at `peaks/ra/fsp/src/r_gpt/!test`. Additional tests will be written to cover the new features.
+Unit tests are implemented in test group `r_gpt_test_tg3_comp_pwm` at `peaks/ra/fsp/src/r_gpt/!test`, with the reference implementation in `compl_pwm/src/r_gpt_test_tg3_comp_pwm.c`. The test harness consists of:
 
-- Verify correct generation of Complementary PWM signals on all three phases.
-- Validate dead-time insertion between high-side and low-side signals.
-- Confirm synchronization across multiple GPT channels (no phase shift).
-- Verify correct behavior of buffer transfer modes (crest, trough, both, immediate).
-- Validate runtime update of duty cycle and dead time without glitches.
-- Measure waveform accuracy using an oscilloscope.
+- **Entry point:** `comp_pwm_run_all_tests()` — declared in `r_gpt_test_tg3_comp_pwm.h`, invoked from `hal_entry()`. Runs all 17 test cases sequentially and prints a pass/fail summary over RTT.
+- **Per-test config helpers:** `test_setup_config(mode, buffer_mode, dead_time)`, `test_open_three_phase()`, `test_close_three_phase()` — reconfigure the FSP-generated structs between tests so a single application binary can exercise every mode and buffer combination.
+- **Register verifiers:** `verify_gtber2_single_buffer()` and `verify_gtber2_double_buffer()` read back `GTBER2.CMTCA`, `GTBER2.CP3DB`, and `GTBER2.CPBTD` to confirm the driver programmed the correct buffer-chain configuration.
+- **Result aggregator:** `test_report()` records each result into a `g_test_results[TOTAL_TEST_CASES]` array and prints per-test and summary lines in the form `[PASS] REQ-xx-yy: <title> - <detail>`.
 
-|Test Group| Test Name | Description | Notes |
+The tests cover:
+- Correct generation of Complementary PWM signals on all three phases (U/V/W).
+- Dead-time insertion between positive-phase (GTIOCnA) and negative-phase (GTIOCnB) signals.
+- Synchronization across master + slave1 + slave2 (no phase shift, simultaneous buffer transfer).
+- Correct behavior of buffer transfer modes (crest / trough / both / immediate).
+- Runtime update of duty cycle and dead time without glitches.
+- Full 17-requirement coverage from REQ-OM-01 through REQ-SEC-17 (FSPRA-5725).
+
+### Test case traceability
+Tests are grouped by the requirement family they verify. Each test function name maps 1:1 to the corresponding requirement ID in the Requirements table.
+
+**Operating Modes (REQ-OM-01 … 04)**
+|Test Group| Test Name | Description | Verification |
 | ----------|---------- | ----------- | ----- |
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_OM_01 | Verify GTCCRD transfers to GTCCRA at end of crest section |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_OM_02 |  Verify GTCCRD transfers to GTCCRA at end of trough section. |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_OM_03 | Verify transfer at both boundaries, single and double buffer. |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_OM_04 | Verify immediate transfer (GTCR.MD = 0xF) from GTCCRD/GTCCRF to GTCCRA |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_OM_04 | Verify immediate transfer, bypass buffer chain. |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DT_05 | Verify Configurable dead time via GTDVU register. |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DT_06 | Verify Valid range - 0 < GTDVU < GTPR. |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DT_07 | Verify No buffer operation for dead time register. |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DT_08 | Verify Non-overlapping guard - dead time prevents shoot-through. |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DC_09 | Verify Independent duty cycle control across three channels (U, V, W). |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DC_10 | Verify GTCCRA >= GTPR means 0% duty (positive OFF, negative ON). |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DC_11 | Verify GTCCRA = 0 means 100% duty (positive ON, negative OFF). |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DC_12 | Verify Prevent 16-bit overflow on compare match value (RA2T1 only). |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_BUF_13 | Verify Single buffer chain for Modes 1-3 (GTCCRD -> Temp A -> GTCCRA). |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_BUF_14 | Verify Double buffer chain for Mode 3 (GTCCRF -> Temp B -> GTCCRE -> GTCCRA). |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_BUF_15 | Verify Mode 4 immediate bypass - GTCCRD transfers directly to GTCCRA. |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_BUF_16 | Verify Slave channel 2 (W phase) write ordering - W must be written LAST. |-|
-|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_SEC_17 | Verify Support for five counting operation sections. |-|
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_OM_01 | Mode 1: GTCCRD transfers to GTCCRA at end of crest section | `GTCR.MD == 0xC`, `GTBER2` single-buffer configuration |
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_OM_02 | Mode 2: GTCCRD transfers to GTCCRA at end of trough section | `GTCR.MD == 0xD`, `GTBER2` single-buffer configuration |
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_OM_03 | Mode 3: transfer at both boundaries, single and double buffer | `GTCR.MD == 0xE`, `GTBER2.CP3DB` 0→1 override, `GTCCRF` initialized |
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_OM_04 | Mode 4: immediate transfer, bypass buffer chain | `GTCR.MD == 0xF`, `GTCCRD` → `GTCCRA` immediate readback |
+
+**Dead Time (REQ-DT-05 … 08)**
+|Test Group| Test Name | Description | Verification |
+| ----------|---------- | ----------- | ----- |
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DT_05 | Configurable dead time via GTDVU register | `GTDVU == DEAD_TIME_TEST_COUNTS` |
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DT_06 | Valid range `0 < GTDVU < GTPR` | Bounds check against `GTPR` |
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DT_07 | No buffer operation for dead time register | Direct write to `GTDVU` reads back immediately |
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DT_08 | Non-overlapping guard — dead time prevents shoot-through | `GTDTCR.TDE == 1` and `GTDVU > 0` |
+
+**Duty Cycle Control (REQ-DC-09 … 12)**
+|Test Group| Test Name | Description | Verification |
+| ----------|---------- | ----------- | ----- |
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DC_09 | Independent duty cycle control across U/V/W | Sets 25% / 50% / 75%, reads back each `GTCCRD` |
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DC_10 | `GTCCRA ≥ GTPR` → 0% duty (pos OFF, neg ON) | Duty set to `period`, `GTCCRD ≥ period` |
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DC_11 | `GTCCRA == 0` → 100% duty (pos ON, neg OFF) | Duty set to minimum (1), `GTCCRD ≤ 1` |
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_DC_12 | Prevent 16-bit overflow on compare match (RA2T1) | 99% duty computed via `uint32_t` intermediate, no wrap-around |
+
+**Buffer Chains (REQ-BUF-13 … 16)**
+|Test Group| Test Name | Description | Verification |
+| ----------|---------- | ----------- | ----- |
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_BUF_13 | Single buffer chain for Modes 1-3 (`GTCCRD → Temp A → GTCCRC → GTCCRA`) | `GTBER2` single-buffer verified for Modes 1/2/3 |
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_BUF_14 | Double buffer chain for Mode 3 (`GTCCRF → Temp B → GTCCRE → GTCCRA`) | `GTBER2.CP3DB == 1`, `GTCCRF` initialized on all channels |
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_BUF_15 | Mode 4 immediate bypass — GTCCRD transfers directly to GTCCRA | `GTCCRD` write, `GTCCRA` readback after 1 µs |
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_BUF_16 | Slave channel 2 (W phase) write ordering — W must be written LAST | Distinct U/V/W duty values, all three `GTCCRD` registers observed post-write |
+
+**Counting Sections (REQ-SEC-17)**
+|Test Group| Test Name | Description | Verification |
+| ----------|---------- | ----------- | ----- |
+|r_gpt_test_tg3_comp_pwm| comp_pwm_test_REQ_SEC_17 | Support for five counting operation sections | 2000 `GTCNT` samples observe trough / up-count / crest / down-count / dead-band |
 
 ## XML Tests
 Add cases in the `yml.j2` file to test XML using existing boards that are equivalent (RA2T1, RA6T2).
@@ -358,13 +454,13 @@ Add cases in the `yml.j2` file to test XML using existing boards that are equiva
 T.B.U
 
 ## Verification
-- Ensure all functional requirements are satisfied as defined in this document.
-- Confirm correct operation of Complementary PWM across all supported modes (Modes 1–4).
-- Ensure the configured dead time is applied within acceptable tolerance.
-- Verify phase alignment across all three channels with zero deviation.
-- Ensure buffer transfer behavior complies with the selected mode (crest, trough, both, or immediate).
-- Confirm that runtime updates do not introduce glitches or timing violations.
-- Ensure compatibility across supported MCU series (RA2T1, RA6T2, RA8T2).
+- Ensure all 17 functional requirements (REQ-OM-01 … REQ-SEC-17) are satisfied, with every `comp_pwm_test_REQ_*` case reporting `[PASS]` on the RTT console.
+- Confirm correct operation of Complementary PWM across all supported modes (Modes 1–4) with both single and double buffer (where applicable).
+- Ensure the configured dead time is applied within acceptable tolerance, measured on an oscilloscope between GTIOCnA falling edge and GTIOCnB rising edge (and vice versa).
+- Verify phase alignment across all three channels with zero deviation when a single `R_GPT_THREE_PHASE_DutyCycleSet()` call updates U/V/W simultaneously.
+- Ensure buffer transfer behavior complies with the selected mode (crest, trough, both, or immediate) and matches the `GTBER2` register state verified by the unit tests.
+- Confirm that runtime updates to duty cycle and dead time do not introduce glitches or timing violations.
+- Ensure compatibility across supported MCU series (RA2T1, RA6T2, RA8T2) by re-running the test suite on each target board with the channel assignments listed above.
 
 
 # Question
