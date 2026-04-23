@@ -29,6 +29,9 @@
 #define GPT_THREE_PHASE_PRV_GTWP_RESET_VALUE       (0xA500U)
 #define GPT_THREE_PHASE_PRV_GTWP_WRITE_PROTECT     (0xA501U)
 
+/* GPT_CFG_OUTPUT_SUPPORT_ENABLE is set to 2 to enable extra features. */
+#define GPT_THREE_PHASE_PRV_EXTRA_FEATURES_ENABLED                   (2U)
+
 /***********************************************************************************************************************
  * Typedef definitions
  **********************************************************************************************************************/
@@ -138,18 +141,11 @@ fsp_err_t R_GPT_THREE_PHASE_Open (three_phase_ctrl_t * const p_ctrl, three_phase
             p_instance_ctrl->p_reg[ch]->GTBER |= GPT_THREE_PHASE_PRV_GTBER_DOUBLE_BUFFER;
         }
 
-#if (1 == GPT_CFG_OUTPUT_SUPPORT_ENABLE)
+#if (GPT_THREE_PHASE_PRV_EXTRA_FEATURES_ENABLED == GPT_CFG_OUTPUT_SUPPORT_ENABLE)
 
         /* Configure complementary PWM buffer chain for this channel.
          * R_GPT_Open() already configured single buffer (GTBER2: CMTCA=1, CP3DB=0, CPBTD=0).
          * Here we override for double buffer when applicable, and set initial duty values.
-         *
-         * Bug fixes applied (FSPRA-5725):
-         *  - Removed misplaced gpt_prv_duty_registers_t struct (belongs in r_gpt.c only)
-         *  - Removed wrong cast of p_cfg->p_extend to gpt_extended_cfg_t*
-         *  - Removed call to static gpt_gtior_calculate() (GTIOR is r_gpt.c's responsibility)
-         *  - Fixed use of p_instance_ctrl->buffer_mode before assignment (now uses p_cfg->buffer_mode)
-         *  - Fixed buffer_mode comparison against GTBER register value (0x50000) instead of enum
          */
         timer_mode_t mode = p_cfg->p_timer_instance[0]->p_cfg->mode;
 

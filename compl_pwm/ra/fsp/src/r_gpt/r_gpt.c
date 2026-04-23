@@ -1416,23 +1416,6 @@ static void gpt_hardware_initialize (gpt_instance_ctrl_t * const p_instance_ctrl
     }
 #endif
 
-#if GPT_PRV_EXTRA_FEATURES_ENABLED == GPT_CFG_OUTPUT_SUPPORT_ENABLE
-        if (p_cfg->mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE1 ||
-                p_cfg->mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE2 ||
-                p_cfg->mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE3 ||
-                p_cfg->mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE4)
-        {
-            /* Enable buffer transfer GTCCRD→GTCCRA at compare match */
-            p_instance_ctrl->p_reg->GTBER2_b.CMTCA  = 0x1U;
-            p_instance_ctrl->p_reg->GTBER2_b.CP3DB  = 0U;   /* double buffer OFF */
-            p_instance_ctrl->p_reg->GTBER2_b.CPBTD  = 0U;   /* buffer transfer ENABLED */
-
-            /* Set single buffer registers */
-            p_instance_ctrl->p_reg->GTCCR[GPT_PRV_GTCCRA] = duty_regs.gtccr_buffer;
-            p_instance_ctrl->p_reg->GTCCR[GPT_PRV_GTCCRD] = duty_regs.gtccr_buffer;
-        }
-#endif
-
     r_gpt_init_compare_match_channel(p_instance_ctrl);
 
 #if GPT_PRV_GPTE_OR_GPTEH_SUPPORTED
