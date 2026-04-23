@@ -51,6 +51,27 @@ extern "C" {
         <constraint display="Requires GPT Driver (W)">
             testExists("${module.driver.three_phase.requires.gpt_w::module.driver.timer.name}")
         </constraint>
+
+        <!-- Complementary PWM mode constraints (Modes 1, 2, 3, 4) -->
+        <constraint display="General|For Complementary PWM modes, GPT V-Channel must equal U-Channel + 1 and W-Channel must equal U-Channel + 2. The GPT peripheral requires three consecutive channels (master + slave1 + slave2).">
+            !"${module.driver.three_phase.mode}".startsWith("mode_complementary_pwm_") ||
+            ((("${module.driver.three_phase.channel_v}" - "${module.driver.three_phase.channel_u}") === 1) &amp;&amp;
+             (("${module.driver.three_phase.channel_w}" - "${module.driver.three_phase.channel_u}") === 2))
+        </constraint>
+        <constraint display="General|Double Buffer is only supported in Complementary PWM Mode 3 and Mode 4. Select Single Buffer for Complementary PWM Mode 1 or Mode 2.">
+            "${module.driver.three_phase.buffer_mode}" != "(THREE_PHASE_BUFFER_MODE_DOUBLE)" ||
+            (("${module.driver.three_phase.mode}" != "mode_complementary_pwm_mode1") &amp;&amp;
+             ("${module.driver.three_phase.mode}" != "mode_complementary_pwm_mode2"))
+        </constraint>
+        <constraint display="Extra Features|Dead Time Count Up must be greater than 0 in Complementary PWM modes (0 &lt; GTDVU &lt; GTPR). A zero dead time permits shoot-through on the complementary GTIOCnA/GTIOCnB output pair.">
+            !"${module.driver.three_phase.mode}".startsWith("mode_complementary_pwm_") ||
+            ("${module.driver.three_phase.dead_time_count_up}" &gt; 0)
+        </constraint>
+        <constraint display="Extra Features|Dead Time Count Up must be less than Period when Period Unit is Raw Counts in Complementary PWM modes (GTDVU &lt; GTPR).">
+            !"${module.driver.three_phase.mode}".startsWith("mode_complementary_pwm_") ||
+            "${module.driver.three_phase.unit}" != "unit_period_raw_counts" ||
+            ("${module.driver.three_phase.dead_time_count_up}" &lt; "${module.driver.three_phase.period}")
+        </constraint>
         <requires id="module.driver.three_phase.requires.gpt_u" interface="interface.driver.timer_on_gpt" find="true" display="Add GPT Driver (U) [Mandatory]">
             <override property="module.driver.timer.mode" value="module.driver.timer.mode.${module.driver.three_phase.mode}"/>
             <override property="module.driver.timer.channel" value="${module.driver.three_phase.channel_u}"/>
