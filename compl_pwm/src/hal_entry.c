@@ -1,4 +1,5 @@
 #include "hal_data.h"
+#include "r_gpt_test_tg3_comp_pwm.h"
 
 #if (1 == BSP_MULTICORE_PROJECT) && BSP_TZ_SECURE_BUILD
 bsp_ipc_semaphore_handle_t g_core_start_semaphore =
@@ -13,7 +14,7 @@ bsp_ipc_semaphore_handle_t g_core_start_semaphore =
  **********************************************************************************************************************/
 void hal_entry(void)
 {
-    comp_pwm_test_mode1();
+    comp_pwm_run_all_tests();
 
     /* Wake up 2nd core if this is first core and we are inside a multicore project. */
 #if (0 == _RA_CORE) && (1 == BSP_MULTICORE_PROJECT) && !BSP_TZ_NONSECURE_BUILD
