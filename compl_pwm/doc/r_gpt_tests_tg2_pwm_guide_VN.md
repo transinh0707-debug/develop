@@ -543,11 +543,11 @@ Khi thêm một test case mới vào `r_gpt_tests_tg2_pwm.c`:
 | `compl_pwm/!test/r_gpt_test_data.h/.c` | Shared config template (`g_gpt_timer_ext`, `g_gpt_timer_ext_off`) |
 | `compl_pwm/!test/r_gpt_tests_runner.c` | Danh sách tất cả test case, `RunAllR_GPTTests()` entry point |
 | `compl_pwm/!test/r_gpt_tests_tg1.c` | Test group 1 — event counting, non-PWM. Cấu trúc tương tự file này |
-| `compl_pwm/src/r_gpt_test_tg3_comp_pwm.c` | Test group 3 (Complementary PWM) — KHÔNG dùng Unity Fixture, tự implement test harness qua `comp_pwm_run_all_tests()` |
+| `compl_pwm/!test/r_gpt_tests_tg3_comp_pwm.c` | Test group 3 (Complementary PWM Modes 1-4). **Dùng Unity Fixture** cùng framework với TG1/TG2. 17 test cases bao phủ REQ-OM-01 → REQ-SEC-17 (FSPRA-5725). |
 | RA2T1 User's Manual §20.3 | Chi tiết GPT peripheral — register, timing, PWM mode |
 | Unity Framework docs | https://github.com/ThrowTheSwitch/Unity — chi tiết tất cả `TEST_ASSERT_*` macro |
 
 ---
 
 **Ghi chú về test group 3 (Complementary PWM):**
-File `r_gpt_test_tg3_comp_pwm.c` trong `compl_pwm/src/` (không phải `!test/`) **không dùng Unity Fixture**. Thay vào đó có harness riêng (`comp_pwm_run_all_tests()`, `test_report()`, `test_setup_config()`...) in kết quả qua SEGGER RTT. Lý do: TG3 chạy trên board thật với oscilloscope để verify waveform, trong khi TG2 dùng input capture timer để verify tự động — hai mô hình test khác nhau, framework cũng khác nhau.
+Trước đây test group 3 nằm trong `compl_pwm/src/r_gpt_test_tg3_comp_pwm.c` và dùng harness RTT tự tạo (`comp_pwm_run_all_tests()`, `test_report()`, `test_setup_config()`...). Hiện file này đã được chuyển sang `compl_pwm/!test/r_gpt_tests_tg3_comp_pwm.c` và chuyển sang framework Unity Fixture — cùng mô hình với TG1/TG2 mô tả ở phần trên. Các test case cũ được giữ nguyên về mặt requirement coverage (17 test cases, REQ-OM-01 → REQ-SEC-17), nhưng đổi tên theo convention `TC_ComplementaryPwm_*` và dùng `TEST_ASSERT_*` macro của Unity thay cho `test_report()` callback. Cả 3 test group (TG1/TG2/TG3) hiện chạy chung qua `RunAllR_GPTTests()` trong `r_gpt_tests_runner.c`.

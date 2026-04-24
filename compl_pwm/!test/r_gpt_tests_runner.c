@@ -66,10 +66,40 @@ TEST_GROUP_RUNNER(R_GPT_TG2)
     RUN_TEST_CASE(R_GPT_TG2, TC_PwmOutputDelay);
     RUN_TEST_CASE(R_GPT_TG2, TC_PwmOutputDelayManualTest);
 }
+TEST_GROUP_RUNNER(R_GPT_TG3)
+{
+    /* Operating Modes (REQ-OM-01 ... REQ-OM-04) */
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_Mode1_CrestTransfer);
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_Mode2_TroughTransfer);
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_Mode3_SingleAndDoubleBuffer);
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_Mode4_ImmediateTransfer);
+
+    /* Dead Time (REQ-DT-05 ... REQ-DT-08) */
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_DeadTime_Configurable);
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_DeadTime_ValidRange);
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_DeadTime_NoBufferedWrite);
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_DeadTime_NonOverlappingGuard);
+
+    /* Duty Cycle Control (REQ-DC-09 ... REQ-DC-12) */
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_DutyCycle_IndependentUVW);
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_DutyCycle_ZeroPercent);
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_DutyCycle_HundredPercent);
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_DutyCycle_NoOverflow16Bit);
+
+    /* Buffer Chains (REQ-BUF-13 ... REQ-BUF-16) */
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_Buffer_SingleChainModes123);
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_Buffer_DoubleChainMode3);
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_Buffer_Mode4ImmediateBypass);
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_Buffer_SlaveWriteOrdering);
+
+    /* Counting Sections (REQ-SEC-17) */
+    RUN_TEST_CASE(R_GPT_TG3, TC_ComplementaryPwm_CountingSections_AllFiveObserved);
+}
 void RunAllR_GPTTests (void)
 {
     RUN_TEST_GROUP(R_GPT_TG1);
     RUN_TEST_GROUP(R_GPT_TG2);
+    RUN_TEST_GROUP(R_GPT_TG3);
 
 #ifdef TEST_IF_TIMER
     RunAllDRV_TIMERTests();

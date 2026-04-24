@@ -1,5 +1,6 @@
 #include "hal_data.h"
-#include "r_gpt_test_tg3_comp_pwm.h"
+#include "unity_fixture.h"
+#include "../!test/r_gpt_tests_runner.h"
 
 #if (1 == BSP_MULTICORE_PROJECT) && BSP_TZ_SECURE_BUILD
 bsp_ipc_semaphore_handle_t g_core_start_semaphore =
@@ -14,7 +15,14 @@ bsp_ipc_semaphore_handle_t g_core_start_semaphore =
  **********************************************************************************************************************/
 void hal_entry(void)
 {
-    comp_pwm_run_all_tests();
+    /* Unity Fixture entry point. Runs all test groups registered in
+     * r_gpt_tests_runner.c (R_GPT_TG1, R_GPT_TG2, R_GPT_TG3) and reports
+     * results via Unity's output (typically routed over SEGGER RTT by the
+     * test_cfg.h configuration). */
+    const char * unity_argv[] = {"unity", "-v"};
+    UnityMain(sizeof(unity_argv) / sizeof(unity_argv[0]),
+              (const char **) unity_argv,
+              RunAllR_GPTTests);
 
     /* Wake up 2nd core if this is first core and we are inside a multicore project. */
 #if (0 == _RA_CORE) && (1 == BSP_MULTICORE_PROJECT) && !BSP_TZ_NONSECURE_BUILD
