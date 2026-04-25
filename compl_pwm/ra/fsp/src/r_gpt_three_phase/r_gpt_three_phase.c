@@ -1,9 +1,5 @@
-/*
-* Copyright (c) 2020 - 2025 Renesas Electronics Corporation and/or its affiliates
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*/
-
+/* ${REA_DISCLAIMER_PLACEHOLDER} */
+ 
 /***********************************************************************************************************************
  * Includes
  **********************************************************************************************************************/
@@ -311,60 +307,60 @@ fsp_err_t R_GPT_THREE_PHASE_DutyCycleSet (three_phase_ctrl_t * const       p_ctr
         }
     }
 #endif
-
-    r_gpt_write_protect_disable_all(p_instance_ctrl);
-
-    /* Determine operating mode from the master (U) channel */
-    timer_mode_t mode = p_instance_ctrl->p_cfg->p_timer_instance[0]->p_cfg->mode;
-
-    if (mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE1 ||
-        mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE2 ||
-        mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE3 ||
-        mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE4)
-    {
-        /* Complementary PWM: write duty to GTCCRD buffer register.
-         * REQ-BUF-16: Write W channel (slave 2, index 2) LAST to trigger
-         * simultaneous temporary-register transfer across all three channels. */
-        static const three_phase_channel_t write_order[3] =
-        {
-            THREE_PHASE_CHANNEL_U, THREE_PHASE_CHANNEL_V, THREE_PHASE_CHANNEL_W
-        };
-
-        for (uint32_t i = 0U; i < 3U; i++)
-        {
-            three_phase_channel_t ch = write_order[i];
-
-            /* Single buffer: GTCCRD -> Temp A -> GTCCRA */
-            p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRD] = p_duty_cycle->duty[ch];
-
-            /* Double buffer: additionally write GTCCRF -> Temp B -> GTCCRE -> GTCCRA */
-            if (THREE_PHASE_BUFFER_MODE_DOUBLE == p_instance_ctrl->buffer_mode)
-            {
-                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRF] = p_duty_cycle->duty_buffer[ch];
-            }
-        }
-    }
-    else
-    {
-        /* Standard triangle-wave PWM: write to GTCCRC/GTCCRE (original behavior) */
-        for (three_phase_channel_t ch = THREE_PHASE_CHANNEL_U; ch <= THREE_PHASE_CHANNEL_W; ch++)
-        {
-            p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRC] = p_duty_cycle->duty[ch];
-            p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRE] = p_duty_cycle->duty[ch];
-
-            /* Set double-buffer registers (if applicable) */
-            if ((THREE_PHASE_BUFFER_MODE_DOUBLE == p_instance_ctrl->buffer_mode) ||
-                (TIMER_MODE_TRIANGLE_WAVE_ASYMMETRIC_PWM_MODE3 == mode))
-            {
-                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRD] = p_duty_cycle->duty_buffer[ch];
-                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRF] = p_duty_cycle->duty_buffer[ch];
-            }
-        }
-    }
-
-    r_gpt_write_protect_enable_all(p_instance_ctrl);
-
-    return FSP_SUCCESS;
+ 
+    r_gpt_write_protect_disable_all(p_instance_ctrl);
+ 
+    /* Determine operating mode from the master (U) channel to set all duty cycle registers */
+    timer_mode_t mode = p_instance_ctrl->p_cfg->p_timer_instance[0]->p_cfg->mode;
+ 
+    if (mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE1 ||
+        mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE2 ||
+        mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE3 ||
+        mode == TIMER_MODE_COMPLEMENTARY_PWM_MODE4)
+    {
+        /* Complementary PWM: write duty to GTCCRD buffer register.
+         * REQ-BUF-16: Write W channel (slave 2, index 2) LAST to trigger
+         * simultaneous temporary-register transfer across all three channels. */
+        static const three_phase_channel_t write_order[3] =
+        {
+            THREE_PHASE_CHANNEL_U, THREE_PHASE_CHANNEL_V, THREE_PHASE_CHANNEL_W
+        };
+ 
+        for (uint32_t i = 0U; i < 3U; i++)
+        {
+            three_phase_channel_t ch = write_order[i];
+ 
+            /* Single buffer: GTCCRD -> Temp A -> GTCCRA */
+            p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRD] = p_duty_cycle->duty[ch];
+ 
+            /* Double buffer: additionally write GTCCRF -> Temp B -> GTCCRE -> GTCCRA */
+            if (THREE_PHASE_BUFFER_MODE_DOUBLE == p_instance_ctrl->buffer_mode)
+            {
+                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRF] = p_duty_cycle->duty_buffer[ch];
+            }
+        }
+    }
+    else
+    {
+        /* Standard triangle-wave PWM: write to GTCCRC/GTCCRE*/
+        for (three_phase_channel_t ch = THREE_PHASE_CHANNEL_U; ch <= THREE_PHASE_CHANNEL_W; ch++)
+        {
+            p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRC] = p_duty_cycle->duty[ch];
+            p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRE] = p_duty_cycle->duty[ch];
+ 
+            /* Set double-buffer registers (if applicable) */
+            if ((THREE_PHASE_BUFFER_MODE_DOUBLE == p_instance_ctrl->buffer_mode) ||
+                (TIMER_MODE_TRIANGLE_WAVE_ASYMMETRIC_PWM_MODE3 == mode))
+            {
+                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRD] = p_duty_cycle->duty_buffer[ch];
+                p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRF] = p_duty_cycle->duty_buffer[ch];
+            }
+        }
+    }
+ 
+    r_gpt_write_protect_enable_all(p_instance_ctrl);
+ 
+    return FSP_SUCCESS;
 }
 
 /*******************************************************************************************************************//**
