@@ -1,0 +1,32 @@
+--- a/peaks/SConstruct
++++ b/peaks/SConstruct
+@@ _create_object_list @@
+     def _create_object_list(self, main_objs):
+         """ Helper to create the lists of objects needed to build based on file lists. """
++        # FIX: Deduplicate by normalized absolute path to prevent
++        # "Two environments with different actions for same target" SCons error.
++        _assigned = set()
++        def _dedup(file_list):
++            result = []
++            for f in file_list:
++                key = os.path.normcase(os.path.abspath(f))
++                if key not in _assigned:
++                    _assigned.add(key)
++                    result.append(f)
++            return result
++        deduped_no_instrument    = _dedup(self.list_of_no_instrument_files)
++        deduped_common           = _dedup(self.list_of_common_files)
++        deduped_test             = _dedup(self.list_of_test_files)
++        deduped_third_party_test = _dedup(self.list_of_third_party_test_files)
+         # object files to build
+-        no_instrument_objs      = self.no_instrument_env.Object(list(map(lambda x: os.path.join(self.output_dir, x), self.list_of_no_instrument_files)))
+-        common_objs             = self.common_env.Object(list(map(lambda x: os.path.join(self.output_dir, x), self.list_of_common_files)))
+-        test_objs               = self.test_env.Object(list(map(lambda x: os.path.join(self.output_dir, x), self.list_of_test_files)))
+-        third_party_test_objs   = self.third_party_test_env.Object(list(map(lambda x: os.path.join(self.output_dir, x), self.list_of_third_party_test_files)))
++        no_instrument_objs    = self.no_instrument_env.Object(list(map(lambda x: os.path.join(self.output_dir, x), deduped_no_instrument)))
++        common_objs           = self.common_env.Object(list(map(lambda x: os.path.join(self.output_dir, x), deduped_common)))
++        test_objs             = self.test_env.Object(list(map(lambda x: os.path.join(self.output_dir, x), deduped_test)))
++        third_party_test_objs = self.third_party_test_env.Object(list(map(lambda x: os.path.join(self.output_dir, x), deduped_third_party_test)))
+         self.object_list = (common_objs + test_objs + main_objs + third_party_test_objs + no_instrument_objs)
+         # sort list of input files to make output consistent
+         self.object_list.sort()
