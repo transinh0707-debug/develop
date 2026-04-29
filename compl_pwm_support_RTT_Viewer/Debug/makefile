@@ -95,7 +95,7 @@ all: compl_pwm.elf secondary-outputs
 
 # Tool invocations
 compl_pwm.elf: $(OBJS) $(USER_OBJS) $(LINKER_SCRIPT)
-	$(file > compl_pwm.elf.in,-mcpu=cortex-m23 -mthumb -Oz -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-strict-aliasing -Wunused -Wuninitialized -Wall -Wextra -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Waggregate-return -Wfloat-equal -g -T "fsp.ld" -Xlinker --gc-sections -L "C:\\Users\\admin.wins\\e2_studio\\workspace\\User\\5725\\develop-master\\compl_pwm/script" -Wl,-Map,"compl_pwm.map" --specs=nano.specs -o "compl_pwm.elf" $(OBJS) $(USER_OBJS) $(LIBS))
+	$(file > compl_pwm.elf.in,-mcpu=cortex-m23 -mthumb -Oz -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-strict-aliasing -Wunused -Wuninitialized -Wall -Wextra -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Waggregate-return -Wfloat-equal -g -T "fsp.ld" -Xlinker --gc-sections -L "C:\\Users\\Admin\\Desktop\\gpt_fpb_ra2t1_ep\\develop\\compl_pwm_support_RTT_Viewer/script" -Wl,-Map,"compl_pwm.map" --specs=nano.specs -o "compl_pwm.elf" $(OBJS) $(USER_OBJS) $(LIBS))
 	@echo Building target: $@ && arm-none-eabi-gcc @"compl_pwm.elf.in"
 compl_pwm.srec: compl_pwm.elf
 	arm-none-eabi-objcopy -O srec "compl_pwm.elf"  "compl_pwm.srec"

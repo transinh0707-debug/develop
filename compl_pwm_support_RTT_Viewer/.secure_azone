@@ -41,7 +41,6 @@
         </peripheral>
         <peripheral name="PORT4.CM23" group="PORT">
             <slot name="P400.CM23" secure="false"/>
-            <slot name="P401.CM23" secure="false"/>
             <slot name="P402.CM23" secure="false"/>
             <slot name="P403.CM23" secure="false"/>
             <slot name="P407.CM23" secure="false"/>
@@ -59,5 +58,10 @@
         <peripheral name="GPT0.CM23" group="GPT" security=""/>
         <peripheral name="GPT1.CM23" group="GPT" security=""/>
         <peripheral name="GPT2.CM23" group="GPT" security=""/>
+        <peripheral name="GPT3.CM23" group="GPT" security=""/>
+        <peripheral name="ICU.CM23">
+            <slot name="IRQ4.CM23" secure="false"/>
+            <slot name="IRQ5.CM23" secure="false"/>
+        </peripheral>
     </partition>
 </azone>

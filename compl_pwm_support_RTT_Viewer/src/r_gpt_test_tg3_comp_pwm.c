@@ -13,6 +13,7 @@
 * Includes
 **********************************************************************************************************************/
 #include "common_utils.h"
+#include "r_gpt_three_phase.h"
 #include "r_gpt_test_tg3_comp_pwm.h"
  
  
@@ -83,7 +84,7 @@ static timer_cfg_t g_slave2_cfg_test;
 static gpt_extended_cfg_t g_master_ext_test;
 static gpt_extended_pwm_cfg_t g_pwm_cfg_test;
 
-static three_phase_instance_t g_three_phase_comp_pwm_test
+//static three_phase_instance_t g_three_phase_comp_pwm_test;
 static gpt_three_phase_instance_ctrl_t g_three_phase_comp_pwm_ctrl_test;
 static three_phase_cfg_t g_three_phase_comp_pwm_cfg_test;
  
@@ -216,7 +217,7 @@ static void comp_pwm_test_REQ_OM_01 (void)
 
             /* Verify GTCCRD is initialized (single buffer register) */
             uint32_t gtccrd = g_three_phase_comp_pwm_ctrl_test.p_reg[ch]->GTCCR[COMP_PWM_PRV_GTCCRD];
-            pass &= (gtccrd == (p_cfg->p_timer_instance[ch]->p_cfg->duty_cycle_counts));
+            pass &= (gtccrd == (g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts));
         }
  
         /* Verify mode is set correctly (GTCR.MD = 0xC for Mode 1) */
@@ -251,7 +252,7 @@ static void comp_pwm_test_REQ_OM_02 (void)
 
             /* Verify GTCCRD is initialized (single buffer register) */
             uint32_t gtccrd = g_three_phase_comp_pwm_ctrl_test.p_reg[ch]->GTCCR[COMP_PWM_PRV_GTCCRD];
-            pass &= (gtccrd == (p_cfg->p_timer_instance[ch]->p_cfg->duty_cycle_counts));
+            pass &= (gtccrd == (g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts));
         }
  
         uint32_t gtcr_md = (g_three_phase_comp_pwm_ctrl_test.p_reg[THREE_PHASE_CHANNEL_U]->GTCR >> R_GPT0_GTCR_MD_Pos) & 0xFU;
@@ -287,7 +288,7 @@ static void comp_pwm_test_REQ_OM_03 (void)
 
             /* Verify GTCCRD is initialized (single buffer register) */
             uint32_t gtccrd = g_three_phase_comp_pwm_ctrl_test.p_reg[ch]->GTCCR[COMP_PWM_PRV_GTCCRD];
-            pass &= (gtccrd == (p_cfg->p_timer_instance[ch]->p_cfg->duty_cycle_counts));
+            pass &= (gtccrd == (g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts));
         }
  
         test_close_three_phase();
@@ -309,8 +310,8 @@ static void comp_pwm_test_REQ_OM_03 (void)
             /* Verify both GTCCRD and GTCCRF are initialized (double buffer register) */
             uint32_t gtccrd = g_three_phase_comp_pwm_ctrl_test.p_reg[ch]->GTCCR[COMP_PWM_PRV_GTCCRD];
             uint32_t gtccrf = g_three_phase_comp_pwm_ctrl_test.p_reg[ch]->GTCCR[COMP_PWM_PRV_GTCCRF];
-            pass &= ((gtccrd == (p_cfg->p_timer_instance[ch]->p_cfg->duty_cycle_counts)) && 
-                     (gtccrf == (p_cfg->p_timer_instance[ch]->p_cfg->duty_cycle_counts)));
+            pass &= ((gtccrd == (g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts)) &&
+            (gtccrf == (g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts)));
         }
  
         /* Verify GTCR.MD = 0xE for Mode 3 */

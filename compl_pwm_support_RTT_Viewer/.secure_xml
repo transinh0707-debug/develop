@@ -41,12 +41,11 @@
       <configSetting altId="gpt.gtcppo0.p407" configurationId="gpt.gtcppo0" peripheral="GPT"/>
       <configSetting altId="gpt0.gtioc0a.p213" configurationId="gpt0.gtioc0a" isUsedByDriver="true" peripheral="GPT0"/>
       <configSetting altId="gpt0.gtioc0b.p212" configurationId="gpt0.gtioc0b" isUsedByDriver="true" peripheral="GPT0"/>
-      <configSetting altId="gpt1.gtioc1a.p101" configurationId="gpt1.gtioc1a" peripheral="GPT1"/>
-      <configSetting altId="gpt1.gtioc1b.p100" configurationId="gpt1.gtioc1b" peripheral="GPT1"/>
-      <configSetting altId="gpt2.gtioc2a.p103" configurationId="gpt2.gtioc2a" peripheral="GPT2"/>
-      <configSetting altId="gpt2.gtioc2b.p102" configurationId="gpt2.gtioc2b" peripheral="GPT2"/>
-      <configSetting altId="iic0.scl0.p400" configurationId="iic0.scl0" peripheral="IIC0"/>
-      <configSetting altId="iic0.sda0.p401" configurationId="iic0.sda0" peripheral="IIC0"/>
+      <configSetting altId="gpt1.gtioc1a.p101" configurationId="gpt1.gtioc1a" isUsedByDriver="true" peripheral="GPT1"/>
+      <configSetting altId="gpt1.gtioc1b.p100" configurationId="gpt1.gtioc1b" isUsedByDriver="true" peripheral="GPT1"/>
+      <configSetting altId="gpt2.gtioc2a.p103" configurationId="gpt2.gtioc2a" isUsedByDriver="true" peripheral="GPT2"/>
+      <configSetting altId="gpt2.gtioc2b.p102" configurationId="gpt2.gtioc2b" isUsedByDriver="true" peripheral="GPT2"/>
+      <configSetting altId="gpt3.gtioc3a.p400" configurationId="gpt3.gtioc3a" isUsedByDriver="true" peripheral="GPT3"/>
       <configSetting altId="irq.nmi.p200" configurationId="irq.nmi" peripheral="IRQ"/>
       <configSetting altId="jtag_fslash_swd.swclk.p300" configurationId="jtag_fslash_swd.swclk" peripheral="JTAG/SWD"/>
       <configSetting altId="jtag_fslash_swd.swdio.p108" configurationId="jtag_fslash_swd.swdio" peripheral="JTAG/SWD"/>
