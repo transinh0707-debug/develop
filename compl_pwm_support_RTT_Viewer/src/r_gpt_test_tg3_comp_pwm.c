@@ -40,7 +40,41 @@
  
 /* Total number of requirements */
 #define TOTAL_TEST_CASES                (17U)
- 
+
+/* ====================================================================
+ *  Duty-Cycle Measurement — GPT Input Capture Channel
+ * ====================================================================
+ *  Physical wiring requirement:
+ *    Connect FPB-RA2T1 P105 (GPT ch0 GTIOCA / GPTIO0A_Master)
+ *    to       P300 (GPT ch3 GTIOCA input)
+ *    with a jumper wire BEFORE running any duty-cycle capture test.
+ *
+ *  Channel selection:
+ *    GPT ch3 is used because ch0/1/2 are reserved for the three-phase
+ *    complementary PWM under test (master + slave1 + slave2).
+ * ==================================================================== */
+
+/* Measurement channel — must not overlap with three-phase ch 0/1/2 */
+#define DUTY_CAP_GPT_CH                 (3U)
+
+/* GTCCR[] indices for the capture channel
+ *   GTCCRA (index 0) — latched at rising  edge of GTIOCA input
+ *   GTCCRB (index 1) — latched at falling edge of GTIOCA input
+ * Note: GTCCRA/GTCCRB defined here for clarity (existing GTCCRD = 3 above).
+ */
+#define DUTY_CAP_GTCCRA_IDX             (0U)
+#define DUTY_CAP_GTCCRB_IDX             (1U)
+
+/* Tolerance in timer counts (±1 for dead-time edge rounding) */
+#define DUTY_CAP_TOLERANCE_COUNTS       (1U)
+
+/* Poll timeout — ~100 000 iterations ≈ several PWM periods at typical clock */
+#define DUTY_CAP_POLL_TIMEOUT           (100000U)
+
+/* Base address stride between consecutive GPT channels on RA2T1.
+ * Computed from R_GPT1 - R_GPT0 so it stays correct across MCU variants. */
+#define GPT_CH_REG_STRIDE               ((uint32_t)((uintptr_t)R_GPT1 - (uintptr_t)R_GPT0))
+
 /***********************************************************************************************************************
 * Typedef definitions
 **********************************************************************************************************************/
@@ -189,6 +223,190 @@ static bool verify_gtber2_double_buffer (gpt_three_phase_instance_ctrl_t * p_ctr
            (p_ctrl->p_reg[ch]->GTBER2_b.CP3DB == 1U) &&
            (p_ctrl->p_reg[ch]->GTBER2_b.CPBTD == 0U);
 }
+
+/***********************************************************************************************************************
+* Duty-cycle capture channel — static instances and helpers
+**********************************************************************************************************************/
+
+/* -----------------------------------------------------------------------
+ *  GPT ch3 — free-running up-counter with GTIOCA input capture
+ *  (opened/closed around each measurement, never left running)
+ * ----------------------------------------------------------------------- */
+static gpt_instance_ctrl_t g_duty_cap_ctrl;
+
+/* Extended cfg: capture A on rising, capture B on falling of GTIOCA pin.
+ * GTIOCB is unused so we accept rising/falling regardless of GTIOCB level
+ * (OR the WHILE_GTIOCB_LOW and WHILE_GTIOCB_HIGH source flags). */
+static const gpt_extended_cfg_t g_duty_cap_ext_cfg =
+{
+    .gtioca               = { .output_enabled = false,
+                              .stop_level     = GPT_PIN_LEVEL_LOW },
+    .gtiocb               = { .output_enabled = false,
+                              .stop_level     = GPT_PIN_LEVEL_LOW },
+    .capture_a_source     = (gpt_source_t)(GPT_SOURCE_GTIOCA_RISING_WHILE_GTIOCB_LOW |
+                                           GPT_SOURCE_GTIOCA_RISING_WHILE_GTIOCB_HIGH),
+    .capture_b_source     = (gpt_source_t)(GPT_SOURCE_GTIOCA_FALLING_WHILE_GTIOCB_LOW |
+                                           GPT_SOURCE_GTIOCA_FALLING_WHILE_GTIOCB_HIGH),
+    .start_source         = GPT_SOURCE_NONE,
+    .stop_source          = GPT_SOURCE_NONE,
+    .clear_source         = GPT_SOURCE_NONE,
+    .count_up_source      = GPT_SOURCE_NONE,
+    .count_down_source    = GPT_SOURCE_NONE,
+    .adc_trigger          = GPT_ADC_TRIGGER_NONE,
+    .dead_time_count_up   = 0U,
+    .dead_time_count_down = 0U,
+    .icds_clk_div         = GPT_CLOCK_DIVIDER_1,
+    .gtior_setting.gtior  = 0U,
+};
+
+static const timer_cfg_t g_duty_cap_timer_cfg =
+{
+    .mode              = TIMER_MODE_PERIODIC,    /* free-running up-counter */
+    .period_counts     = UINT32_MAX,             /* wrap only after ~13 min @ 50 MHz */
+    .duty_cycle_counts = 0U,
+    .source_div        = TIMER_SOURCE_DIV_1,     /* same clock as PWM channels */
+    .channel           = DUTY_CAP_GPT_CH,
+    .p_callback        = NULL,
+    .p_context         = NULL,
+    .p_extend          = &g_duty_cap_ext_cfg,
+    .cycle_end_ipl     = BSP_IRQ_DISABLED,
+    .cycle_end_irq     = FSP_INVALID_VECTOR,
+};
+
+/* -----------------------------------------------------------------------
+ * @brief  Get pointer to the capture channel's register block.
+ *         Computed from R_GPT0 base + channel offset to avoid hardcoding
+ *         R_GPT3 (which keeps this code portable to other channels).
+ * ----------------------------------------------------------------------- */
+static inline R_GPT0_Type * duty_cap_regs (void)
+{
+    return (R_GPT0_Type *)((uintptr_t)R_GPT0 + (DUTY_CAP_GPT_CH * GPT_CH_REG_STRIDE));
+}
+
+/* -----------------------------------------------------------------------
+ * @brief  Open and start the capture GPT channel.
+ *         Call BEFORE starting the three-phase timer so the counter is
+ *         already running when the first PWM edge arrives.
+ * @return FSP_SUCCESS or FSP error code.
+ * ----------------------------------------------------------------------- */
+static fsp_err_t duty_cap_open (void)
+{
+    fsp_err_t err = R_GPT_Open(&g_duty_cap_ctrl, &g_duty_cap_timer_cfg);
+    if (FSP_SUCCESS != err)
+    {
+        return err;
+    }
+
+    /* Clear any stale capture flags before arming */
+    duty_cap_regs()->GTST = 0U;   /* write 0 to clear all status flags */
+
+    return R_GPT_Start(&g_duty_cap_ctrl);
+}
+
+/* -----------------------------------------------------------------------
+ * @brief  Close the capture GPT channel and release the resource.
+ * ----------------------------------------------------------------------- */
+static void duty_cap_close (void)
+{
+    (void)R_GPT_Close(&g_duty_cap_ctrl);
+}
+
+/* -----------------------------------------------------------------------
+ * @brief  Wait for one complete high-pulse on GTIOCA of the capture
+ *         channel, then return the measured high-time in timer counts.
+ *
+ *         Capture register usage:
+ *           GTCCRA — latched at rising  edge (TCFA flag set in GTST)
+ *           GTCCRB — latched at falling edge (TCFB flag set in GTST)
+ *
+ * @param[out] p_measured_counts   High-time measured in timer counts.
+ * @return true  if both edges captured within timeout.
+ * @return false if timeout expired before both edges arrived.
+ * ----------------------------------------------------------------------- */
+static bool duty_cap_measure (uint32_t * const p_measured_counts)
+{
+    R_GPT0_Type * const p_reg = duty_cap_regs();
+
+    /* ------------------------------------------------------------------ */
+    /* Step 1: Wait for rising-edge capture (GTST.TCFA set by hardware)   */
+    /* ------------------------------------------------------------------ */
+    uint32_t timeout = DUTY_CAP_POLL_TIMEOUT;
+    while (0U == p_reg->GTST_b.TCFA)
+    {
+        if (0U == timeout--)
+        {
+            return false;   /* rising edge never came — check jumper wire */
+        }
+    }
+    uint32_t t_rise = p_reg->GTCCR[DUTY_CAP_GTCCRA_IDX];   /* latched value */
+
+    /* Clear TCFA so the next rising edge does not confuse TCFB polling */
+    p_reg->GTST_b.TCFA = 0U;
+
+    /* ------------------------------------------------------------------ */
+    /* Step 2: Wait for the immediately following falling-edge capture    */
+    /* ------------------------------------------------------------------ */
+    timeout = DUTY_CAP_POLL_TIMEOUT;
+    while (0U == p_reg->GTST_b.TCFB)
+    {
+        if (0U == timeout--)
+        {
+            return false;   /* falling edge never came */
+        }
+    }
+    uint32_t t_fall = p_reg->GTCCR[DUTY_CAP_GTCCRB_IDX];   /* latched value */
+
+    /* Clear TCFB so a subsequent measurement starts clean */
+    p_reg->GTST_b.TCFB = 0U;
+
+    /* ------------------------------------------------------------------ */
+    /* Step 3: Compute high-time, handling 32-bit counter wrap-around     */
+    /* ------------------------------------------------------------------ */
+    if (t_fall >= t_rise)
+    {
+        *p_measured_counts = t_fall - t_rise;
+    }
+    else
+    {
+        /* Wrap: counter rolled over 0xFFFFFFFF between rise and fall */
+        *p_measured_counts = (UINT32_MAX - t_rise) + t_fall + 1U;
+    }
+
+    return true;
+}
+
+/* -----------------------------------------------------------------------
+ * @brief  Compare measured high-time against expected duty.
+ *
+ *  In complementary PWM (triangle wave), for the master channel U:
+ *    high_time = period_counts - duty_cycle_counts
+ *
+ *  This function computes the expected value and checks the measurement
+ *  falls within ±DUTY_CAP_TOLERANCE_COUNTS.
+ *
+ * @param[in] measured      High-time returned by duty_cap_measure().
+ * @param[in] period_counts GTPR value of the master channel.
+ * @param[in] duty_counts   duty_cycle_counts set in the timer config.
+ * @return true if within tolerance.
+ * ----------------------------------------------------------------------- */
+static bool duty_cap_verify (uint32_t measured,
+                             uint32_t period_counts,
+                             uint32_t duty_counts)
+{
+    /* Expected high-time in the complementary triangle-wave */
+    if (period_counts < duty_counts)
+    {
+        return false;   /* invalid configuration — would underflow */
+    }
+    uint32_t expected = period_counts - duty_counts;
+
+    uint32_t lower = (expected > DUTY_CAP_TOLERANCE_COUNTS)
+                     ? (expected - DUTY_CAP_TOLERANCE_COUNTS)
+                     : 0U;
+    uint32_t upper = expected + DUTY_CAP_TOLERANCE_COUNTS;
+
+    return (measured >= lower) && (measured <= upper);
+}
  
 /***********************************************************************************************************************
 * Test Cases
@@ -198,19 +416,38 @@ static bool verify_gtber2_double_buffer (gpt_three_phase_instance_ctrl_t * p_ctr
  
 /*******************************************************************************************************************//**
 * @brief REQ-OM-01: Operating mode 1 - GTCCRD transfers to GTCCRA at end of crest section.
+*
+*        This test additionally measures the high-time of GPTIO0A_Master
+*        through GPT ch3 input capture (GTIOCA on P300) and verifies it
+*        matches the expected (period - duty_cycle_counts) within tolerance.
+*
+*        Hardware: jumper wire from P105 (GPT ch0 GTIOCA) to P300 (GPT ch3 GTIOCA).
 **********************************************************************************************************************/
 static void comp_pwm_test_REQ_OM_01 (void)
 {
     test_setup_config(TIMER_MODE_COMPLEMENTARY_PWM_MODE1, THREE_PHASE_BUFFER_MODE_SINGLE, DEAD_TIME_TEST_COUNTS);
+
+    /* ------------------------------------------------------------------ */
+    /* Open capture channel FIRST so its counter is running before the    */
+    /* first PWM edge arrives.                                            */
+    /* ------------------------------------------------------------------ */
+    fsp_err_t cap_err = duty_cap_open();
+    bool pass = (FSP_SUCCESS == cap_err);
+
+    /* ------------------------------------------------------------------ */
+    /* Open and start the three-phase complementary PWM channels          */
+    /* ------------------------------------------------------------------ */
     fsp_err_t err = test_open_three_phase();
- 
-    bool pass = (FSP_SUCCESS == err);
+    pass &= (FSP_SUCCESS == err);
+
     if (pass)
     {
         err = R_GPT_THREE_PHASE_Start(&g_three_phase_comp_pwm_ctrl_test);
         pass &= (FSP_SUCCESS == err);
-        
-        /* Verify single buffer GTBER2 config on all channels */
+
+        /* -------------------------------------------------------------- */
+        /* Verify single buffer GTBER2 config on all three channels       */
+        /* -------------------------------------------------------------- */
         for (three_phase_channel_t ch = THREE_PHASE_CHANNEL_U; ch <= THREE_PHASE_CHANNEL_W; ch++)
         {
             pass &= verify_gtber2_single_buffer(&g_three_phase_comp_pwm_ctrl_test, ch);
@@ -219,17 +456,51 @@ static void comp_pwm_test_REQ_OM_01 (void)
             uint32_t gtccrd = g_three_phase_comp_pwm_ctrl_test.p_reg[ch]->GTCCR[COMP_PWM_PRV_GTCCRD];
             pass &= (gtccrd == (g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts));
         }
- 
-        /* Verify mode is set correctly (GTCR.MD = 0xC for Mode 1) */
+
+        /* -------------------------------------------------------------- */
+        /* Verify GTCR.MD = 0xC for Mode 1                                */
+        /* -------------------------------------------------------------- */
         uint32_t gtcr_md = (g_three_phase_comp_pwm_ctrl_test.p_reg[THREE_PHASE_CHANNEL_U]->GTCR >> R_GPT0_GTCR_MD_Pos) & 0xFU;
         pass &= (gtcr_md == 0xCU);
- 
+
+        /* -------------------------------------------------------------- */
+        /* Duty-cycle capture: measure GPTIO0A_Master high-time           */
+        /*                                                                */
+        /*  Expected relationship (complementary triangle wave, ch U):    */
+        /*    high_time = period_counts - duty_cycle_counts               */
+        /*                                                                */
+        /*  Allow a settling delay so the first captured pulse is steady. */
+        /* -------------------------------------------------------------- */
+        R_BSP_SoftwareDelay(DELAY_SETTLING_MS, BSP_DELAY_UNITS_MILLISECONDS);
+
+        uint32_t measured_counts = 0U;
+        bool cap_ok = duty_cap_measure(&measured_counts);
+        pass &= cap_ok;
+
+        if (cap_ok)
+        {
+            const timer_cfg_t * const p_master_cfg =
+                g_three_phase_comp_pwm_cfg_test.p_timer_instance[THREE_PHASE_CHANNEL_U]->p_cfg;
+
+            pass &= duty_cap_verify(measured_counts,
+                                    p_master_cfg->period_counts,
+                                    p_master_cfg->duty_cycle_counts);
+
+            APP_PRINT("  [REQ-OM-01] Duty-cap: measured=%lu, expected=%lu (period=%lu, duty=%lu)\r\n",
+                      (unsigned long)measured_counts,
+                      (unsigned long)(p_master_cfg->period_counts - p_master_cfg->duty_cycle_counts),
+                      (unsigned long)p_master_cfg->period_counts,
+                      (unsigned long)p_master_cfg->duty_cycle_counts);
+        }
+
         test_close_three_phase();
     }
- 
+
+    duty_cap_close();
+
     test_report("REQ-OM-01", "Operating mode 1 (crest transfer)", pass,
-                pass ? "Mode 1 opened, GTBER2 single buffer, GTCR.MD=0xC verified"
-                     : "Mode 1 open or register verification failed");
+                pass ? "Mode 1 opened, GTBER2 single, GTCR.MD=0xC, duty-cap within tolerance"
+                     : "Mode 1 open / register / duty-cap verification failed");
 }
  
 /*******************************************************************************************************************//**
