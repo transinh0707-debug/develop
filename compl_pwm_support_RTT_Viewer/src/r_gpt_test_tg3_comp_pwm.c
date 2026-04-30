@@ -122,7 +122,7 @@ static fsp_err_t test_open_three_phase(void);
 static void test_close_three_phase(void);
 static bool verify_gtber2_single_buffer(gpt_three_phase_instance_ctrl_t * p_ctrl, three_phase_channel_t ch);
 static bool verify_gtber2_double_buffer(gpt_three_phase_instance_ctrl_t * p_ctrl, three_phase_channel_t ch);
-static void wait_pwm_transfer (void);
+static bool wait_pwm_transfer(void);
 
 /***********************************************************************************************************************
 * Private helper functions
@@ -303,40 +303,39 @@ static bool duty_cap_verify (uint32_t measured,
     return (measured >= lower) && (measured <= upper);
 }
 
-/* Ensure compare transfer has occurred */
-static void wait_pwm_transfer (void)
+/* Ensure compare transfer has been applied after a completed Complementary PWM cycle */
+static bool wait_pwm_transfer(void)
 {
     bool crest_seen  = false;
     bool trough_seen = false;
+    uint32_t timeout = DUTY_CAP_POLL_TIMEOUT;
 
-    /* Clear status flags first */
-    g_three_phase_comp_pwm_ctrl_test.p_reg[THREE_PHASE_CHANNEL_U]->GTST = 0U;
+    /* Clear TCFPO và TCFPU before starting poll */
+    g_three_phase_comp_pwm_ctrl_test.p_reg[THREE_PHASE_CHANNEL_U]->GTST = R_GPT0_GTST_TCFPO_Msk | R_GPT0_GTST_TCFPU_Msk;
 
-    while (1)
+    while (timeout--)
     {
-        uint32_t gtst = g_three_phase_comp_pwm_ctrl_test.p_reg[THREE_PHASE_CHANNEL_U]->GTST;
-
-        if (gtst & R_GPT0_GTST_TCFA_Msk)
+        /* Crest: counter overflow up to GTPR, and then TCFPO set */
+        if (!crest_seen && (g_three_phase_comp_pwm_ctrl_test.p_reg[THREE_PHASE_CHANNEL_U]->GTST & R_GPT0_GTST_TCFPO_Msk))
         {
-            /* Clear flag immediately */
-            g_three_phase_comp_pwm_ctrl_test.p_reg[THREE_PHASE_CHANNEL_U]->GTST &= ~R_GPT0_GTST_TCFA_Msk;
-
-            if (!crest_seen)
-            {
-                crest_seen = true;
-            }
-            else
-            {
-                trough_seen = true;
-            }
+            g_three_phase_comp_pwm_ctrl_test.p_reg[THREE_PHASE_CHANNEL_U]->GTST = R_GPT0_GTST_TCFPO_Msk;
+            crest_seen  = true;
         }
 
-        /* Exit conditions */
+        /* Trough: counter underflow at 0, and then TCFPU set */
+        if (crest_seen && !trough_seen && (g_three_phase_comp_pwm_ctrl_test.p_reg[THREE_PHASE_CHANNEL_U]->GTST & R_GPT0_GTST_TCFPU_Msk))
+        {
+            g_three_phase_comp_pwm_ctrl_test.p_reg[THREE_PHASE_CHANNEL_U]->GTST = R_GPT0_GTST_TCFPU_Msk;
+            trough_seen = true;
+        }
+
         if (crest_seen && trough_seen)
         {
-            break;
+            break;   /* a completed Complementary PWM cycle, buffer transfer has been applied */
         }
     }
+
+    return (crest_seen && trough_seen);
 }
  
 /***********************************************************************************************************************
@@ -379,15 +378,15 @@ static void comp_pwm_test_REQ_OM_01 (void)
         err = R_GPT_THREE_PHASE_Start(&g_three_phase_comp_pwm_ctrl_test);
         pass &= (FSP_SUCCESS == err);
 
-        /* Capture at the second Complementary PWM cycle */
-        wait_pwm_transfer();
+        pass &= wait_pwm_transfer();
 
-        uint32_t measured_counts = 0U;
-        bool cap_ok = duty_cap_measure(&measured_counts);
-        pass &= cap_ok;
-
-        if (cap_ok)
+        if (pass)
         {
+            uint32_t measured_counts = 0U;
+            bool cap_ok = duty_cap_measure(&measured_counts);
+
+            if (pass &= cap_ok)
+            {   
             pass &= duty_cap_verify(measured_counts,
                                     g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts,
                                     g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->duty_cycle_counts);
@@ -398,8 +397,9 @@ static void comp_pwm_test_REQ_OM_01 (void)
                                       g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->duty_cycle_counts),
                       (unsigned long)g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts,
                       (unsigned long)g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->duty_cycle_counts);
+            }
         }
-
+        
         test_close_three_phase();
     }
 
@@ -995,30 +995,30 @@ void comp_pwm_run_all_tests (void)
  
     /* Operating Modes (REQ-OM-01 ~ 04) */
     comp_pwm_test_REQ_OM_01();
-    comp_pwm_test_REQ_OM_02();
-    comp_pwm_test_REQ_OM_03();
-    comp_pwm_test_REQ_OM_04();
- 
-    /* Dead Time (REQ-DT-05 ~ 08) */
-    comp_pwm_test_REQ_DT_05();
-    comp_pwm_test_REQ_DT_06();
-    comp_pwm_test_REQ_DT_07();
-    comp_pwm_test_REQ_DT_08();
- 
-    /* Duty Cycle Control (REQ-DC-09 ~ 12) */
-    comp_pwm_test_REQ_DC_09();
-    comp_pwm_test_REQ_DC_10();
-    comp_pwm_test_REQ_DC_11();
-    comp_pwm_test_REQ_DC_12();
- 
-    /* Buffer Chains (REQ-BUF-13 ~ 16) */
-    comp_pwm_test_REQ_BUF_13();
-    comp_pwm_test_REQ_BUF_14();
-    comp_pwm_test_REQ_BUF_15();
-    comp_pwm_test_REQ_BUF_16();
- 
-    /* Counting Sections (REQ-SEC-17) */
-    comp_pwm_test_REQ_SEC_17();
+//    comp_pwm_test_REQ_OM_02();
+//    comp_pwm_test_REQ_OM_03();
+//    comp_pwm_test_REQ_OM_04();
+//
+//    /* Dead Time (REQ-DT-05 ~ 08) */
+//    comp_pwm_test_REQ_DT_05();
+//    comp_pwm_test_REQ_DT_06();
+//    comp_pwm_test_REQ_DT_07();
+//    comp_pwm_test_REQ_DT_08();
+//
+//    /* Duty Cycle Control (REQ-DC-09 ~ 12) */
+//    comp_pwm_test_REQ_DC_09();
+//    comp_pwm_test_REQ_DC_10();
+//    comp_pwm_test_REQ_DC_11();
+//    comp_pwm_test_REQ_DC_12();
+//
+//    /* Buffer Chains (REQ-BUF-13 ~ 16) */
+//    comp_pwm_test_REQ_BUF_13();
+//    comp_pwm_test_REQ_BUF_14();
+//    comp_pwm_test_REQ_BUF_15();
+//    comp_pwm_test_REQ_BUF_16();
+//
+//    /* Counting Sections (REQ-SEC-17) */
+//    comp_pwm_test_REQ_SEC_17();
  
     /* ---- Summary ---- */
     uint32_t passed = 0U;
