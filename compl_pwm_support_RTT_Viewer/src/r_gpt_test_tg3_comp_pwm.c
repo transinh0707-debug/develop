@@ -159,7 +159,7 @@ static void test_setup_config (timer_mode_t mode, three_phase_buffer_mode_t buf_
     memcpy(&g_slave2_cfg_test, &g_timer_comp_pwm_slave2_cfg, sizeof(timer_cfg_t));
     memcpy(&g_master_ext_test, g_master_cfg_test.p_extend, sizeof(gpt_extended_cfg_t));
 
-    memcpy(&g_duty_cap_cfg_test, &g_timer_comp_pwm_duty_cap_ctrl, sizeof(timer_cfg_t));
+    memcpy(&g_duty_cap_cfg_test, &g_timer_comp_pwm_duty_cap_cfg, sizeof(timer_cfg_t));
     memcpy(&g_duty_cap_ext_cfg_test, g_duty_cap_cfg_test.p_extend, sizeof(gpt_extended_cfg_t));
 
 
@@ -229,8 +229,8 @@ static fsp_err_t duty_cap_open (void)
         return err;
     }
 
-    /* Clear any stale capture flags before arming */
-    g_duty_cap_ctrl_test.p_reg->GTST = 0U;
+    /* Clear any stale capture flags before arming (W1C: write 1 to clear) */
+    g_duty_cap_ctrl_test.p_reg->GTST = R_GPT0_GTST_TCFA_Msk | R_GPT0_GTST_TCFB_Msk;
 
     return R_GPT_Start(&g_duty_cap_ctrl_test);
 }
@@ -255,8 +255,8 @@ static bool duty_cap_measure (uint32_t * const p_measured_counts)
     }
     uint32_t t_rise = g_duty_cap_ctrl_test.p_reg->GTCCR[DUTY_CAP_GTCCRA_IDX];   /* latched value */
 
-    /* Clear TCFA so the next rising edge does not confuse TCFB polling */
-    g_duty_cap_ctrl_test.p_reg->GTST_b.TCFA = 0U;
+    /* Clear TCFA so the next rising edge does not confuse TCFB polling (W1C: write 1 to clear) */
+    g_duty_cap_ctrl_test.p_reg->GTST = R_GPT0_GTST_TCFA_Msk;
 
     /* Wait for the immediately following falling-edge capture    */
     timeout = DUTY_CAP_POLL_TIMEOUT;
@@ -269,8 +269,8 @@ static bool duty_cap_measure (uint32_t * const p_measured_counts)
     }
     uint32_t t_fall = g_duty_cap_ctrl_test.p_reg->GTCCR[DUTY_CAP_GTCCRB_IDX];   /* latched value */
 
-    /* Clear TCFB so a subsequent measurement starts clean */
-    g_duty_cap_ctrl_test.p_reg->GTST_b.TCFB = 0U;
+    /* Clear TCFB so a subsequent measurement starts clean (W1C: write 1 to clear) */
+    g_duty_cap_ctrl_test.p_reg->GTST = R_GPT0_GTST_TCFB_Msk;
 
     /* Compute high-time, handling 32-bit counter wrap-around     */
     if (t_fall >= t_rise)
@@ -371,9 +371,9 @@ static void comp_pwm_test_REQ_OM_01 (void)
             pass &= verify_gtber2_single_buffer(&g_three_phase_comp_pwm_ctrl_test, ch);
             pass_test[i_test++] = pass;
 
-            /* Verify GTCCRD is initialized (single buffer register) */
+            /* Verify GTCCRD is initialized (single buffer register = duty_cycle_counts per FSP r_gpt_three_phase.c) */
             uint32_t gtccrd = g_three_phase_comp_pwm_ctrl_test.p_reg[ch]->GTCCR[COMP_PWM_PRV_GTCCRD];
-            pass &= (gtccrd == (g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts));
+            pass &= (gtccrd == (g_three_phase_comp_pwm_cfg_test.p_timer_instance[ch]->p_cfg->duty_cycle_counts));
             pass_test[i_test++] = pass;
         }
 
