@@ -10,11 +10,11 @@
 #include "r_three_phase_api.h"
 FSP_HEADER
 /** Timer on GPT Instance. */
-extern const timer_instance_t g_timer_Comp_pwm_counting_capture;
+extern const timer_instance_t g_timer_comp_pwm_duty_cap;
 
 /** Access the GPT instance using these structures when calling API functions directly (::p_api is not used). */
-extern gpt_instance_ctrl_t g_timer_Comp_pwm_counting_capture_ctrl;
-extern const timer_cfg_t g_timer_Comp_pwm_counting_capture_cfg;
+extern gpt_instance_ctrl_t g_timer_comp_pwm_duty_cap_ctrl;
+extern const timer_cfg_t g_timer_comp_pwm_duty_cap_cfg;
 
 #ifndef NULL
 void NULL(timer_callback_args_t *p_args);

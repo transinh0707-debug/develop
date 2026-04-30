@@ -369,7 +369,7 @@
       <property id="module.driver.timer.gtiocb_disable_setting" value="module.driver.timer.gtiocb_disable_setting.gtioc_disable_prohibited"/>
     </module>
     <module id="module.driver.timer_on_gpt.969665883">
-      <property id="module.driver.timer.name" value="g_timer_Comp_pwm_counting_capture"/>
+      <property id="module.driver.timer.name" value="g_timer_comp_pwm_duty_cap"/>
       <property id="module.driver.timer.channel" value="3"/>
       <property id="module.driver.timer.mode" value="module.driver.timer.mode.mode_periodic"/>
       <property id="module.driver.timer.period" value="0xFFFFFFFF"/>

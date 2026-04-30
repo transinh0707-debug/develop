@@ -351,8 +351,8 @@ FSP Configuration
         Extra Features: Output Disable: GTIOCA Disable Setting: Disable Prohibited
         Extra Features: Output Disable: GTIOCB Disable Setting: Disable Prohibited
         
-    Instance "g_timer_Comp_pwm_counting_capture Timer, General PWM (r_gpt)"
-      General: Name: g_timer_Comp_pwm_counting_capture
+    Instance "g_timer_comp_pwm_duty_cap Timer, General PWM (r_gpt)"
+      General: Name: g_timer_comp_pwm_duty_cap
       General: Channel: 3
       General: Mode: Periodic
       General: Period: 0xFFFFFFFF

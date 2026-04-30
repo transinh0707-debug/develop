@@ -1,9 +1,9 @@
 /* generated HAL source file - do not edit */
 #include "hal_data.h"
 
-gpt_instance_ctrl_t g_timer_Comp_pwm_counting_capture_ctrl;
+gpt_instance_ctrl_t g_timer_comp_pwm_duty_cap_ctrl;
 #if 0
-const gpt_extended_pwm_cfg_t g_timer_Comp_pwm_counting_capture_pwm_extend =
+const gpt_extended_pwm_cfg_t g_timer_comp_pwm_duty_cap_pwm_extend =
 {
     .trough_ipl          = (BSP_IRQ_DISABLED),
 #if defined(VECTOR_NUMBER_GPT3_COUNTER_UNDERFLOW)
@@ -25,7 +25,7 @@ const gpt_extended_pwm_cfg_t g_timer_Comp_pwm_counting_capture_pwm_extend =
     .gtiocb_disable_setting = GPT_GTIOC_DISABLE_PROHIBITED,
 };
 #endif
-const gpt_extended_cfg_t g_timer_Comp_pwm_counting_capture_extend =
+const gpt_extended_cfg_t g_timer_comp_pwm_duty_cap_extend =
         { .gtioca =
         { .output_enabled = false, .stop_level = GPT_PIN_LEVEL_LOW },
           .gtiocb =
@@ -52,7 +52,7 @@ const gpt_extended_cfg_t g_timer_Comp_pwm_counting_capture_extend =
           .compare_match_status = (0U << 1U) | 0U, .capture_filter_gtioca = GPT_CAPTURE_FILTER_NONE, .capture_filter_gtiocb =
                   GPT_CAPTURE_FILTER_NONE,
 #if 0
-    .p_pwm_cfg                   = &g_timer_Comp_pwm_counting_capture_pwm_extend,
+    .p_pwm_cfg                   = &g_timer_comp_pwm_duty_cap_pwm_extend,
 #else
           .p_pwm_cfg = NULL,
 #endif
@@ -78,7 +78,7 @@ const gpt_extended_cfg_t g_timer_Comp_pwm_counting_capture_extend =
           .gtioca_polarity = GPT_GTIOC_POLARITY_NORMAL,
           .gtiocb_polarity = GPT_GTIOC_POLARITY_NORMAL, };
 
-const timer_cfg_t g_timer_Comp_pwm_counting_capture_cfg =
+const timer_cfg_t g_timer_comp_pwm_duty_cap_cfg =
 { .mode = TIMER_MODE_PERIODIC,
 /* Actual period: 1.048576 seconds. Actual duty: 50%. */.period_counts = (uint32_t) 0x10000,
   .duty_cycle_counts = 0x8000, .source_div = (timer_source_div_t) 10, .channel = 3, .p_callback = NULL,
@@ -88,7 +88,7 @@ const timer_cfg_t g_timer_Comp_pwm_counting_capture_cfg =
 #else
   .p_context = (void*) &NULL,
 #endif
-  .p_extend = &g_timer_Comp_pwm_counting_capture_extend,
+  .p_extend = &g_timer_comp_pwm_duty_cap_extend,
   .cycle_end_ipl = (BSP_IRQ_DISABLED),
 #if defined(VECTOR_NUMBER_GPT3_COUNTER_OVERFLOW)
     .cycle_end_irq       = VECTOR_NUMBER_GPT3_COUNTER_OVERFLOW,
@@ -97,9 +97,8 @@ const timer_cfg_t g_timer_Comp_pwm_counting_capture_cfg =
 #endif
         };
 /* Instance structure to use this module. */
-const timer_instance_t g_timer_Comp_pwm_counting_capture =
-{ .p_ctrl = &g_timer_Comp_pwm_counting_capture_ctrl, .p_cfg = &g_timer_Comp_pwm_counting_capture_cfg, .p_api =
-          &g_timer_on_gpt };
+const timer_instance_t g_timer_comp_pwm_duty_cap =
+{ .p_ctrl = &g_timer_comp_pwm_duty_cap_ctrl, .p_cfg = &g_timer_comp_pwm_duty_cap_cfg, .p_api = &g_timer_on_gpt };
 gpt_instance_ctrl_t g_timer_comp_pwm_slave2_ctrl;
 #if 1
 const gpt_extended_pwm_cfg_t g_timer_comp_pwm_slave2_pwm_extend =
