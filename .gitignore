@@ -1,0 +1,17 @@
+# e2studio build output
+Debug/
+Release/
+*.d
+*.o
+*.elf
+*.map
+*.lst
+*.a
+
+# e2studio workspace metadata
+.metadata/
+RemoteSystemsTempFiles/
+
+# OS
+.DS_Store
+Thumbs.db
