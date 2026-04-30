@@ -93,6 +93,9 @@ extern const timer_cfg_t g_timer_comp_pwm_duty_cap_cfg;
 /***********************************************************************************************************************
 * Private variables
 **********************************************************************************************************************/
+volatile uint8_t i_test = 0;
+volatile bool pass_test[10] = {false};
+
 static timer_instance_t g_timer_instances_test[THREE_PHASE_COUNT];
 
 static timer_cfg_t g_master_cfg_test;
@@ -358,6 +361,7 @@ static void comp_pwm_test_REQ_OM_01 (void)
     /* Open and start the three-phase complementary PWM channels          */
     fsp_err_t err = test_open_three_phase();
     pass &= (FSP_SUCCESS == err);
+    pass_test[i_test] = pass;
 
     if (pass)
     {
@@ -365,34 +369,41 @@ static void comp_pwm_test_REQ_OM_01 (void)
         for (three_phase_channel_t ch = THREE_PHASE_CHANNEL_U; ch <= THREE_PHASE_CHANNEL_W; ch++)
         {
             pass &= verify_gtber2_single_buffer(&g_three_phase_comp_pwm_ctrl_test, ch);
+            pass_test[i_test++] = pass;
 
             /* Verify GTCCRD is initialized (single buffer register) */
             uint32_t gtccrd = g_three_phase_comp_pwm_ctrl_test.p_reg[ch]->GTCCR[COMP_PWM_PRV_GTCCRD];
             pass &= (gtccrd == (g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts));
+            pass_test[i_test++] = pass;
         }
 
         /* Verify GTCR.MD = 0xC for Mode 1 */
         uint32_t gtcr_md = (g_three_phase_comp_pwm_ctrl_test.p_reg[THREE_PHASE_CHANNEL_U]->GTCR >> R_GPT0_GTCR_MD_Pos) & 0xFU;
         pass &= (gtcr_md == 0xCU);
+        pass_test[i_test++] = pass;
 
         err = R_GPT_THREE_PHASE_Start(&g_three_phase_comp_pwm_ctrl_test);
         pass &= (FSP_SUCCESS == err);
+        pass_test[i_test++] = pass;
 
         if (pass)
         {
             
             pass &= wait_pwm_transfer();
+            pass_test[i_test++] = pass;
     
             if (pass)
             {
                 uint32_t measured_counts = 0U;
                 pass &= duty_cap_measure(&measured_counts);
+                pass_test[i_test++] = pass;
     
                 if (pass)
                 {
                     pass &= duty_cap_verify(measured_counts,
                                             g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts,
                                             g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->duty_cycle_counts);
+                    pass_test[i_test++] = pass;
     
                     APP_PRINT("  [REQ-OM-01] Duty-cap: measured=%lu, expected=%lu (period=%lu, duty=%lu)\r\n",
                               (unsigned long)measured_counts,
