@@ -378,26 +378,29 @@ static void comp_pwm_test_REQ_OM_01 (void)
         err = R_GPT_THREE_PHASE_Start(&g_three_phase_comp_pwm_ctrl_test);
         pass &= (FSP_SUCCESS == err);
 
-        pass &= wait_pwm_transfer();
-
         if (pass)
         {
-            uint32_t measured_counts = 0U;
-            bool cap_ok = duty_cap_measure(&measured_counts);
-            pass &= cap_ok;
-
-            if (cap_ok)
+            
+            pass &= wait_pwm_transfer();
+    
+            if (pass)
             {
-                pass &= duty_cap_verify(measured_counts,
-                                        g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts,
-                                        g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->duty_cycle_counts);
-
-                APP_PRINT("  [REQ-OM-01] Duty-cap: measured=%lu, expected=%lu (period=%lu, duty=%lu)\r\n",
-                          (unsigned long)measured_counts,
-                          (unsigned long)(g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts -
-                                          g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->duty_cycle_counts),
-                          (unsigned long)g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts,
-                          (unsigned long)g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->duty_cycle_counts);
+                uint32_t measured_counts = 0U;
+                pass &= duty_cap_measure(&measured_counts);
+    
+                if (pass)
+                {
+                    pass &= duty_cap_verify(measured_counts,
+                                            g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts,
+                                            g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->duty_cycle_counts);
+    
+                    APP_PRINT("  [REQ-OM-01] Duty-cap: measured=%lu, expected=%lu (period=%lu, duty=%lu)\r\n",
+                              (unsigned long)measured_counts,
+                              (unsigned long)(g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts -
+                                              g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->duty_cycle_counts),
+                              (unsigned long)g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->period_counts,
+                              (unsigned long)g_three_phase_comp_pwm_cfg_test.p_timer_instance[0]->p_cfg->duty_cycle_counts);
+                }
             }
         }
 
