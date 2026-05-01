@@ -173,7 +173,15 @@ fsp_err_t R_GPT_THREE_PHASE_Open (three_phase_ctrl_t * const p_ctrl, three_phase
             else
             {
                 /* Single buffer (Modes 1-4): GTCCRD -> Temp A -> GTCCRA
-                 * GTBER2 already configured by R_GPT_Open; set initial duty values */
+                 * R_GPT_Open() does NOT initialize GTBER2 -- configure it explicitly here.
+                 * CMTCA=1: enable compare-match buffer transfer for GTCCRA
+                 * CP3DB=0: single buffer (not double)
+                 * CPBTD=0: buffer transfer ENABLED (not disabled) */
+                p_instance_ctrl->p_reg[ch]->GTBER2_b.CMTCA = 0x1U;
+                p_instance_ctrl->p_reg[ch]->GTBER2_b.CP3DB  = 0U;
+                p_instance_ctrl->p_reg[ch]->GTBER2_b.CPBTD  = 0U;
+
+                /* Initialize active register and single buffer stage */
                 p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRA] = duty_initial;
                 p_instance_ctrl->p_reg[ch]->GTCCR[GPT_THREE_PHASE_PRV_GTCCRD] = duty_initial;
             }
