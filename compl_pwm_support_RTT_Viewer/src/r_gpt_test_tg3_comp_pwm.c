@@ -196,9 +196,24 @@ static void test_setup_config (timer_mode_t mode, three_phase_buffer_mode_t buf_
  
 static fsp_err_t test_open_three_phase (void)
 {
+    /* Memset three-phase ctrl AND each individual GPT channel ctrl.
+     * If a previous debug session crashed before test_close_three_phase(),
+     * the per-channel ctrl structs retain GPT_OPEN (0x47505420) in their
+     * .open field. R_GPT_Open() would then return FSP_ERR_ALREADY_OPEN.
+     * Clearing them here forces a clean open regardless of prior state. */
     memset(&g_three_phase_comp_pwm_ctrl_test, 0, sizeof(g_three_phase_comp_pwm_ctrl_test));
- 
-    return R_GPT_THREE_PHASE_Open(&g_three_phase_comp_pwm_ctrl_test, &g_three_phase_comp_pwm_cfg_test);
+    memset(&g_timer_comp_pwm_master_ctrl,     0, sizeof(g_timer_comp_pwm_master_ctrl));
+    memset(&g_timer_comp_pwm_slave1_ctrl,     0, sizeof(g_timer_comp_pwm_slave1_ctrl));
+    memset(&g_timer_comp_pwm_slave2_ctrl,     0, sizeof(g_timer_comp_pwm_slave2_ctrl));
+
+    fsp_err_t err = R_GPT_THREE_PHASE_Open(&g_three_phase_comp_pwm_ctrl_test,
+                                            &g_three_phase_comp_pwm_cfg_test);
+    if (FSP_SUCCESS != err)
+    {
+        APP_PRINT("  [open_three_phase] R_GPT_THREE_PHASE_Open FAILED: err=0x%02X\r\n", (unsigned)err);
+    }
+
+    return err;
 }
  
 static void test_close_three_phase (void)
@@ -358,12 +373,17 @@ static void comp_pwm_test_REQ_OM_01 (void)
     /* Open capture channel FIRST so its counter is running before the first PWM edge arrives. */
     fsp_err_t cap_err = duty_cap_open();
     bool pass = (FSP_SUCCESS == cap_err);
-    pass_test[i_test] = pass;
+    pass_test[i_test++] = pass;                    /* [0]: duty_cap_open result */
+
+    if (FSP_SUCCESS != cap_err)
+    {
+        APP_PRINT("  [REQ-OM-01] duty_cap_open FAILED: err=0x%02X\r\n", (unsigned)cap_err);
+    }
 
     /* Open and start the three-phase complementary PWM channels          */
     fsp_err_t err = test_open_three_phase();
     pass &= (FSP_SUCCESS == err);
-    pass_test[i_test++] = pass;
+    pass_test[i_test++] = pass;                    /* [1]: combined open result */
 
     if (pass)
     {
