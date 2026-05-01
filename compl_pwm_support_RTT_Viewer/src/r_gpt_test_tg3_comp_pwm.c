@@ -153,6 +153,7 @@ static void test_report (const char * req_id, const char * title, bool passed, c
 **********************************************************************************************************************/
 static void test_setup_config (timer_mode_t mode, three_phase_buffer_mode_t buf_mode, uint32_t dead_time)
 {
+
     /* Copy base configurations from FSP-generated const structs */
     memcpy(&g_master_cfg_test, &g_timer_comp_pwm_master_cfg, sizeof(timer_cfg_t));
     memcpy(&g_slave1_cfg_test, &g_timer_comp_pwm_slave1_cfg, sizeof(timer_cfg_t));
@@ -357,11 +358,12 @@ static void comp_pwm_test_REQ_OM_01 (void)
     /* Open capture channel FIRST so its counter is running before the first PWM edge arrives. */
     fsp_err_t cap_err = duty_cap_open();
     bool pass = (FSP_SUCCESS == cap_err);
+    pass_test[i_test] = pass;
 
     /* Open and start the three-phase complementary PWM channels          */
     fsp_err_t err = test_open_three_phase();
     pass &= (FSP_SUCCESS == err);
-    pass_test[i_test] = pass;
+    pass_test[i_test++] = pass;
 
     if (pass)
     {
